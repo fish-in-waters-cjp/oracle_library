@@ -10,6 +10,22 @@ $ARGUMENTS
 
 You **MUST** consider the user input before proceeding (if not empty).
 
+## Learning Mode Parameters
+
+Parse the following flags from user input:
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--learn` | 完整學習模式：執行前教學 + 執行後報告 | **預設啟用** |
+| `--learn-brief` | 簡潔學習模式：僅顯示關鍵概念 | - |
+| `--no-learn` | 禁用學習模式：純執行，無教學內容 | - |
+| `--export-report` | 結束後匯出完整學習報告 | - |
+
+Set `LEARNING_MODE` variable:
+- `full` (default or `--learn`)
+- `brief` (`--learn-brief`)
+- `none` (`--no-learn`)
+
 ## Outline
 
 1. Run `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
@@ -103,33 +119,189 @@ You **MUST** consider the user input before proceeding (if not empty).
    - **Task details**: ID, description, file paths, parallel markers [P]
    - **Execution flow**: Order and dependency requirements
 
-6. Execute implementation following the task plan:
+6. **Contract Task Detection** (合約任務偵測):
+
+   Scan tasks for contract-related keywords to enable learning mode:
+
+   **Detection Keywords**:
+   - File paths: `contracts/`, `.move`, `Move.toml`
+   - Move syntax: `module`, `entry fun`, `public fun`, `struct`, `has key`, `has store`
+   - Domain terms: `mint`, `burn`, `transfer`, `Coin`, `NFT`, `Treasury`, `TxContext`
+
+   **If contract tasks detected**:
+   - Set `CONTRACT_LEARNING_MODE = true`
+   - Build `CONTRACT_TASKS` mapping:
+     ```
+     CONTRACT_TASKS = {
+       task_id: {
+         module: "mgc" | "check_in" | "oracle_draw" | "oracle_nft",
+         concepts: ["Object Model", "Coin Standard", ...],
+         security_topics: ["權限控制", "重入攻擊", ...]
+       }
+     }
+     ```
+   - Initialize learning report at `FEATURE_DIR/learning/session-[timestamp].md`
+
+   **Concept Mapping Table**:
+
+   | Module | Core Concepts | Security Topics |
+   |--------|--------------|-----------------|
+   | mgc.move | Coin Standard, TreasuryCap, OTW | 權限控制, 總量管理 |
+   | check_in.move | Entry Functions, Events, Time | 時間操控, 重複呼叫 |
+   | oracle_draw.move | Object Ownership, Coin Transfer | 隨機公平性, 資產安全 |
+   | oracle_nft.move | Display Standard, Destruction | NFT 安全, Metadata |
+
+7. **Pre-Implementation Learning** (執行前教學):
+
+   **When**: `CONTRACT_LEARNING_MODE = true` AND `LEARNING_MODE != none` AND task is in `CONTRACT_TASKS`
+
+   For each contract task, BEFORE execution:
+
+   a. **Invoke contract-tutor Agent** with task context:
+      - Task ID and description
+      - Target file paths
+      - Mapped concepts and security topics
+      - Request: "pre-implementation teaching"
+
+   b. **Display teaching content**:
+      ```
+      ═══════════════════════════════════════════════════════════════
+      📚 學習時刻：[任務名稱]
+      ═══════════════════════════════════════════════════════════════
+
+      ## 核心概念
+      [Agent 提供的概念解釋]
+
+      ## 設計決策
+      [為什麼要這樣設計]
+
+      ## 程式碼預覽
+      [即將實作的程式碼結構]
+
+      ## 常見陷阱
+      [需要避免的錯誤]
+      ═══════════════════════════════════════════════════════════════
+      ```
+
+   c. **User interaction** (when `LEARNING_MODE = full`):
+      - Ask: "準備好了嗎？請選擇：[yes/skip/explain more]"
+      - `yes` → Continue to execution
+      - `skip` → Skip teaching, proceed to execution
+      - `explain more` → Request deeper explanation from Agent, then ask again
+
+   d. **Brief mode** (`LEARNING_MODE = brief`):
+      - Display only: 核心概念 + 常見陷阱
+      - Auto-proceed without asking
+
+8. Execute implementation following the task plan:
    - **Phase-by-phase execution**: Complete each phase before moving to the next
-   - **Respect dependencies**: Run sequential tasks in order, parallel tasks [P] can run together  
+   - **Respect dependencies**: Run sequential tasks in order, parallel tasks [P] can run together
    - **Follow TDD approach**: Execute test tasks before their corresponding implementation tasks
    - **File-based coordination**: Tasks affecting the same files must run sequentially
    - **Validation checkpoints**: Verify each phase completion before proceeding
 
-7. Implementation execution rules:
-   - **Setup first**: Initialize project structure, dependencies, configuration
-   - **Tests before code**: If you need to write tests for contracts, entities, and integration scenarios
-   - **Core development**: Implement models, services, CLI commands, endpoints
-   - **Integration work**: Database connections, middleware, logging, external services
-   - **Polish and validation**: Unit tests, performance optimization, documentation
+9. **Post-Implementation Learning Report** (執行後報告):
 
-8. Progress tracking and error handling:
-   - Report progress after each completed task
-   - Halt execution if any non-parallel task fails
-   - For parallel tasks [P], continue with successful tasks, report failed ones
-   - Provide clear error messages with context for debugging
-   - Suggest next steps if implementation cannot proceed
-   - **IMPORTANT** For completed tasks, make sure to mark the task off as [X] in the tasks file.
+   **When**: `CONTRACT_LEARNING_MODE = true` AND `LEARNING_MODE != none` AND task was in `CONTRACT_TASKS`
 
-9. Completion validation:
-   - Verify all required tasks are completed
-   - Check that implemented features match the original specification
-   - Validate that tests pass and coverage meets requirements
-   - Confirm the implementation follows the technical plan
-   - Report final status with summary of completed work
+   After EACH contract task completion:
+
+   a. **Invoke contract-tutor Agent** with:
+      - Task ID and completion status
+      - Files modified/created
+      - Request: "post-implementation review"
+
+   b. **Display review content**:
+      ```
+      ═══════════════════════════════════════════════════════════════
+      📝 實作報告：[任務名稱]
+      ═══════════════════════════════════════════════════════════════
+
+      ## 實作摘要
+      - 修改/新增的檔案：[列表]
+      - 實作的功能：[說明]
+
+      ## 概念強化
+      [回顧使用的核心概念]
+
+      ## 安全性檢查
+      | 檢查項目 | 狀態 | 說明 |
+      |----------|------|------|
+      | 權限控制 | ✓/⚠️ | ... |
+      | 資產安全 | ✓/⚠️ | ... |
+
+      ## 測試建議
+      1. [測試案例建議]
+      ═══════════════════════════════════════════════════════════════
+      ```
+
+   c. **Update learning report** (即時累積):
+      - Append task learning to `FEATURE_DIR/learning/session-[timestamp].md`
+      - Update concepts covered count
+      - Track security checks passed/warned
+
+   d. **Brief mode** (`LEARNING_MODE = brief`):
+      - Display only: 安全性檢查結果
+      - Still update learning report
+
+10. Implementation execution rules:
+    - **Setup first**: Initialize project structure, dependencies, configuration
+    - **Tests before code**: If you need to write tests for contracts, entities, and integration scenarios
+    - **Core development**: Implement models, services, CLI commands, endpoints
+    - **Integration work**: Database connections, middleware, logging, external services
+    - **Polish and validation**: Unit tests, performance optimization, documentation
+
+11. Progress tracking and error handling:
+    - Report progress after each completed task
+    - Halt execution if any non-parallel task fails
+    - For parallel tasks [P], continue with successful tasks, report failed ones
+    - Provide clear error messages with context for debugging
+    - Suggest next steps if implementation cannot proceed
+    - **IMPORTANT** For completed tasks, make sure to mark the task off as [X] in the tasks file.
+
+12. **Learning Session Completion** (學習報告完成):
+
+    **When**: All tasks completed AND `CONTRACT_LEARNING_MODE = true`
+
+    a. **Finalize learning report**:
+       - Add completion timestamp
+       - Calculate learning statistics:
+         - Total contract tasks completed
+         - Concepts covered
+         - Security checks passed/warned
+         - Estimated learning time
+
+    b. **Generate session summary**:
+       ```
+       ═══════════════════════════════════════════════════════════════
+       📊 學習報告摘要
+       ═══════════════════════════════════════════════════════════════
+
+       | 指標 | 數值 |
+       |------|------|
+       | 完成合約任務 | X |
+       | 學習概念數 | Y |
+       | 安全檢查通過 | Z |
+       | 安全警告 | W |
+
+       ## 已學習概念
+       - [概念列表]
+
+       ## 延伸學習建議
+       - [推薦資源]
+
+       完整報告位置：FEATURE_DIR/learning/session-[timestamp].md
+       ═══════════════════════════════════════════════════════════════
+       ```
+
+    c. **Export report** (if `--export-report` flag):
+       - Copy session report to project root as `learning-report-[feature]-[date].md`
+
+13. Completion validation:
+    - Verify all required tasks are completed
+    - Check that implemented features match the original specification
+    - Validate that tests pass and coverage meets requirements
+    - Confirm the implementation follows the technical plan
+    - Report final status with summary of completed work
 
 Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit.tasks` first to regenerate the task list.
