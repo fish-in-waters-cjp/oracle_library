@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser 3 效果演示 - 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">永恆圖書館 - Phaser 演示</div>
+            <nav class="nav-actions">
+                <a href="../index.html" class="nav-link">返回總覽</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Phaser 3 遊戲場景演示</h1>
+
+        <!-- DrawScene 演示 -->
+        <section class="demo-section">
+            <div class="card">
+                <h2 class="card-title">DrawScene - 抽取動畫場景</h2>
+                <p class="card-body">卡牌飛入、能量粒子聚集、3D 翻轉、稀有度爆發效果。持續 3-5 秒。</p>
+
+                <div class="demo-controls">
+                    <button class="btn btn-primary" onclick="startDrawScene('common')">
+                        <span class="badge badge-common">普通</span> 抽取
+                    </button>
+                    <button class="btn btn-primary" onclick="startDrawScene('rare')">
+                        <span class="badge badge-rare">稀有</span> 抽取
+                    </button>
+                    <button class="btn btn-primary" onclick="startDrawScene('epic')">
+                        <span class="badge badge-epic">史詩</span> 抽取
+                    </button>
+                    <button class="btn btn-primary" onclick="startDrawScene('legendary')">
+                        <span class="badge badge-legendary">傳說</span> 抽取
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CardRevealScene 演示 -->
+        <section class="demo-section">
+            <div class="card">
+                <h2 class="card-title">CardRevealScene - 卡片揭示場景</h2>
+                <p class="card-body">持續的光效環繞、粒子效果根據稀有度變化。低調優雅的動畫。</p>
+
+                <div class="demo-controls">
+                    <button class="btn btn-secondary" onclick="startRevealScene('common')">
+                        <span class="badge badge-common">普通</span> 揭示
+                    </button>
+                    <button class="btn btn-secondary" onclick="startRevealScene('rare')">
+                        <span class="badge badge-rare">稀有</span> 揭示
+                    </button>
+                    <button class="btn btn-secondary" onclick="startRevealScene('epic')">
+                        <span class="badge badge-epic">史詩</span> 揭示
+                    </button>
+                    <button class="btn btn-secondary" onclick="startRevealScene('legendary')">
+                        <span class="badge badge-legendary">傳說</span> 揭示
+                    </button>
+                    <button class="btn btn-secondary" onclick="stopAllScenes()">停止場景</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CelebrationScene 演示 -->
+        <section class="demo-section">
+            <div class="card">
+                <h2 class="card-title">CelebrationScene - 慶祝場景</h2>
+                <p class="card-body">煙火效果、金幣飛散、光芒爆發。持續 2-3 秒。</p>
+
+                <div class="demo-controls">
+                    <button class="btn btn-primary btn-large" onclick="startCelebrationScene()">
+                        🎉 開始慶祝
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phaser 預覽 -->
+        <section class="demo-section">
+            <div class="card">
+                <h2 class="card-title">遊戲預覽</h2>
+                <div id="demo-preview" class="demo-preview">
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--color-text-muted);">
+                        點擊上方按鈕以啟動 Phaser 場景
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 事件日誌 -->
+        <section class="demo-section">
+            <div class="card">
+                <h2 class="card-title">事件日誌</h2>
+                <div class="event-log">
+                    <div class="event-log-title">React ↔ Phaser 事件通訊</div>
+                    <div id="eventLog" style="font-family: var(--font-mono); font-size: var(--text-xs);">
+                        <div style="color: var(--color-text-muted); padding: var(--space-4);">等待事件...</div>
+                    </div>
+                </div>
+                <div style="margin-top: var(--space-4); display: flex; gap: var(--space-4);">
+                    <button class="btn btn-small btn-secondary" onclick="clearEventLog()">清除日誌</button>
+                    <button class="btn btn-small btn-secondary" onclick="exportEventLog()">匯出日誌</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../js/phaser-loader.js"></script>
+    <script src="../js/phaser/event-bridge.js"></script>
+    <script src="../js/phaser/game-config.js"></script>
+
+    <!-- 場景腳本將在 Phaser 載入後動態載入 -->
+    <script>
+        let phaserInitialized = false;
+
+        // 初始化 Phaser
+        async function initPhaser() {
+            if (phaserInitialized) return;
+
+            logEvent('SYSTEM', 'Phaser 初始化開始');
+
+            try {
+                // 1. 載入 Phaser CDN
+                await loadPhaser();
+                logEvent('SYSTEM', 'Phaser CDN 載入成功');
+
+                // 2. 動態載入場景腳本
+                await loadSceneScripts();
+                logEvent('SYSTEM', '場景腳本載入成功');
+
+                // 3. 建立遊戲配置
+                const config = createGameConfig('demo-preview');
+                config.scene = [DrawScene, CardRevealScene, CelebrationScene];
+
+                // 4. 初始化遊戲
+                const game = await initPhaserGame(config);
+                eventBridge.setGame(game);
+
+                phaserInitialized = true;
+                logEvent('SYSTEM', 'Phaser 初始化完成');
+
+                // 5. 監聽所有事件
+                setupEventListeners();
+            } catch (error) {
+                logEvent('ERROR', 'Phaser 初始化失敗: ' + error.message);
+                throw error;
+            }
+        }
+
+        // 動態載入場景腳本
+        function loadSceneScripts() {
+            const scripts = [
+                '../js/phaser/scenes/DrawScene.js',
+                '../js/phaser/scenes/CardRevealScene.js',
+                '../js/phaser/scenes/CelebrationScene.js'
+            ];
+
+            return Promise.all(scripts.map(src => {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.onload = () => {
+                        logEvent('SYSTEM', `場景載入: ${src.split('/').pop()}`);
+                        resolve();
+                    };
+                    script.onerror = (error) => {
+                        logEvent('ERROR', `場景載入失敗: ${src.split('/').pop()}`);
+                        reject(error);
+                    };
+                    document.body.appendChild(script);
+                });
+            }));
+        }
+
+        // 設定事件監聽器
+        function setupEventListeners() {
+            eventBridge.on(EVENTS.DRAW_COMPLETE, (data) => {
+                logEvent('IN', 'DRAW_COMPLETE', data);
+            });
+
+            eventBridge.on(EVENTS.CARD_REVEALED, (data) => {
+                logEvent('IN', 'CARD_REVEALED', data);
+            });
+
+            eventBridge.on(EVENTS.CELEBRATION_DONE, (data) => {
+                logEvent('IN', 'CELEBRATION_DONE', data);
+            });
+        }
+
+        // 啟動 DrawScene
+        async function startDrawScene(rarity) {
+            await initPhaser();
+
+            logEvent('OUT', 'START_DRAW', { rarity });
+
+            const game = getPhaserGame();
+            game.scene.stop('CardRevealScene');
+            game.scene.stop('CelebrationScene');
+            game.scene.start('DrawScene', { rarity });
+        }
+
+        // 啟動 CardRevealScene
+        async function startRevealScene(rarity) {
+            await initPhaser();
+
+            logEvent('OUT', 'REVEAL_CARD', { rarity });
+
+            const game = getPhaserGame();
+            game.scene.stop('DrawScene');
+            game.scene.stop('CelebrationScene');
+            game.scene.start('CardRevealScene', { rarity });
+        }
+
+        // 啟動 CelebrationScene
+        async function startCelebrationScene() {
+            await initPhaser();
+
+            logEvent('OUT', 'START_CELEBRATION', {});
+
+            const game = getPhaserGame();
+            game.scene.stop('DrawScene');
+            game.scene.stop('CardRevealScene');
+            game.scene.start('CelebrationScene');
+        }
+
+        // 停止所有場景
+        function stopAllScenes() {
+            if (!phaserInitialized) return;
+
+            logEvent('OUT', 'STOP_SCENE', {});
+
+            const game = getPhaserGame();
+            game.scene.stop('DrawScene');
+            game.scene.stop('CardRevealScene');
+            game.scene.stop('CelebrationScene');
+        }
+
+        // 記錄事件
+        function logEvent(direction, eventName, data = {}) {
+            const timestamp = new Date().toLocaleTimeString('zh-TW');
+            const logContainer = document.getElementById('eventLog');
+
+            const logItem = document.createElement('div');
+            logItem.className = `event-log-item event-${direction.toLowerCase()}`;
+
+            const dataStr = Object.keys(data).length > 0 ? JSON.stringify(data) : '';
+            logItem.innerHTML = `
+                <span style="color: var(--color-text-muted);">[${timestamp}]</span>
+                <span style="color: ${direction === 'OUT' ? 'var(--color-primary)' : 'var(--color-success)'};">${direction === 'OUT' ? '→' : '←'}</span>
+                <span style="color: var(--color-text-primary);">${eventName}</span>
+                ${dataStr ? `<span style="color: var(--color-text-muted); margin-left: var(--space-2);">${dataStr}</span>` : ''}
+            `;
+
+            logContainer.appendChild(logItem);
+
+            // 自動滾動到底部
+            logContainer.scrollTop = logContainer.scrollHeight;
+
+            // 只保留最近 50 條
+            const items = logContainer.querySelectorAll('.event-log-item');
+            if (items.length > 50) {
+                items[0].remove();
+            }
+        }
+
+        // 清除事件日誌
+        function clearEventLog() {
+            const logContainer = document.getElementById('eventLog');
+            logContainer.innerHTML = '<div style="color: var(--color-text-muted); padding: var(--space-4);">日誌已清除</div>';
+            eventBridge.clearLog();
+        }
+
+        // 匯出事件日誌
+        function exportEventLog() {
+            const logs = eventBridge.getEventLog();
+            const json = JSON.stringify(logs, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `phaser-event-log-${Date.now()}.json`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+
+            logEvent('SYSTEM', 'EVENT_LOG_EXPORTED', { count: logs.length });
+        }
+
+        // 初始化日誌
+        logEvent('SYSTEM', 'Demo Page Loaded');
+    </script>
+</body>
+</html>

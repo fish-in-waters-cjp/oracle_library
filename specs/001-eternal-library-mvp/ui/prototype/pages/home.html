@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主頁 - 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">永恆圖書館</div>
+            <nav class="nav-actions">
+                <a href="collection.html" class="nav-link">我的收藏</a>
+                <div class="wallet-address" id="walletAddress">0x1234...5678</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">歡迎來到智慧的殿堂</h1>
+
+        <div class="cards-grid">
+            <!-- MGC 餘額卡片 -->
+            <div class="card">
+                <h2 class="card-title">MGC 餘額</h2>
+                <div class="balance-amount">
+                    <span id="mgcBalance">1,250</span>
+                    <span class="balance-unit">MGC</span>
+                </div>
+                <p class="text-muted text-sm">智慧碎片（Magic Coin）</p>
+            </div>
+
+            <!-- 每日簽到卡片 -->
+            <div class="card">
+                <h2 class="card-title">每日簽到</h2>
+                <div class="checkin-info">
+                    <div>
+                        <div class="checkin-days">7 <span class="text-base">天</span></div>
+                        <div class="checkin-label">連續簽到</div>
+                    </div>
+                    <button class="btn btn-primary" id="checkinButton">簽到</button>
+                </div>
+            </div>
+
+            <!-- 抽取解答區塊（整合 Phaser）-->
+            <div class="card" style="grid-column: 1 / -1;">
+                <h2 class="card-title">向圖書館提問</h2>
+                <textarea
+                    id="questionInput"
+                    class="question-input"
+                    placeholder="在這裡輸入您的問題，圖書館將賜予您智慧的解答..."
+                ></textarea>
+                <div class="cost-info">💎 每次抽取消耗 10 MGC</div>
+                <button class="btn btn-primary btn-large btn-full" id="drawButton">抽取解答</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Phaser 遊戲容器（初始隱藏）-->
+    <div id="phaser-container" class="phaser-container hidden">
+        <div id="phaser-game"></div>
+
+        <!-- 答案覆蓋層（Phaser 完成後顯示）-->
+        <div id="answer-overlay" class="answer-overlay">
+            <div class="answer-card">
+                <div class="answer-rarity">
+                    <span id="rarityBadge" class="badge badge-common">普通</span>
+                </div>
+                <p id="answerTextEn" class="answer-text-en">Patience is the companion of wisdom.</p>
+                <p id="answerTextZh" class="answer-text-zh">耐心是智慧的夥伴。</p>
+                <div class="answer-actions">
+                    <button class="btn btn-secondary" id="skipButton">跳過</button>
+                    <button class="btn btn-primary btn-large" id="mintButton">鑄造 NFT（5 MGC）</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-title" id="toastTitle">通知</div>
+        <div class="toast-message" id="toastMessage">訊息內容</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/phaser-loader.js"></script>
+    <script src="../js/phaser/event-bridge.js"></script>
+    <script src="../js/phaser/game-config.js"></script>
+
+    <!-- 場景腳本將在 Phaser 載入後動態載入 -->
+    <script>
+        // ===== 狀態管理 =====
+        let currentMGC = 1250;
+        let hasCheckedIn = false;
+        let phaserInitialized = false;
+        let currentAnswer = null;
+
+        // ===== DOM 元素 =====
+        const elements = {
+            mgcBalance: document.getElementById('mgcBalance'),
+            walletAddress: document.getElementById('walletAddress'),
+            checkinButton: document.getElementById('checkinButton'),
+            questionInput: document.getElementById('questionInput'),
+            drawButton: document.getElementById('drawButton'),
+            phaserContainer: document.getElementById('phaser-container'),
+            answerOverlay: document.getElementById('answer-overlay'),
+            rarityBadge: document.getElementById('rarityBadge'),
+            answerTextEn: document.getElementById('answerTextEn'),
+            answerTextZh: document.getElementById('answerTextZh'),
+            mintButton: document.getElementById('mintButton'),
+            skipButton: document.getElementById('skipButton'),
+            toast: document.getElementById('toast'),
+            toastTitle: document.getElementById('toastTitle'),
+            toastMessage: document.getElementById('toastMessage')
+        };
+
+        // ===== 初始化 =====
+        function init() {
+            // 檢查錢包連接
+            const walletAddress = localStorage.getItem('walletAddress');
+            if (walletAddress) {
+                elements.walletAddress.textContent = walletAddress;
+            }
+
+            // 載入 MGC 餘額
+            updateMGCBalance(currentMGC);
+
+            // 綁定事件
+            elements.checkinButton.addEventListener('click', handleCheckin);
+            elements.drawButton.addEventListener('click', handleDraw);
+            elements.mintButton.addEventListener('click', handleMint);
+            elements.skipButton.addEventListener('click', handleSkip);
+
+            // 監聽 Phaser 事件
+            eventBridge.on(EVENTS.DRAW_COMPLETE, onDrawComplete);
+            eventBridge.on(EVENTS.CARD_REVEALED, onCardRevealed);
+            eventBridge.on(EVENTS.CELEBRATION_DONE, onCelebrationDone);
+
+            console.log('✅ 主頁初始化完成');
+        }
+
+        // ===== 簽到功能 =====
+        function handleCheckin() {
+            if (hasCheckedIn) {
+                showToast('提示', '今天已經簽到過了', 'info');
+                return;
+            }
+
+            elements.checkinButton.disabled = true;
+            elements.checkinButton.classList.add('btn-loading');
+
+            setTimeout(() => {
+                hasCheckedIn = true;
+                currentMGC += 5;
+                updateMGCBalance(currentMGC);
+
+                elements.checkinButton.classList.remove('btn-loading');
+                elements.checkinButton.textContent = '已簽到 ✓';
+                elements.checkinButton.style.opacity = '0.6';
+
+                showToast('簽到成功', '您獲得了 5 MGC', 'success');
+            }, 1000);
+        }
+
+        // ===== 抽取解答功能 =====
+        async function handleDraw() {
+            const question = elements.questionInput.value.trim();
+
+            // 驗證問題
+            if (!question) {
+                showToast('提示', '請先輸入您的問題', 'warning');
+                elements.questionInput.focus();
+                return;
+            }
+
+            // 驗證餘額
+            if (currentMGC < 10) {
+                showToast('餘額不足', `需要 10 MGC，您目前有 ${currentMGC} MGC`, 'error');
+                return;
+            }
+
+            // 扣除 MGC
+            currentMGC -= 10;
+            updateMGCBalance(currentMGC);
+
+            // 禁用按鈕
+            elements.drawButton.disabled = true;
+            elements.drawButton.classList.add('btn-loading');
+
+            // 隨機稀有度
+            const rarity = getRandomRarity();
+            console.log('🎲 抽取稀有度:', rarity);
+
+            // 隨機答案
+            currentAnswer = getRandomAnswer(rarity, question);
+            console.log('📖 抽取答案:', currentAnswer);
+
+            // 顯示 Phaser 容器
+            elements.phaserContainer.classList.remove('hidden');
+
+            try {
+                // 懶載入 Phaser 並初始化遊戲
+                if (!phaserInitialized) {
+                    await initializePhaser(rarity);
+                } else {
+                    // 重啟場景
+                    const game = getPhaserGame();
+                    game.scene.start('DrawScene', { rarity });
+                }
+            } catch (error) {
+                console.error('❌ Phaser 初始化失敗:', error);
+                showToast('錯誤', 'Phaser 載入失敗，請重新整理頁面', 'error');
+                hidePhaserContainer();
+            }
+        }
+
+        // ===== 初始化 Phaser =====
+        async function initializePhaser(rarity) {
+            console.log('🎮 開始初始化 Phaser...');
+
+            try {
+                // 1. 載入 Phaser CDN
+                await loadPhaser();
+                console.log('✅ Phaser CDN 載入成功');
+
+                // 2. 動態載入場景腳本
+                await loadSceneScripts();
+                console.log('✅ 場景腳本載入成功');
+
+                // 3. 建立遊戲配置
+                const config = createGameConfig('phaser-game');
+                config.scene = [DrawScene, CardRevealScene, CelebrationScene];
+
+                // 4. 初始化遊戲
+                const game = await initPhaserGame(config);
+                eventBridge.setGame(game);
+
+                phaserInitialized = true;
+                console.log('✅ Phaser 初始化完成');
+
+                // 5. 啟動 DrawScene
+                game.scene.start('DrawScene', { rarity });
+            } catch (error) {
+                console.error('❌ Phaser 初始化失敗:', error);
+                throw error;
+            }
+        }
+
+        // ===== 動態載入場景腳本 =====
+        function loadSceneScripts() {
+            const scripts = [
+                '../js/phaser/scenes/DrawScene.js',
+                '../js/phaser/scenes/CardRevealScene.js',
+                '../js/phaser/scenes/CelebrationScene.js'
+            ];
+
+            return Promise.all(scripts.map(src => {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.onload = () => {
+                        console.log(`✅ 載入場景: ${src}`);
+                        resolve();
+                    };
+                    script.onerror = (error) => {
+                        console.error(`❌ 載入場景失敗: ${src}`, error);
+                        reject(error);
+                    };
+                    document.body.appendChild(script);
+                });
+            }));
+        }
+
+        // ===== Phaser 事件處理 =====
+        function onDrawComplete(data) {
+            console.log('✅ 抽取動畫完成', data);
+        }
+
+        function onCardRevealed(data) {
+            console.log('✅ 卡片揭示完成', data);
+
+            // 顯示答案覆蓋層
+            setTimeout(() => {
+                displayAnswer(currentAnswer);
+                elements.answerOverlay.classList.add('show');
+            }, 500);
+        }
+
+        function onCelebrationDone(data) {
+            console.log('✅ 慶祝動畫完成', data);
+
+            // 跳轉到收藏頁
+            setTimeout(() => {
+                window.location.href = 'collection.html';
+            }, 500);
+        }
+
+        // ===== 顯示答案 =====
+        function displayAnswer(answer) {
+            // 設定稀有度徽章
+            const badgeClasses = {
+                common: 'badge-common',
+                rare: 'badge-rare',
+                epic: 'badge-epic',
+                legendary: 'badge-legendary'
+            };
+
+            elements.rarityBadge.className = `badge ${badgeClasses[answer.rarity]}`;
+            elements.rarityBadge.textContent = getRarityName(answer.rarity);
+
+            // 設定答案文字
+            elements.answerTextEn.textContent = answer.en;
+            elements.answerTextZh.textContent = answer.zh;
+        }
+
+        // ===== 鑄造 NFT =====
+        function handleMint() {
+            // 驗證餘額
+            if (currentMGC < 5) {
+                showToast('餘額不足', `鑄造 NFT 需要 5 MGC，您目前有 ${currentMGC} MGC`, 'error');
+                return;
+            }
+
+            // 扣除 MGC
+            currentMGC -= 5;
+            updateMGCBalance(currentMGC);
+
+            // 隱藏答案覆蓋層
+            elements.answerOverlay.classList.remove('show');
+
+            // 禁用按鈕
+            elements.mintButton.disabled = true;
+            elements.mintButton.classList.add('btn-loading');
+
+            // 模擬鑄造延遲
+            setTimeout(() => {
+                // 啟動慶祝場景
+                const game = getPhaserGame();
+                game.scene.stop('CardRevealScene');
+                game.scene.start('CelebrationScene');
+
+                console.log('🎉 開始慶祝動畫');
+            }, 1000);
+        }
+
+        // ===== 跳過鑄造 =====
+        function handleSkip() {
+            hidePhaserContainer();
+            showToast('已跳過', '答案未保存，您可以繼續提問', 'info');
+        }
+
+        // ===== 隱藏 Phaser 容器 =====
+        function hidePhaserContainer() {
+            elements.phaserContainer.classList.add('hidden');
+            elements.answerOverlay.classList.remove('show');
+
+            // 停止場景
+            if (phaserInitialized) {
+                const game = getPhaserGame();
+                game.scene.stop('DrawScene');
+                game.scene.stop('CardRevealScene');
+                game.scene.stop('CelebrationScene');
+            }
+
+            // 重置按鈕
+            elements.drawButton.disabled = false;
+            elements.drawButton.classList.remove('btn-loading');
+            elements.mintButton.disabled = false;
+            elements.mintButton.classList.remove('btn-loading');
+        }
+
+        // ===== 工具函數 =====
+        function updateMGCBalance(amount) {
+            elements.mgcBalance.textContent = amount.toLocaleString();
+        }
+
+        function getRandomRarity() {
+            const rand = Math.random();
+            if (rand < 0.5) return 'common';      // 50%
+            if (rand < 0.8) return 'rare';        // 30%
+            if (rand < 0.95) return 'epic';       // 15%
+            return 'legendary';                    // 5%
+        }
+
+        function getRandomAnswer(rarity, question) {
+            const answers = {
+                common: [
+                    { en: 'Patience is the companion of wisdom.', zh: '耐心是智慧的夥伴。' },
+                    { en: 'Knowledge is power.', zh: '知識就是力量。' },
+                    { en: 'The journey of a thousand miles begins with one step.', zh: '千里之行，始於足下。' }
+                ],
+                rare: [
+                    { en: 'The only true wisdom is in knowing you know nothing.', zh: '唯一真正的智慧是知道自己一無所知。' },
+                    { en: 'In the midst of chaos, there is also opportunity.', zh: '危機之中，必有轉機。' }
+                ],
+                epic: [
+                    { en: 'The mind is everything. What you think you become.', zh: '心靈就是一切，你所想的，你就會成為。' }
+                ],
+                legendary: [
+                    { en: 'The unexamined life is not worth living.', zh: '未經審視的人生不值得活。' }
+                ]
+            };
+
+            const pool = answers[rarity] || answers.common;
+            const selected = pool[Math.floor(Math.random() * pool.length)];
+
+            return {
+                rarity,
+                question,
+                ...selected,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        function showToast(title, message, type = 'info') {
+            elements.toastTitle.textContent = title;
+            elements.toastMessage.textContent = message;
+            elements.toast.className = `toast toast-${type}`;
+            elements.toast.classList.remove('hidden');
+
+            setTimeout(() => {
+                elements.toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // ===== 啟動 =====
+        init();
+    </script>
+</body>
+</html>

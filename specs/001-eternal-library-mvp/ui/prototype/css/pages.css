@@ -1,0 +1,543 @@
+/**
+ * Page-Specific Styles
+ * 頁面特定樣式
+ */
+
+/* ===== Login Page ===== */
+.login-container {
+    max-width: 480px;
+    width: 100%;
+}
+
+.login-logo-section {
+    text-align: center;
+    margin-bottom: var(--space-16);
+}
+
+.login-logo {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto var(--space-8);
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: var(--color-primary);
+}
+
+.login-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: 0.02em;
+}
+
+.login-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+.wallet-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.wallet-button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-6);
+    background: transparent;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-slow);
+    text-align: left;
+    width: 100%;
+}
+
+.wallet-button:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-glow-gold);
+}
+
+.wallet-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.wallet-name {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary);
+    font-size: var(--text-base);
+}
+
+.wallet-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+}
+
+/* ===== Home Page ===== */
+.main-content {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: var(--space-16) var(--space-8);
+}
+
+.page-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-12);
+    text-align: center;
+    font-weight: var(--font-weight-normal);
+    letter-spacing: 0.02em;
+}
+
+.cards-grid {
+    display: grid;
+    gap: var(--space-10);
+}
+
+@media (min-width: 768px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.balance-amount {
+    font-family: var(--font-heading);
+    font-size: var(--text-5xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+    font-weight: var(--font-weight-normal);
+}
+
+.balance-unit {
+    font-size: var(--text-xl);
+    color: var(--color-text-secondary);
+    margin-left: var(--space-2);
+}
+
+.checkin-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space-6);
+}
+
+.checkin-days {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: var(--color-primary);
+}
+
+.checkin-label {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-top: var(--space-2);
+}
+
+.question-input {
+    width: 100%;
+    padding: var(--space-5);
+    background: transparent;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    resize: vertical;
+    min-height: 120px;
+    margin-bottom: var(--space-6);
+    transition: all var(--transition-normal);
+}
+
+.question-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-glow-gold);
+}
+
+.cost-info {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-6);
+}
+
+/* ===== Phaser Container ===== */
+.phaser-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.98);
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in 0.3s ease;
+}
+
+.phaser-container.hidden {
+    display: none;
+}
+
+#phaser-game {
+    width: 100%;
+    max-width: 800px;
+    height: 600px;
+}
+
+#phaser-game canvas {
+    border-radius: var(--radius-lg);
+}
+
+/* ===== Answer Overlay ===== */
+.answer-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: calc(var(--z-modal) + 10);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.answer-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.answer-card {
+    background: var(--color-background-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-10);
+    max-width: 600px;
+    width: 90vw;
+    text-align: center;
+    box-shadow: var(--shadow-glow-gold);
+}
+
+.answer-rarity {
+    margin-bottom: var(--space-6);
+}
+
+.answer-text-en {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+    line-height: var(--line-height-relaxed);
+}
+
+.answer-text-zh {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-8);
+    line-height: var(--line-height-relaxed);
+}
+
+.answer-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+}
+
+/* ===== Collection Page ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+}
+
+.stat-card {
+    background: var(--color-background-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    text-align: center;
+}
+
+.stat-value {
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+}
+
+.stat-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.nft-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-8);
+}
+
+.nft-card {
+    background: var(--color-background-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.nft-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-glow-gold);
+}
+
+.nft-image {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--color-background-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-5xl);
+    position: relative;
+}
+
+.nft-rarity-glow {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+}
+
+.nft-rarity-glow.common {
+    background: radial-gradient(circle, var(--color-rarity-common) 0%, transparent 70%);
+}
+
+.nft-rarity-glow.rare {
+    background: radial-gradient(circle, var(--color-rarity-rare) 0%, transparent 70%);
+}
+
+.nft-rarity-glow.epic {
+    background: radial-gradient(circle, var(--color-rarity-epic) 0%, transparent 70%);
+}
+
+.nft-rarity-glow.legendary {
+    background: radial-gradient(circle, var(--color-rarity-legendary) 0%, transparent 70%);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.nft-content {
+    padding: var(--space-6);
+}
+
+.nft-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+    font-weight: var(--font-weight-normal);
+}
+
+.nft-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nft-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border-subtle);
+}
+
+.nft-date {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+}
+
+/* ===== NFT Detail Modal ===== */
+.nft-detail-content {
+    max-width: 800px;
+}
+
+.nft-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+    margin-bottom: var(--space-8);
+}
+
+@media (max-width: 768px) {
+    .nft-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.nft-detail-image {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--color-background-surface);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.nft-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.nft-detail-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.nft-detail-field-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.nft-detail-field-value {
+    font-size: var(--text-base);
+    color: var(--color-text-primary);
+}
+
+/* ===== Demo Page ===== */
+.demo-section {
+    margin-bottom: var(--space-16);
+}
+
+.demo-controls {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    flex-wrap: wrap;
+}
+
+.demo-preview {
+    background: var(--color-background-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    min-height: 400px;
+}
+
+.event-log {
+    background: var(--color-background-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.event-log-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+}
+
+.event-log-item {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    padding: var(--space-2);
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.event-log-item:last-child {
+    border-bottom: none;
+}
+
+.event-log-item.event-out {
+    color: var(--color-primary);
+}
+
+.event-log-item.event-in {
+    color: var(--color-success);
+}
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 768px) {
+    .main-content {
+        padding: var(--space-8) var(--space-4);
+    }
+
+    .page-title {
+        font-size: var(--text-2xl);
+    }
+
+    .balance-amount {
+        font-size: var(--text-4xl);
+    }
+
+    .cards-grid {
+        gap: var(--space-6);
+    }
+
+    #phaser-game {
+        max-width: 100%;
+        height: 400px;
+    }
+
+    .answer-card {
+        padding: var(--space-6);
+    }
+
+    .answer-text-en {
+        font-size: var(--text-xl);
+    }
+
+    .answer-text-zh {
+        font-size: var(--text-base);
+    }
+}
+
+@media (max-width: 480px) {
+    .wallet-button {
+        padding: var(--space-4);
+    }
+
+    .wallet-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    #phaser-game {
+        height: 300px;
+    }
+}

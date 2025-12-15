@@ -1,0 +1,152 @@
+/**
+ * Base Styles
+ * CSS Reset 和基礎樣式
+ */
+
+/* CSS Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* HTML & Body */
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--color-background-main);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-normal);
+    min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-tight);
+    letter-spacing: 0.02em;
+}
+
+h1 {
+    font-size: var(--text-4xl);
+    color: var(--color-primary);
+}
+
+h2 {
+    font-size: var(--text-3xl);
+    color: var(--color-primary);
+}
+
+h3 {
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+}
+
+h4 {
+    font-size: var(--text-xl);
+    color: var(--color-text-primary);
+}
+
+h5 {
+    font-size: var(--text-lg);
+    color: var(--color-text-primary);
+}
+
+h6 {
+    font-size: var(--text-base);
+    color: var(--color-text-primary);
+}
+
+p {
+    margin-bottom: var(--space-4);
+    color: var(--color-text-secondary);
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+/* Lists */
+ul, ol {
+    list-style-position: inside;
+}
+
+/* Form Elements */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+input, textarea, select {
+    font-family: inherit;
+    font-size: var(--text-base);
+}
+
+/* Code */
+code, pre {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Selection */
+::selection {
+    background: rgba(212, 175, 55, 0.3);
+    color: var(--color-text-primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-background-surface);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border-default);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+}
+
+/* Focus Styles */
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}

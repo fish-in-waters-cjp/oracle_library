@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的收藏 - 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">永恆圖書館</div>
+            <nav class="nav-actions">
+                <a href="home.html" class="nav-link">返回主頁</a>
+                <div class="wallet-address">0x1234...5678</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">我的收藏</h1>
+
+        <!-- 統計卡片 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">總收藏數</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">傳說級</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">史詩級</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">4</div>
+                <div class="stat-label">稀有級</div>
+            </div>
+        </div>
+
+        <!-- NFT 網格 -->
+        <div class="nft-grid" id="nftGrid">
+            <!-- NFT 卡片將由 JavaScript 動態生成 -->
+        </div>
+    </main>
+
+    <!-- NFT 詳情 Modal -->
+    <div id="nftModal" class="modal-overlay hidden">
+        <div class="modal-content nft-detail-content">
+            <div class="modal-header">
+                <h3 class="modal-title">NFT 詳情</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="nft-detail-grid">
+                <div class="nft-detail-image" id="modalImage">
+                    📖
+                    <div class="nft-rarity-glow" id="modalGlow"></div>
+                </div>
+
+                <div class="nft-detail-info">
+                    <div class="nft-detail-field">
+                        <div class="nft-detail-field-label">稀有度</div>
+                        <div class="nft-detail-field-value">
+                            <span id="modalRarity" class="badge badge-legendary">傳說</span>
+                        </div>
+                    </div>
+
+                    <div class="nft-detail-field">
+                        <div class="nft-detail-field-label">問題</div>
+                        <div class="nft-detail-field-value" id="modalQuestion">我該如何面對生活的挑戰？</div>
+                    </div>
+
+                    <div class="nft-detail-field">
+                        <div class="nft-detail-field-label">解答（英文）</div>
+                        <div class="nft-detail-field-value" id="modalAnswerEn">The unexamined life is not worth living.</div>
+                    </div>
+
+                    <div class="nft-detail-field">
+                        <div class="nft-detail-field-label">解答（中文）</div>
+                        <div class="nft-detail-field-value" id="modalAnswerZh">未經審視的人生不值得活。</div>
+                    </div>
+
+                    <div class="nft-detail-field">
+                        <div class="nft-detail-field-label">鑄造時間</div>
+                        <div class="nft-detail-field-value" id="modalDate">2025-12-16 14:30:45</div>
+                    </div>
+
+                    <div class="nft-detail-field">
+                        <div class="nft-detail-field-label">NFT ID</div>
+                        <div class="nft-detail-field-value" style="font-family: var(--font-mono); font-size: var(--text-sm);" id="modalId">#1234567890</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">關閉</button>
+                <button class="btn btn-primary">查看鏈上資訊</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模擬 NFT 資料
+        const mockNFTs = [
+            {
+                id: 1,
+                rarity: 'legendary',
+                question: '我該如何面對生活的挑戰？',
+                answerEn: 'The unexamined life is not worth living.',
+                answerZh: '未經審視的人生不值得活。',
+                date: '2025-12-16 14:30:45',
+                icon: '📖'
+            },
+            {
+                id: 2,
+                rarity: 'epic',
+                question: '什麼是真正的智慧？',
+                answerEn: 'The mind is everything. What you think you become.',
+                answerZh: '心靈就是一切，你所想的，你就會成為。',
+                date: '2025-12-15 10:20:30',
+                icon: '📜'
+            },
+            {
+                id: 3,
+                rarity: 'rare',
+                question: '如何獲得成功？',
+                answerEn: 'The only true wisdom is in knowing you know nothing.',
+                answerZh: '唯一真正的智慧是知道自己一無所知。',
+                date: '2025-12-14 16:45:10',
+                icon: '📚'
+            },
+            {
+                id: 4,
+                rarity: 'common',
+                question: '如何保持耐心？',
+                answerEn: 'Patience is the companion of wisdom.',
+                answerZh: '耐心是智慧的夥伴。',
+                date: '2025-12-13 09:15:20',
+                icon: '📖'
+            },
+            {
+                id: 5,
+                rarity: 'legendary',
+                question: '生命的意義是什麼？',
+                answerEn: 'To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.',
+                answerZh: '在一個不斷試圖改變你的世界裡做自己，是最偉大的成就。',
+                date: '2025-12-12 20:30:00',
+                icon: '🌟'
+            },
+            {
+                id: 6,
+                rarity: 'epic',
+                question: '如何面對失敗？',
+                answerEn: 'Success is not final, failure is not fatal: it is the courage to continue that counts.',
+                answerZh: '成功不是終點，失敗不是致命的：重要的是繼續前進的勇氣。',
+                date: '2025-12-11 11:20:15',
+                icon: '💪'
+            },
+            {
+                id: 7,
+                rarity: 'rare',
+                question: '如何培養創造力？',
+                answerEn: 'Creativity is intelligence having fun.',
+                answerZh: '創造力就是智慧在玩耍。',
+                date: '2025-12-10 15:40:30',
+                icon: '🎨'
+            },
+            {
+                id: 8,
+                rarity: 'common',
+                question: '如何保持專注？',
+                answerEn: 'The secret of getting ahead is getting started.',
+                answerZh: '成功的秘訣就是開始行動。',
+                date: '2025-12-09 08:10:45',
+                icon: '🎯'
+            },
+            {
+                id: 9,
+                rarity: 'legendary',
+                question: '什麼是幸福？',
+                answerEn: 'Happiness is not something ready made. It comes from your own actions.',
+                answerZh: '幸福不是現成的東西，它來自你自己的行動。',
+                date: '2025-12-08 19:25:10',
+                icon: '😊'
+            },
+            {
+                id: 10,
+                rarity: 'epic',
+                question: '如何克服恐懼？',
+                answerEn: 'Fear is the path to the dark side. Fear leads to anger.',
+                answerZh: '恐懼是通往黑暗面的道路，恐懼導致憤怒。',
+                date: '2025-12-07 13:50:20',
+                icon: '⚡'
+            },
+            {
+                id: 11,
+                rarity: 'epic',
+                question: '如何建立自信？',
+                answerEn: 'Believe you can and you\'re halfway there.',
+                answerZh: '相信你能做到，你就已經成功了一半。',
+                date: '2025-12-06 17:35:40',
+                icon: '💎'
+            },
+            {
+                id: 12,
+                rarity: 'rare',
+                question: '如何維持關係？',
+                answerEn: 'The best time to plant a tree was 20 years ago. The second best time is now.',
+                answerZh: '種一棵樹最好的時間是二十年前，其次是現在。',
+                date: '2025-12-05 12:15:30',
+                icon: '🌳'
+            }
+        ];
+
+        const rarityMap = {
+            common: { name: '普通', class: 'badge-common' },
+            rare: { name: '稀有', class: 'badge-rare' },
+            epic: { name: '史詩', class: 'badge-epic' },
+            legendary: { name: '傳說', class: 'badge-legendary' }
+        };
+
+        // 渲染 NFT 網格
+        function renderNFTs() {
+            const grid = document.getElementById('nftGrid');
+
+            mockNFTs.forEach(nft => {
+                const card = createNFTCard(nft);
+                grid.appendChild(card);
+            });
+        }
+
+        // 建立 NFT 卡片
+        function createNFTCard(nft) {
+            const card = document.createElement('div');
+            card.className = 'nft-card';
+            card.onclick = () => openModal(nft);
+
+            const rarityInfo = rarityMap[nft.rarity];
+
+            card.innerHTML = `
+                <div class="nft-image">
+                    <div class="nft-rarity-glow ${nft.rarity}"></div>
+                    <span style="position: relative; z-index: 1; font-size: var(--text-5xl);">${nft.icon}</span>
+                </div>
+                <div class="nft-content">
+                    <h3 class="nft-title">${nft.answerZh}</h3>
+                    <p class="nft-subtitle">${nft.question}</p>
+                    <div class="nft-footer">
+                        <span class="badge ${rarityInfo.class}">${rarityInfo.name}</span>
+                        <span class="nft-date">${nft.date.split(' ')[0]}</span>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // 開啟 Modal
+        function openModal(nft) {
+            const modal = document.getElementById('nftModal');
+            const rarityInfo = rarityMap[nft.rarity];
+
+            document.getElementById('modalImage').innerHTML = `
+                ${nft.icon}
+                <div class="nft-rarity-glow ${nft.rarity}"></div>
+            `;
+            document.getElementById('modalRarity').className = `badge ${rarityInfo.class}`;
+            document.getElementById('modalRarity').textContent = rarityInfo.name;
+            document.getElementById('modalQuestion').textContent = nft.question;
+            document.getElementById('modalAnswerEn').textContent = nft.answerEn;
+            document.getElementById('modalAnswerZh').textContent = nft.answerZh;
+            document.getElementById('modalDate').textContent = nft.date;
+            document.getElementById('modalId').textContent = `#${nft.id.toString().padStart(10, '0')}`;
+
+            modal.classList.remove('hidden');
+        }
+
+        // 關閉 Modal
+        function closeModal() {
+            const modal = document.getElementById('nftModal');
+            modal.classList.add('hidden');
+        }
+
+        // 點擊背景關閉
+        document.getElementById('nftModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // 初始化
+        renderNFTs();
+    </script>
+</body>
+</html>

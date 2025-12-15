@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入 - 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-8);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container animate-fade-in">
+        <div class="login-logo-section">
+            <div class="login-logo">L</div>
+            <h1 class="login-title">永恆圖書館</h1>
+            <p class="login-subtitle">探索智慧的殿堂，收藏永恆的答案</p>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">連接錢包</h2>
+            <p class="card-body" style="margin-bottom: var(--space-8);">
+                選擇您的 IOTA 錢包以開始探索圖書館
+            </p>
+
+            <div class="wallet-options">
+                <button class="wallet-button" data-wallet="iota">
+                    <div class="wallet-icon">I</div>
+                    <div style="flex: 1; text-align: left;">
+                        <div class="wallet-name">IOTA Wallet</div>
+                        <div class="wallet-desc">官方錢包（推薦）</div>
+                    </div>
+                </button>
+            </div>
+
+            <div class="text-muted text-sm" style="margin-top: var(--space-4); padding: var(--space-4); background: var(--color-background-elevated); border-radius: var(--radius-sm);">
+                💡 <strong>Prototype 模擬模式</strong><br>
+                此為前端原型，錢包連接為模擬實作。實際開發時將整合 @iota/dapp-kit。
+            </div>
+
+            <div id="errorMessage" class="hidden" style="margin-top: var(--space-6); padding: var(--space-4); background: rgba(220, 38, 38, 0.1); border: 1px solid var(--color-error); border-radius: var(--radius-sm); color: var(--color-error); font-size: var(--text-sm);">
+            </div>
+
+            <p class="text-center text-muted text-sm" style="margin-top: var(--space-8); margin-bottom: 0;">
+                還沒有錢包？<a href="https://chrome.google.com/webstore/detail/iota-wallet" target="_blank" style="color: var(--color-primary);">下載 IOTA Wallet</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 模擬錢包連接
+        const walletButtons = document.querySelectorAll('.wallet-button');
+        const errorMessage = document.getElementById('errorMessage');
+
+        walletButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                const wallet = this.dataset.wallet;
+                const walletName = this.querySelector('.wallet-name').textContent;
+
+                // 禁用所有按鈕
+                walletButtons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                });
+
+                // 更新按鈕文字
+                this.querySelector('.wallet-name').textContent = '連接中...';
+
+                // 模擬連接延遲
+                setTimeout(() => {
+                    // 模擬連接成功 (90% 成功率，原型演示用)
+                    if (Math.random() > 0.1) {
+                        console.log(`✅ IOTA Wallet 連接成功`);
+
+                        // 儲存模擬的錢包地址（IOTA 格式）
+                        const mockAddress = '0x' + Math.random().toString(16).substring(2, 10) + '...' + Math.random().toString(16).substring(2, 6);
+                        localStorage.setItem('walletAddress', mockAddress);
+                        localStorage.setItem('walletType', 'iota');
+                        localStorage.setItem('isSimulated', 'true');
+
+                        // 跳轉到主頁
+                        window.location.href = 'home.html';
+                    } else {
+                        // 模擬連接失敗
+                        errorMessage.textContent = '連接失敗，請稍後再試';
+                        errorMessage.classList.remove('hidden');
+
+                        // 恢復按鈕
+                        walletButtons.forEach(btn => {
+                            btn.disabled = false;
+                            btn.style.opacity = '1';
+                        });
+                        this.querySelector('.wallet-name').textContent = 'IOTA Wallet';
+                    }
+                }, 1500);
+            });
+        });
+
+        // 檢查是否已連接
+        if (localStorage.getItem('walletAddress')) {
+            console.log('已連接錢包，跳轉到主頁');
+            // window.location.href = 'home.html';
+        }
+    </script>
+</body>
+</html>

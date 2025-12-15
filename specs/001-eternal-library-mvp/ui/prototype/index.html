@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>永恆圖書館 - 互動原型總覽</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <style>
+        .prototype-hero {
+            text-align: center;
+            padding: var(--space-20) var(--space-8);
+            background: var(--color-background-surface);
+            border-bottom: 1px solid var(--color-border-default);
+        }
+
+        .prototype-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-5xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-6);
+            font-weight: var(--font-weight-normal);
+            letter-spacing: 0.02em;
+        }
+
+        .prototype-subtitle {
+            font-size: var(--text-xl);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-4);
+        }
+
+        .prototype-version {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .prototype-content {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-8);
+        }
+
+        .section {
+            margin-bottom: var(--space-20);
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-3xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-8);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--color-border-default);
+            font-weight: var(--font-weight-normal);
+        }
+
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--space-8);
+            margin-bottom: var(--space-12);
+        }
+
+        .page-card {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            transition: all var(--transition-normal);
+        }
+
+        .page-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .page-card-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-4);
+            font-weight: var(--font-weight-normal);
+        }
+
+        .page-card-desc {
+            color: var(--color-text-secondary);
+            font-size: var(--text-sm);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--space-6);
+        }
+
+        .page-card-link {
+            display: inline-block;
+            padding: var(--space-3) var(--space-6);
+            background: transparent;
+            border: 1px solid var(--color-primary);
+            border-radius: var(--radius-sm);
+            color: var(--color-primary);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            transition: all var(--transition-normal);
+        }
+
+        .page-card-link:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-item {
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--color-border-subtle);
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            color: var(--color-text-secondary);
+            font-size: var(--text-base);
+        }
+
+        .tech-tag {
+            display: inline-block;
+            padding: var(--space-1) var(--space-3);
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-full);
+            color: var(--color-primary);
+            font-size: var(--text-xs);
+            margin-right: var(--space-2);
+            margin-bottom: var(--space-2);
+        }
+
+        .highlight-box {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+        }
+
+        .highlight-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            color: var(--color-primary);
+            margin-bottom: var(--space-4);
+            font-weight: var(--font-weight-normal);
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype-hero">
+        <h1 class="prototype-title">永恆圖書館</h1>
+        <p class="prototype-subtitle">高端奢華風格 - 互動原型</p>
+        <p class="prototype-version">Version 1.0 | Style 10 - Luxury Premium | 整合 Phaser 3</p>
+    </div>
+
+    <main class="prototype-content">
+        <!-- 核心頁面 -->
+        <section class="section">
+            <h2 class="section-title">核心頁面</h2>
+
+            <div class="page-grid">
+                <div class="page-card">
+                    <h3 class="page-card-title">登入頁面</h3>
+                    <p class="page-card-desc">錢包連接介面，支援 Petra、Martian、Pontem 三種 IOTA 錢包。</p>
+                    <div style="margin-bottom: var(--space-4);">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Framer Motion</span>
+                    </div>
+                    <a href="pages/login.html" class="page-card-link">查看頁面 →</a>
+                </div>
+
+                <div class="page-card">
+                    <h3 class="page-card-title">主頁面</h3>
+                    <p class="page-card-desc">MGC 餘額、每日簽到、抽取解答。整合 Phaser 3 動畫場景。</p>
+                    <div style="margin-bottom: var(--space-4);">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Phaser 3</span>
+                        <span class="tech-tag">懶載入</span>
+                    </div>
+                    <a href="pages/home.html" class="page-card-link">查看頁面 →</a>
+                </div>
+
+                <div class="page-card">
+                    <h3 class="page-card-title">收藏頁面</h3>
+                    <p class="page-card-desc">NFT 收藏展示，統計資訊，稀有度篩選，詳情彈窗。</p>
+                    <div style="margin-bottom: var(--space-4);">
+                        <span class="tech-tag">React Grid</span>
+                        <span class="tech-tag">Modal</span>
+                    </div>
+                    <a href="pages/collection.html" class="page-card-link">查看頁面 →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phaser 演示 -->
+        <section class="section">
+            <h2 class="section-title">Phaser 3 效果演示</h2>
+
+            <div class="highlight-box">
+                <h3 class="highlight-title">遊戲引擎整合</h3>
+                <p style="color: var(--color-text-secondary); margin-bottom: var(--space-6);">
+                    展示所有 Phaser 3 場景效果，包含抽取動畫、卡片揭示、慶祝特效。
+                </p>
+                <div style="margin-bottom: var(--space-6);">
+                    <span class="tech-tag">Phaser 3.90</span>
+                    <span class="tech-tag">粒子系統</span>
+                    <span class="tech-tag">Tween 動畫</span>
+                    <span class="tech-tag">事件橋接</span>
+                </div>
+                <a href="pages/demo-phaser.html" class="page-card-link">查看演示 →</a>
+            </div>
+
+            <div class="page-grid">
+                <div class="page-card">
+                    <h3 class="page-card-title">DrawScene</h3>
+                    <p class="page-card-desc">卡牌飛入、能量粒子聚集、3D 翻轉、稀有度爆發效果。持續 3-5 秒。</p>
+                </div>
+
+                <div class="page-card">
+                    <h3 class="page-card-title">CardRevealScene</h3>
+                    <p class="page-card-desc">持續的光效環繞、粒子效果根據稀有度變化。低調優雅。</p>
+                </div>
+
+                <div class="page-card">
+                    <h3 class="page-card-title">CelebrationScene</h3>
+                    <p class="page-card-desc">煙火效果、金幣飛散、光芒爆發。持續 2-3 秒。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 設計系統 -->
+        <section class="section">
+            <h2 class="section-title">設計系統</h2>
+
+            <div class="highlight-box">
+                <h3 class="highlight-title">風格特徵</h3>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <svg class="feature-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                        </svg>
+                        <span class="feature-text"><strong>色彩：</strong>金色 (#d4af37) + 銀色 (#c0c0c0) + 純黑背景</span>
+                    </li>
+                    <li class="feature-item">
+                        <svg class="feature-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span class="feature-text"><strong>字體：</strong>Playfair Display（標題）+ Inter（內文）</span>
+                    </li>
+                    <li class="feature-item">
+                        <svg class="feature-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                        <span class="feature-text"><strong>風格：</strong>極簡奢華、細微發光、大量留白、低調精緻</span>
+                    </li>
+                    <li class="feature-item">
+                        <svg class="feature-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <span class="feature-text"><strong>動畫：</strong>Phaser 3 粒子系統、Framer Motion 轉場</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="page-grid">
+                <div class="page-card">
+                    <h3 class="page-card-title">Design Tokens</h3>
+                    <p class="page-card-desc">CSS 自訂屬性，包含色彩、字體、間距、陰影、轉場等所有設計變數。</p>
+                    <a href="css/tokens.css" class="page-card-link" download>下載檔案 →</a>
+                </div>
+
+                <div class="page-card">
+                    <h3 class="page-card-title">元件庫</h3>
+                    <p class="page-card-desc">按鈕、輸入框、卡片、Modal、Toast 等可重用元件樣式。</p>
+                    <a href="css/components.css" class="page-card-link" download>下載檔案 →</a>
+                </div>
+
+                <div class="page-card">
+                    <h3 class="page-card-title">使用文檔</h3>
+                    <p class="page-card-desc">原型使用說明、技術架構、事件通訊、本地開發指南。</p>
+                    <a href="README.md" class="page-card-link" download>下載檔案 →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技術資訊 -->
+        <section class="section">
+            <h2 class="section-title">技術架構</h2>
+
+            <div class="page-grid">
+                <div class="page-card">
+                    <h3 class="page-card-title">React ↔ Phaser 通訊</h3>
+                    <p class="page-card-desc" style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted);">
+                        START_DRAW → DrawScene<br>
+                        DRAW_COMPLETE → React<br>
+                        REVEAL_CARD → CardRevealScene<br>
+                        START_CELEBRATION → CelebrationScene
+                    </p>
+                </div>
+
+                <div class="page-card">
+                    <h3 class="page-card-title">懶載入策略</h3>
+                    <p class="page-card-desc">首頁 Bundle < 500KB，Phaser 3 (~400KB) 僅在使用者點擊「抽取解答」時載入。</p>
+                </div>
+
+                <div class="page-card">
+                    <h3 class="page-card-title">響應式設計</h3>
+                    <p class="page-card-desc">支援桌面（1280px+）、平板（768px-1279px）、手機（< 768px）三種斷點。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 互動流程 -->
+        <section class="section">
+            <h2 class="section-title">完整互動流程</h2>
+
+            <div class="highlight-box">
+                <ol style="color: var(--color-text-secondary); line-height: 2; padding-left: var(--space-8);">
+                    <li>使用者在登入頁連接錢包</li>
+                    <li>進入主頁面，查看 MGC 餘額和簽到狀態</li>
+                    <li>完成每日簽到，獲得 5 MGC（動畫效果）</li>
+                    <li>在文字框輸入問題，點擊「抽取解答」</li>
+                    <li>懶載入 Phaser.js，顯示 DrawScene（卡牌飛入動畫）</li>
+                    <li>切換到 CardRevealScene（持續光效）</li>
+                    <li>React 覆蓋層顯示答案文字和稀有度</li>
+                    <li>點擊「鑄造 NFT」，執行 CelebrationScene（慶祝特效）</li>
+                    <li>跳轉到收藏頁面，展示新鑄造的 NFT</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align: center; padding: var(--space-16) var(--space-8); border-top: 1px solid var(--color-border-default);">
+        <p style="color: var(--color-text-muted); font-size: var(--text-sm);">
+            永恆圖書館 MVP | 設計系統版本 1.0 | Style 10 - 高端奢華
+        </p>
+        <p style="color: var(--color-text-muted); font-size: var(--text-xs); margin-top: var(--space-4);">
+            整合 Phaser 3.90 | Next.js 16 | React 19 | IOTA Testnet
+        </p>
+    </footer>
+</body>
+</html>
