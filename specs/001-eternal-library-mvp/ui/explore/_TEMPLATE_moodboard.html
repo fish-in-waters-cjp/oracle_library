@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[風格名稱] - 風格預覽</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 根據風格替換 Google Fonts URL -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); padding: var(--space-8) var(--space-4); }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .back-link { display: inline-block; color: var(--color-primary); text-decoration: none; margin-bottom: var(--space-8); }
+        .moodboard-header { text-align: center; padding: var(--space-12) 0; border-bottom: 1px solid var(--color-border-subtle); margin-bottom: var(--space-12); }
+        .style-number { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-primary); margin-bottom: var(--space-2); }
+        h1 { font-family: var(--font-heading); font-size: var(--text-5xl); font-weight: var(--font-weight-bold); margin-bottom: var(--space-3); color: var(--color-primary); }
+        .tone-tags { display: flex; justify-content: center; gap: var(--space-3); margin-bottom: var(--space-4); flex-wrap: wrap; }
+        .tone-tag { padding: var(--space-2) var(--space-4); background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-full); font-size: var(--text-sm); color: var(--color-primary); }
+        .description { max-width: 800px; margin: 0 auto; font-size: var(--text-lg); color: var(--color-text-secondary); line-height: var(--line-height-relaxed); }
+        .section { margin-bottom: var(--space-16); }
+        .section-title { font-family: var(--font-heading); font-size: var(--text-3xl); font-weight: var(--font-weight-bold); margin-bottom: var(--space-8); color: var(--color-primary); }
+        .color-grid, .component-grid, .rarity-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-6); }
+        .color-card, .component-group { background: var(--color-background-surface); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
+        .color-swatch { height: 120px; }
+        .color-info, .component-group { padding: var(--space-4); }
+        .color-name, .component-label { font-weight: var(--font-weight-semibold); margin-bottom: var(--space-2); font-size: var(--text-sm); }
+        .color-value { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); }
+        .typography-samples { background: var(--color-background-surface); padding: var(--space-8); border-radius: var(--radius-xl); border: 1px solid var(--color-border-subtle); }
+        .heading-sample { margin-bottom: var(--space-6); padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-border-subtle); }
+        .heading-label { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: var(--space-2); }
+        .sample-h1 { font-family: var(--font-heading); font-size: var(--text-4xl); font-weight: var(--font-weight-bold); color: var(--color-primary); }
+        .sample-h2 { font-family: var(--font-heading); font-size: var(--text-3xl); font-weight: var(--font-weight-bold); }
+        .body-sample { font-size: var(--text-base); line-height: var(--line-height-relaxed); color: var(--color-text-secondary); }
+        .btn { padding: var(--space-3) var(--space-6); border-radius: var(--radius-md); font-weight: var(--font-weight-semibold); cursor: pointer; transition: all var(--transition-normal); font-size: var(--text-base); display: block; width: 100%; margin-bottom: var(--space-3); text-align: center; }
+        .btn-primary { background: var(--color-primary); color: var(--color-background-main); border: none; }
+        .btn-secondary { background: transparent; color: var(--color-primary); border: 2px solid var(--color-primary); }
+        .btn-ghost { background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border-subtle); }
+        .btn-disabled { background: var(--color-background-elevated); color: var(--color-text-disabled); cursor: not-allowed; border: none; }
+        .input { padding: var(--space-3) var(--space-4); background: var(--color-background-main); border: 2px solid var(--color-border-default); border-radius: var(--radius-md); color: var(--color-text-primary); font-size: var(--text-base); width: 100%; margin-bottom: var(--space-3); }
+        .card { background: var(--color-background-surface); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-xl); padding: var(--space-6); }
+        .card-title { font-size: var(--text-xl); font-weight: var(--font-weight-bold); margin-bottom: var(--space-2); }
+        .card-content { color: var(--color-text-secondary); line-height: var(--line-height-relaxed); }
+        .rarity-card { background: var(--color-background-surface); border-radius: var(--radius-xl); overflow: hidden; border: 2px solid; }
+        .rarity-card.common { border-color: var(--color-rarity-common); }
+        .rarity-card.rare { border-color: var(--color-rarity-rare); }
+        .rarity-card.epic { border-color: var(--color-rarity-epic); }
+        .rarity-card.legendary { border-color: var(--color-rarity-legendary); }
+        .rarity-header { padding: var(--space-4); text-align: center; font-weight: var(--font-weight-bold); color: white; }
+        .rarity-card.common .rarity-header { background: var(--gradient-rarity-common); }
+        .rarity-card.rare .rarity-header { background: var(--gradient-rarity-rare); }
+        .rarity-card.epic .rarity-header { background: var(--gradient-rarity-epic); }
+        .rarity-card.legendary .rarity-header { background: var(--gradient-rarity-legendary); }
+        .rarity-body { padding: var(--space-6); }
+        .rarity-text { font-size: var(--text-sm); color: var(--color-text-secondary); line-height: var(--line-height-relaxed); }
+        .mgc-balance { display: flex; align-items: center; gap: var(--space-3); background: var(--color-background-surface); padding: var(--space-4) var(--space-6); border-radius: var(--radius-lg); border: 1px solid var(--color-border-default); }
+        .mgc-icon { width: 32px; height: 32px; background: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: var(--font-weight-bold); color: var(--color-background-main); }
+        .mgc-amount { font-family: var(--font-mono); font-size: var(--text-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); }
+        .mgc-label { font-size: var(--text-sm); color: var(--color-text-muted); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← 返回風格總覽</a>
+
+        <header class="moodboard-header">
+            <p class="style-number">Style [編號]</p>
+            <h1>[風格名稱]</h1>
+            <div class="tone-tags">
+                <span class="tone-tag">[調性1]</span>
+                <span class="tone-tag">[調性2]</span>
+                <span class="tone-tag">[調性3]</span>
+            </div>
+            <p class="description">[風格描述文字，2-3 句話，說明視覺特點和適用情境]</p>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">色彩系統</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-primary);"></div>
+                    <div class="color-info">
+                        <div class="color-name">主色</div>
+                        <div class="color-value">[色碼]</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-secondary);"></div>
+                    <div class="color-info">
+                        <div class="color-name">次要色</div>
+                        <div class="color-value">[色碼]</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-accent);"></div>
+                    <div class="color-info">
+                        <div class="color-name">強調色</div>
+                        <div class="color-value">[色碼]</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-background-main);"></div>
+                    <div class="color-info">
+                        <div class="color-name">背景</div>
+                        <div class="color-value">[色碼]</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title" style="font-size: var(--text-2xl); margin-top: var(--space-12);">稀有度配色</h3>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-rarity-common);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Common</div>
+                        <div class="color-value">[色碼]</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-rarity-rare);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Rare</div>
+                        <div class="color-value">[色碼]</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-rarity-epic);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Epic</div>
+                        <div class="color-value">[色碼]</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-rarity-legendary);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Legendary</div>
+                        <div class="color-value">[色碼]</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">字體排版</h2>
+            <div class="typography-samples">
+                <div class="heading-sample">
+                    <p class="heading-label">Heading 1</p>
+                    <h1 class="sample-h1">永恆圖書館 Eternal Library</h1>
+                </div>
+                <div class="heading-sample">
+                    <p class="heading-label">Heading 2</p>
+                    <h2 class="sample-h2">解答之書 Oracle Book</h2>
+                </div>
+                <div class="heading-sample">
+                    <p class="heading-label">Body Text</p>
+                    <p class="body-sample">在心中默念你的問題，消耗 10 MGC 抽取一張解答之書。每張答案都有獨特的稀有度，你可以將珍貴的答案鑄造成 NFT 永久保存。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">元件預覽</h2>
+            <div class="component-grid">
+                <div class="component-group">
+                    <p class="component-label">按鈕</p>
+                    <button class="btn btn-primary">連接錢包</button>
+                    <button class="btn btn-secondary">查看收藏</button>
+                    <button class="btn btn-ghost">取消</button>
+                    <button class="btn btn-disabled">已簽到</button>
+                </div>
+                <div class="component-group">
+                    <p class="component-label">輸入框</p>
+                    <input type="text" class="input" placeholder="在心中默念你的問題...">
+                    <input type="text" class="input" style="border-color: var(--color-primary);" placeholder="聚焦狀態">
+                </div>
+                <div class="component-group">
+                    <p class="component-label">MGC 餘額</p>
+                    <div class="mgc-balance">
+                        <div class="mgc-icon">M</div>
+                        <div>
+                            <div class="mgc-amount">125</div>
+                            <div class="mgc-label">智慧碎片</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="component-group">
+                    <p class="component-label">卡片</p>
+                    <div class="card">
+                        <h3 class="card-title">連續簽到</h3>
+                        <p class="card-content">已連續簽到 7 天<br>繼續保持!</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title" style="font-size: var(--text-2xl); margin-top: var(--space-12);">答案卡片 - 稀有度展示</h3>
+            <div class="rarity-cards">
+                <div class="rarity-card common">
+                    <div class="rarity-header">COMMON</div>
+                    <div class="rarity-body">
+                        <p class="rarity-text" style="font-weight: 600; margin-bottom: 0.5rem;">The journey begins with a single step.</p>
+                        <p class="rarity-text">千里之行，始於足下。</p>
+                    </div>
+                </div>
+                <div class="rarity-card rare">
+                    <div class="rarity-header">RARE</div>
+                    <div class="rarity-body">
+                        <p class="rarity-text" style="font-weight: 600; margin-bottom: 0.5rem;">Trust the process and embrace change.</p>
+                        <p class="rarity-text">相信過程，擁抱改變。</p>
+                    </div>
+                </div>
+                <div class="rarity-card epic">
+                    <div class="rarity-header">EPIC</div>
+                    <div class="rarity-body">
+                        <p class="rarity-text" style="font-weight: 600; margin-bottom: 0.5rem;">The stars align in your favor.</p>
+                        <p class="rarity-text">星辰眷顧著你的道路。</p>
+                    </div>
+                </div>
+                <div class="rarity-card legendary">
+                    <div class="rarity-header">LEGENDARY</div>
+                    <div class="rarity-body">
+                        <p class="rarity-text" style="font-weight: 600; margin-bottom: 0.5rem;">Destiny awaits those who dare.</p>
+                        <p class="rarity-text">命運眷顧勇敢者。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

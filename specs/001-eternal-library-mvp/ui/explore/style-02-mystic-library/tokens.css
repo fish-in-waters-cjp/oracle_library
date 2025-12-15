@@ -1,0 +1,135 @@
+/**
+ * Design Tokens - 神秘圖書館 (Mystic Library)
+ * 調性: 神秘 | 古典 | 知識
+ */
+
+:root {
+    /* ===== Color System ===== */
+
+    /* Primary Colors */
+    --color-primary: #d4af37;           /* 典雅金色 - 主要強調 */
+    --color-primary-light: #e8c96f;     /* 亮金 */
+    --color-primary-dark: #b8941f;      /* 深金 */
+
+    /* Secondary Colors */
+    --color-secondary: #6366f1;         /* 神秘靛藍 - 次要強調 */
+    --color-secondary-light: #818cf8;   /* 亮靛藍 */
+    --color-secondary-dark: #4f46e5;    /* 深靛藍 */
+
+    /* Accent Colors */
+    --color-accent: #9333ea;            /* 神秘紫 */
+    --color-accent-light: #a855f7;      /* 亮紫 */
+
+    /* Background Layers */
+    --color-background-main: #1a0b2e;   /* 深紫黑底 */
+    --color-background-surface: #2d1b4e; /* 卡片背景 - 深紫 */
+    --color-background-elevated: #3d2b5e; /* 浮起元素 */
+    --color-background-overlay: rgba(26, 11, 46, 0.95); /* 遮罩 */
+
+    /* Text Colors */
+    --color-text-primary: #f5f3f0;      /* 主要文字 - 羊皮紙白 */
+    --color-text-secondary: rgba(245, 243, 240, 0.85); /* 次要文字 */
+    --color-text-muted: rgba(245, 243, 240, 0.6); /* 弱化文字 */
+    --color-text-disabled: rgba(245, 243, 240, 0.3); /* 禁用文字 */
+
+    /* Border Colors */
+    --color-border-default: rgba(212, 175, 55, 0.3); /* 預設邊框 - 金色半透明 */
+    --color-border-focus: #d4af37;      /* 焦點邊框 */
+    --color-border-subtle: rgba(245, 243, 240, 0.1); /* 細微邊框 */
+
+    /* Semantic Colors */
+    --color-success: #10b981;           /* 成功 - 祖母綠 */
+    --color-warning: #f59e0b;           /* 警告 - 琥珀金 */
+    --color-error: #ef4444;             /* 錯誤 - 深紅 */
+    --color-info: #6366f1;              /* 資訊 - 靛藍 */
+
+    /* Rarity Colors - NFT 稀有度系統 */
+    --color-rarity-common: #9ca3af;     /* Common - 銀灰 */
+    --color-rarity-rare: #60a5fa;       /* Rare - 藍水晶 */
+    --color-rarity-epic: #c084fc;       /* Epic - 紫水晶 */
+    --color-rarity-legendary: #fbbf24;  /* Legendary - 黃金 */
+
+    /* Rarity Gradients */
+    --gradient-rarity-common: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+    --gradient-rarity-rare: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    --gradient-rarity-epic: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
+    --gradient-rarity-legendary: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+
+    /* Special Gradients */
+    --gradient-gold: linear-gradient(135deg, #d4af37 0%, #e8c96f 50%, #b8941f 100%);
+    --gradient-mystic: linear-gradient(135deg, #6366f1 0%, #9333ea 100%);
+
+    /* ===== Typography ===== */
+
+    /* Font Families */
+    --font-heading: 'Cinzel', 'Noto Serif TC', serif;     /* 古典襯線標題 */
+    --font-body: 'Noto Sans TC', 'Inter', sans-serif;     /* 現代內文 */
+    --font-accent: 'Cormorant Garamond', 'Noto Serif TC', serif; /* 裝飾字體 */
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace; /* 等寬字體 */
+
+    /* Font Sizes */
+    --text-xs: 0.75rem;      /* 12px */
+    --text-sm: 0.875rem;     /* 14px */
+    --text-base: 1rem;       /* 16px */
+    --text-lg: 1.125rem;     /* 18px */
+    --text-xl: 1.25rem;      /* 20px */
+    --text-2xl: 1.5rem;      /* 24px */
+    --text-3xl: 1.875rem;    /* 30px */
+    --text-4xl: 2.25rem;     /* 36px */
+    --text-5xl: 3rem;        /* 48px */
+
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Line Heights */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    /* ===== Spacing Scale ===== */
+    --space-1: 0.25rem;      /* 4px */
+    --space-2: 0.5rem;       /* 8px */
+    --space-3: 0.75rem;      /* 12px */
+    --space-4: 1rem;         /* 16px */
+    --space-5: 1.25rem;      /* 20px */
+    --space-6: 1.5rem;       /* 24px */
+    --space-8: 2rem;         /* 32px */
+    --space-10: 2.5rem;      /* 40px */
+    --space-12: 3rem;        /* 48px */
+    --space-16: 4rem;        /* 64px */
+
+    /* ===== Border Radius ===== */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+
+    /* ===== Shadows ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.8);
+
+    /* Gold Glow Shadows */
+    --shadow-glow-gold: 0 0 20px rgba(212, 175, 55, 0.4);
+    --shadow-glow-purple: 0 0 20px rgba(147, 51, 234, 0.4);
+    --shadow-glow-blue: 0 0 20px rgba(99, 102, 241, 0.4);
+
+    /* ===== Transitions ===== */
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+
+    /* ===== Z-Index Scale ===== */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-popover: 400;
+    --z-tooltip: 500;
+}

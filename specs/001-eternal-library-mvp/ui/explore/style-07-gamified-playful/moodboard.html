@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲化活潑 - 風格預覽</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            line-height: var(--line-height-normal);
+            padding: var(--space-8) var(--space-4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .moodboard-header {
+            text-align: center;
+            padding: var(--space-12) var(--space-8);
+            border: 3px solid var(--color-border-default);
+            margin-bottom: var(--space-12);
+            position: relative;
+            border-radius: var(--radius-2xl);
+            background: var(--gradient-playful);
+            background-size: 200% 200%;
+            animation: gradient-shift 6s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .moodboard-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--color-background-main);
+            opacity: 0.92;
+            border-radius: calc(var(--radius-2xl) - 3px);
+            z-index: 0;
+        }
+
+        .moodboard-header > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .style-number {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--color-primary);
+            margin-bottom: var(--space-2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: var(--font-weight-bold);
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-5xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-3);
+            color: var(--color-text-primary);
+        }
+
+        .tone-tags {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+
+        .tone-tag {
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-border-default);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: var(--font-weight-bold);
+        }
+
+        .description {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: var(--text-lg);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: var(--space-16);
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-3xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-8);
+            color: var(--color-text-primary);
+            position: relative;
+            padding-left: var(--space-6);
+        }
+
+        .section-title::before {
+            content: '★';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-primary);
+            font-size: var(--text-3xl);
+        }
+
+        /* Color Palette */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        .color-card {
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-border-default);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transition: all var(--transition-bounce);
+        }
+
+        .color-card:hover {
+            transform: translateY(-8px) rotate(-2deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .color-swatch {
+            height: 120px;
+            position: relative;
+        }
+
+        .color-info {
+            padding: var(--space-4);
+        }
+
+        .color-name {
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-1);
+            font-size: var(--text-sm);
+        }
+
+        .color-value {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+
+        /* Typography Samples */
+        .typography-samples {
+            background: var(--color-background-surface);
+            padding: var(--space-8);
+            border-radius: var(--radius-2xl);
+            border: 2px solid var(--color-border-default);
+            margin-bottom: var(--space-8);
+        }
+
+        .heading-sample {
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-4);
+            border-bottom: 2px dashed var(--color-border-subtle);
+        }
+
+        .heading-sample:last-child {
+            border-bottom: none;
+        }
+
+        .heading-label {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+            text-transform: uppercase;
+        }
+
+        .sample-h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+        }
+
+        .sample-h2 {
+            font-family: var(--font-heading);
+            font-size: var(--text-3xl);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .sample-h3 {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .sample-h4 {
+            font-family: var(--font-heading);
+            font-size: var(--text-xl);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .body-sample {
+            font-size: var(--text-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-secondary);
+        }
+
+        /* Component Examples */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .component-group {
+            background: var(--color-background-surface);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--color-border-default);
+        }
+
+        .component-label {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-lg);
+            font-weight: var(--font-weight-bold);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-bounce);
+            font-size: var(--text-base);
+            font-family: var(--font-body);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-playful);
+            color: white;
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(251, 191, 36, 0.1);
+            transform: scale(1.05);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-text-secondary);
+        }
+
+        .btn-ghost:hover {
+            background: var(--color-background-elevated);
+        }
+
+        .btn-disabled {
+            background: var(--color-background-elevated);
+            color: var(--color-text-disabled);
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        /* Input Fields */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .input {
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-primary);
+            font-size: var(--text-base);
+            font-family: var(--font-body);
+            transition: all var(--transition-normal);
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow-primary);
+            transform: scale(1.02);
+        }
+
+        .input-error {
+            border-color: var(--color-error);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            transition: all var(--transition-bounce);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px) rotate(1deg);
+        }
+
+        .card-title {
+            font-size: var(--text-xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-2);
+        }
+
+        .card-content {
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+        }
+
+        /* Rarity Cards */
+        .rarity-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-8);
+        }
+
+        .rarity-card {
+            background: var(--color-background-surface);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            border: 3px solid;
+            transition: all var(--transition-bounce);
+        }
+
+        .rarity-card:hover {
+            transform: translateY(-12px) scale(1.05);
+        }
+
+        .rarity-card.common {
+            border-color: var(--color-rarity-common);
+        }
+
+        .rarity-card.rare {
+            border-color: var(--color-rarity-rare);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.4);
+        }
+
+        .rarity-card.epic {
+            border-color: var(--color-rarity-epic);
+            box-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
+        }
+
+        .rarity-card.legendary {
+            border-color: var(--color-rarity-legendary);
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.5);
+        }
+
+        .rarity-header {
+            padding: var(--space-4);
+            text-align: center;
+            font-weight: var(--font-weight-bold);
+            color: white;
+        }
+
+        .rarity-card.common .rarity-header {
+            background: var(--gradient-rarity-common);
+        }
+
+        .rarity-card.rare .rarity-header {
+            background: var(--gradient-rarity-rare);
+        }
+
+        .rarity-card.epic .rarity-header {
+            background: var(--gradient-rarity-epic);
+        }
+
+        .rarity-card.legendary .rarity-header {
+            background: var(--gradient-rarity-legendary);
+        }
+
+        .rarity-body {
+            padding: var(--space-6);
+        }
+
+        .rarity-text {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--color-success);
+            border: 2px solid var(--color-success);
+        }
+
+        /* MGC Balance Display */
+        .mgc-balance {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            background: var(--color-background-surface);
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--color-border-default);
+        }
+
+        .mgc-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-rarity-legendary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--font-weight-bold);
+            color: white;
+            font-size: var(--text-base);
+        }
+
+        .mgc-amount {
+            font-family: var(--font-mono);
+            font-size: var(--text-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+        }
+
+        .mgc-label {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        /* Layout Preview */
+        .layout-preview {
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-border-default);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            margin-top: var(--space-8);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: var(--space-6);
+            border-bottom: 2px dashed var(--color-border-default);
+            margin-bottom: var(--space-6);
+        }
+
+        .preview-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-primary);
+        }
+
+        .preview-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .preview-item {
+            background: var(--color-background-main);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--color-border-default);
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-8);
+            transition: all var(--transition-bounce);
+        }
+
+        .back-link:hover {
+            gap: var(--space-4);
+            transform: translateX(-4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← 返回風格總覽</a>
+
+        <header class="moodboard-header">
+            <p class="style-number">Style 07</p>
+            <h1>遊戲化活潑 Gamified Playful</h1>
+            <div class="tone-tags">
+                <span class="tone-tag">活潑</span>
+                <span class="tone-tag">遊戲化</span>
+                <span class="tone-tag">趣味</span>
+            </div>
+            <p class="description">
+                明亮的金色調搭配圓潤的設計元素，創造出充滿活力和趣味性的遊戲化介面。強調互動回饋和視覺獎勵，使用彈跳動畫和明亮色彩，讓每個互動都充滿樂趣。適合希望打造輕鬆、有趣體驗的產品。
+            </p>
+        </header>
+
+        <!-- Color System -->
+        <section class="section">
+            <h2 class="section-title">色彩系統</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-playful); box-shadow: var(--shadow-glow-primary);"></div>
+                    <div class="color-info">
+                        <div class="color-name">主色 - 金色漸變</div>
+                        <div class="color-value">#fbbf24 → #fb923c</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-secondary);"></div>
+                    <div class="color-info">
+                        <div class="color-name">次要色 - 琥珀色</div>
+                        <div class="color-value">#f59e0b</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-accent);"></div>
+                    <div class="color-info">
+                        <div class="color-name">強調色 - 紫色</div>
+                        <div class="color-value">#8b5cf6</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-background-main);"></div>
+                    <div class="color-info">
+                        <div class="color-name">背景 - 淺金米</div>
+                        <div class="color-value">#fef3c7</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-success);"></div>
+                    <div class="color-info">
+                        <div class="color-name">成功 - 翡翠綠</div>
+                        <div class="color-value">#10b981</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--color-error);"></div>
+                    <div class="color-info">
+                        <div class="color-name">錯誤 - 紅色</div>
+                        <div class="color-value">#ef4444</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title" style="font-size: var(--text-2xl); margin-top: var(--space-12);">稀有度配色系統</h3>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-rarity-common);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Common - 灰</div>
+                        <div class="color-value">#94a3b8</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-rarity-rare); box-shadow: 0 0 20px rgba(96, 165, 250, 0.4);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Rare - 藍</div>
+                        <div class="color-value">#60a5fa</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-rarity-epic); box-shadow: 0 0 20px rgba(192, 132, 252, 0.4);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Epic - 紫</div>
+                        <div class="color-value">#c084fc</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: var(--gradient-rarity-legendary); box-shadow: 0 0 25px rgba(251, 191, 36, 0.5);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Legendary - 金</div>
+                        <div class="color-value">#fbbf24</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography -->
+        <section class="section">
+            <h2 class="section-title">字體排版</h2>
+            <div class="typography-samples">
+                <div class="heading-sample">
+                    <p class="heading-label">Heading 1 - Fredoka Bold</p>
+                    <h1 class="sample-h1">永恆圖書館 Eternal Library</h1>
+                </div>
+                <div class="heading-sample">
+                    <p class="heading-label">Heading 2 - Fredoka Bold</p>
+                    <h2 class="sample-h2">解答之書 Oracle Book</h2>
+                </div>
+                <div class="heading-sample">
+                    <p class="heading-label">Heading 3 - Fredoka Semibold</p>
+                    <h3 class="sample-h3">我的 NFT 收藏 My Collection</h3>
+                </div>
+                <div class="heading-sample">
+                    <p class="heading-label">Heading 4 - Fredoka Semibold</p>
+                    <h4 class="sample-h4">每日簽到 Daily Check-in</h4>
+                </div>
+                <div class="heading-sample">
+                    <p class="heading-label">Body Text - Inter Regular</p>
+                    <p class="body-sample">
+                        在心中默念你的問題，消耗 10 MGC 抽取一張解答之書。每張答案都有獨特的稀有度，你可以將珍貴的答案鑄造成 NFT 永久保存。
+                    </p>
+                    <p class="body-sample" style="margin-top: var(--space-4);">
+                        Think of your question, spend 10 MGC to draw an Oracle Book. Each answer has unique rarity, and you can mint precious answers as NFTs for eternal preservation.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Components -->
+        <section class="section">
+            <h2 class="section-title">元件預覽</h2>
+            <div class="component-grid">
+                <!-- Buttons -->
+                <div class="component-group">
+                    <p class="component-label">按鈕 Buttons</p>
+                    <div class="button-group">
+                        <button class="btn btn-primary">連接錢包</button>
+                        <button class="btn btn-secondary">查看收藏</button>
+                        <button class="btn btn-ghost">取消</button>
+                        <button class="btn btn-disabled">已簽到</button>
+                    </div>
+                </div>
+
+                <!-- Inputs -->
+                <div class="component-group">
+                    <p class="component-label">輸入框 Input Fields</p>
+                    <div class="input-group">
+                        <input type="text" class="input" placeholder="在心中默念你的問題...">
+                        <input type="text" class="input" placeholder="聚焦狀態" style="border-color: var(--color-primary); box-shadow: var(--shadow-glow-primary);">
+                        <input type="text" class="input input-error" placeholder="錯誤狀態" value="MGC 餘額不足">
+                    </div>
+                </div>
+
+                <!-- MGC Balance -->
+                <div class="component-group">
+                    <p class="component-label">MGC 餘額顯示</p>
+                    <div class="mgc-balance">
+                        <div class="mgc-icon">M</div>
+                        <div>
+                            <div class="mgc-amount">125</div>
+                            <div class="mgc-label">智慧碎片</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card -->
+                <div class="component-group">
+                    <p class="component-label">基本卡片 Card</p>
+                    <div class="card">
+                        <h3 class="card-title">連續簽到</h3>
+                        <p class="card-content">已連續簽到 7 天<br>繼續保持!</p>
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div class="component-group">
+                    <p class="component-label">徽章 Badges</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+                        <span class="badge badge-success">+5 MGC</span>
+                        <span class="badge" style="background: rgba(251, 191, 36, 0.2); color: var(--color-primary); border: 2px solid var(--color-primary);">NEW</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rarity Cards -->
+            <h3 class="section-title" style="font-size: var(--text-2xl); margin-top: var(--space-12);">答案卡片 - 稀有度展示</h3>
+            <div class="rarity-cards">
+                <div class="rarity-card common">
+                    <div class="rarity-header">COMMON</div>
+                    <div class="rarity-body">
+                        <p class="rarity-text" style="font-weight: var(--font-weight-semibold); margin-bottom: var(--space-2);">The journey begins with a single step.</p>
+                        <p class="rarity-text">千里之行，始於足下。</p>
+                    </div>
+                </div>
+
+                <div class="rarity-card rare">
+                    <div class="rarity-header">RARE</div>
+                    <div class="rarity-body">
+                        <p class="rarity-text" style="font-weight: var(--font-weight-semibold); margin-bottom: var(--space-2);">Trust the process and embrace change.</p>
+                        <p class="rarity-text">相信過程，擁抱改變。</p>
+                    </div>
+                </div>
+
+                <div class="rarity-card epic">
+                    <div class="rarity-header">EPIC</div>
+                    <div class="rarity-body">
+                        <p class="rarity-text" style="font-weight: var(--font-weight-semibold); margin-bottom: var(--space-2);">The stars align in your favor.</p>
+                        <p class="rarity-text">星辰眷顧著你的道路。</p>
+                    </div>
+                </div>
+
+                <div class="rarity-card legendary">
+                    <div class="rarity-header">LEGENDARY</div>
+                    <div class="rarity-body">
+                        <p class="rarity-text" style="font-weight: var(--font-weight-semibold); margin-bottom: var(--space-2);">Destiny awaits those who dare.</p>
+                        <p class="rarity-text">命運眷顧勇敢者。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Layout Preview -->
+        <section class="section">
+            <h2 class="section-title">佈局預覽</h2>
+            <div class="layout-preview">
+                <div class="preview-header">
+                    <h3 class="preview-title">永恆圖書館</h3>
+                    <div class="mgc-balance" style="padding: var(--space-2) var(--space-4);">
+                        <div class="mgc-icon" style="width: 24px; height: 24px; font-size: var(--text-xs);">M</div>
+                        <div>
+                            <div class="mgc-amount" style="font-size: var(--text-lg);">125</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-item">
+                        <p style="color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-2);">每日簽到</p>
+                        <p style="font-size: var(--text-xl); font-weight: var(--font-weight-bold);">7 天</p>
+                    </div>
+                    <div class="preview-item">
+                        <p style="color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-2);">NFT 收藏</p>
+                        <p style="font-size: var(--text-xl); font-weight: var(--font-weight-bold);">12 個</p>
+                    </div>
+                    <div class="preview-item">
+                        <p style="color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-2);">抽取次數</p>
+                        <p style="font-size: var(--text-xl); font-weight: var(--font-weight-bold);">45 次</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

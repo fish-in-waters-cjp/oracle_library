@@ -1,0 +1,113 @@
+/**
+ * Design Tokens - 極簡 Web3 (Minimal Web3)
+ * 調性: 極簡 | 去中心化 | 現代
+ */
+
+:root {
+    /* ===== Color System ===== */
+    --color-primary: #00ff88;
+    --color-primary-light: #5fffa8;
+    --color-primary-dark: #00cc6e;
+
+    --color-secondary: #ffffff;
+    --color-secondary-light: #ffffff;
+    --color-secondary-dark: #e5e5e5;
+
+    --color-accent: #00ffff;
+    --color-accent-light: #5fffff;
+
+    --color-background-main: #0f0f0f;
+    --color-background-surface: #1a1a1a;
+    --color-background-elevated: #252525;
+    --color-background-overlay: rgba(15, 15, 15, 0.95);
+
+    --color-text-primary: #ffffff;
+    --color-text-secondary: rgba(255, 255, 255, 0.85);
+    --color-text-muted: rgba(255, 255, 255, 0.5);
+    --color-text-disabled: rgba(255, 255, 255, 0.3);
+
+    --color-border-default: rgba(0, 255, 136, 0.3);
+    --color-border-focus: #00ff88;
+    --color-border-subtle: rgba(255, 255, 255, 0.1);
+
+    --color-success: #00ff88;
+    --color-warning: #ffaa00;
+    --color-error: #ff3333;
+    --color-info: #00ffff;
+
+    --color-rarity-common: #808080;
+    --color-rarity-rare: #4a9eff;
+    --color-rarity-epic: #a855f7;
+    --color-rarity-legendary: #ffd700;
+
+    --gradient-rarity-common: linear-gradient(135deg, #808080 0%, #606060 100%);
+    --gradient-rarity-rare: linear-gradient(135deg, #4a9eff 0%, #2563eb 100%);
+    --gradient-rarity-epic: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+    --gradient-rarity-legendary: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+
+    /* ===== Typography ===== */
+    --font-heading: 'Space Grotesk', 'Noto Sans TC', sans-serif;
+    --font-body: 'Inter', 'Noto Sans TC', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    /* ===== Spacing Scale ===== */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    /* ===== Border Radius ===== */
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-2xl: 16px;
+    --radius-full: 9999px;
+
+    /* ===== Shadows ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.8);
+
+    --shadow-glow-primary: 0 0 20px rgba(0, 255, 136, 0.4);
+    --shadow-glow-secondary: 0 0 20px rgba(255, 255, 255, 0.3);
+
+    /* ===== Transitions ===== */
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+
+    /* ===== Z-Index Scale ===== */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-popover: 400;
+    --z-tooltip: 500;
+}

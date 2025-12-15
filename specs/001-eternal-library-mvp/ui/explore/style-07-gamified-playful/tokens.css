@@ -1,0 +1,111 @@
+/**
+ * Design Tokens - 遊戲化活潑 (Gamified Playful)
+ * 調性: 活潑 | 遊戲化 | 趣味
+ */
+
+:root {
+    /* ===== Color System ===== */
+    --color-primary: #fbbf24;
+    --color-primary-light: #fcd34d;
+    --color-primary-dark: #f59e0b;
+
+    --color-secondary: #f59e0b;
+    --color-secondary-light: #fbbf24;
+    --color-secondary-dark: #d97706;
+
+    --color-accent: #8b5cf6;
+    --color-accent-bright: #a78bfa;
+    --color-accent-pink: #ec4899;
+
+    --color-background-main: #fef3c7;
+    --color-background-surface: #ffffff;
+    --color-background-elevated: #fffbeb;
+    --color-background-overlay: rgba(254, 243, 199, 0.95);
+
+    --color-text-primary: #78350f;
+    --color-text-secondary: #92400e;
+    --color-text-muted: #b45309;
+    --color-text-disabled: #d97706;
+
+    --color-border-default: #fbbf24;
+    --color-border-focus: #f59e0b;
+    --color-border-subtle: #fde68a;
+
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #06b6d4;
+
+    --color-rarity-common: #94a3b8;
+    --color-rarity-rare: #60a5fa;
+    --color-rarity-epic: #c084fc;
+    --color-rarity-legendary: #fbbf24;
+
+    --gradient-rarity-common: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+    --gradient-rarity-rare: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    --gradient-rarity-epic: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
+    --gradient-rarity-legendary: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+
+    --gradient-playful: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fb923c 100%);
+
+    /* ===== Typography ===== */
+    --font-heading: 'Fredoka', 'Noto Sans TC', sans-serif;
+    --font-body: 'Inter', 'Noto Sans TC', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-2xl: 32px;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 2px 4px rgba(251, 191, 36, 0.2);
+    --shadow-md: 0 4px 8px rgba(251, 191, 36, 0.3);
+    --shadow-lg: 0 8px 16px rgba(251, 191, 36, 0.4);
+    --shadow-xl: 0 12px 24px rgba(251, 191, 36, 0.5);
+
+    --shadow-glow-primary: 0 0 20px rgba(251, 191, 36, 0.4);
+
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-popover: 400;
+    --z-tooltip: 500;
+}

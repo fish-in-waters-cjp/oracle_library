@@ -1,0 +1,112 @@
+/**
+ * Design Tokens - 復古未來 (Retro Future)
+ * 調性: 復古 | 未來感 | 蒸汽波
+ */
+
+:root {
+    /* ===== Color System ===== */
+    --color-primary: #ff6ec7;
+    --color-primary-light: #ff9edb;
+    --color-primary-dark: #ff3eb3;
+
+    --color-secondary: #00ffff;
+    --color-secondary-light: #5fffff;
+    --color-secondary-dark: #00cccc;
+
+    --color-accent: #ffd700;
+    --color-accent-light: #ffed4e;
+
+    --color-background-main: #2d1b69;
+    --color-background-surface: #1a1a3e;
+    --color-background-elevated: #3d2b79;
+    --color-background-overlay: rgba(45, 27, 105, 0.95);
+
+    --color-text-primary: #ffffff;
+    --color-text-secondary: rgba(255, 255, 255, 0.85);
+    --color-text-muted: rgba(255, 255, 255, 0.6);
+    --color-text-disabled: rgba(255, 255, 255, 0.3);
+
+    --color-border-default: rgba(255, 110, 199, 0.4);
+    --color-border-focus: #ff6ec7;
+    --color-border-subtle: rgba(255, 255, 255, 0.1);
+
+    --color-success: #00ff88;
+    --color-warning: #ffd700;
+    --color-error: #ff006e;
+    --color-info: #00ffff;
+
+    --color-rarity-common: #b8b8b8;
+    --color-rarity-rare: #6eb5ff;
+    --color-rarity-epic: #d796ff;
+    --color-rarity-legendary: #ffd700;
+
+    --gradient-rarity-common: linear-gradient(135deg, #b8b8b8 0%, #8a8a8a 100%);
+    --gradient-rarity-rare: linear-gradient(135deg, #6eb5ff 0%, #4a9eff 100%);
+    --gradient-rarity-epic: linear-gradient(135deg, #d796ff 0%, #b76eff 100%);
+    --gradient-rarity-legendary: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+
+    --gradient-vaporwave: linear-gradient(135deg, #ff6ec7 0%, #00ffff 50%, #ffd700 100%);
+    --gradient-retro: linear-gradient(180deg, #2d1b69 0%, #1a1a3e 50%, #ff6ec7 100%);
+
+    /* ===== Typography ===== */
+    --font-heading: 'Bungee', 'Noto Sans TC', sans-serif;
+    --font-body: 'Inter', 'Noto Sans TC', sans-serif;
+    --font-mono: 'VT323', monospace;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    --radius-sm: 0px;
+    --radius-md: 2px;
+    --radius-lg: 4px;
+    --radius-xl: 8px;
+    --radius-2xl: 12px;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 2px 4px rgba(255, 110, 199, 0.3);
+    --shadow-md: 0 4px 8px rgba(255, 110, 199, 0.4);
+    --shadow-lg: 0 8px 16px rgba(255, 110, 199, 0.5);
+    --shadow-xl: 0 12px 24px rgba(255, 110, 199, 0.6);
+
+    --shadow-glow-primary: 0 0 20px rgba(255, 110, 199, 0.6);
+    --shadow-glow-secondary: 0 0 20px rgba(0, 255, 255, 0.6);
+    --shadow-glow-accent: 0 0 20px rgba(255, 215, 0, 0.6);
+
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-popover: 400;
+    --z-tooltip: 500;
+}

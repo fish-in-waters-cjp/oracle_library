@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>永恆圖書館 - UI 風格探索</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 300;
+        }
+
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .style-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .style-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .style-preview {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .style-info {
+            padding: 1.5rem;
+        }
+
+        .style-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .style-name-en {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1rem;
+        }
+
+        .style-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .color-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .color-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .view-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .view-button:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .styles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>永恆圖書館 - UI 風格探索</h1>
+            <p class="subtitle">選擇一個風格作為設計基礎</p>
+        </header>
+
+        <div class="styles-grid">
+            <!-- Style 01: Web3 暗黑科技 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f0f23 100%); position: relative;">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; height: 1px; background: linear-gradient(90deg, transparent, #00f3ff, transparent);"></div>
+                    <div style="position: absolute; top: 30%; left: 20%; width: 60px; height: 60px; border: 2px solid #ff006e; border-radius: 50%; opacity: 0.6;"></div>
+                    <div style="position: absolute; bottom: 30%; right: 20%; width: 80px; height: 80px; border: 2px solid #00f3ff; opacity: 0.5;"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">Web3 暗黑科技</h3>
+                    <p class="style-name-en">Web3 Dark Tech</p>
+                    <div class="style-tags">
+                        <span class="tag">Web3科技</span>
+                        <span class="tag">暗黑</span>
+                        <span class="tag">賽博龐克</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #00f3ff;"></div>
+                        <div class="color-dot" style="background: #ff006e;"></div>
+                        <div class="color-dot" style="background: #0a0e27;"></div>
+                        <div class="color-dot" style="background: #8b5cf6;"></div>
+                    </div>
+                    <a href="style-01-web3-dark-tech/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 02: 神秘圖書館 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 50%, #16213e 100%);">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; color: #d4af37; opacity: 0.3;">📖</div>
+                    <div style="position: absolute; top: 20%; left: 10%; width: 100px; height: 2px; background: linear-gradient(90deg, transparent, #d4af37, transparent);"></div>
+                    <div style="position: absolute; bottom: 20%; right: 10%; width: 120px; height: 2px; background: linear-gradient(90deg, transparent, #d4af37, transparent);"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">神秘圖書館</h3>
+                    <p class="style-name-en">Mystic Library</p>
+                    <div class="style-tags">
+                        <span class="tag">神秘</span>
+                        <span class="tag">古典</span>
+                        <span class="tag">知識</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #d4af37;"></div>
+                        <div class="color-dot" style="background: #2d1b4e;"></div>
+                        <div class="color-dot" style="background: #6366f1;"></div>
+                        <div class="color-dot" style="background: #9333ea;"></div>
+                    </div>
+                    <a href="style-02-mystic-library/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 03: 極簡 Web3 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: #0f0f0f;">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border: 3px solid #fff; opacity: 0.8;"></div>
+                    <div style="position: absolute; top: 40%; left: 30%; width: 60px; height: 2px; background: #00ff88;"></div>
+                    <div style="position: absolute; bottom: 40%; right: 30%; width: 60px; height: 2px; background: #00ff88;"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">極簡 Web3</h3>
+                    <p class="style-name-en">Minimal Web3</p>
+                    <div class="style-tags">
+                        <span class="tag">極簡</span>
+                        <span class="tag">去中心化</span>
+                        <span class="tag">現代</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #00ff88;"></div>
+                        <div class="color-dot" style="background: #ffffff;"></div>
+                        <div class="color-dot" style="background: #0f0f0f;"></div>
+                        <div class="color-dot" style="background: #1a1a1a;"></div>
+                    </div>
+                    <a href="style-03-minimal-web3/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 04: 漸變夢幻 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%); opacity: 0.9;">
+                    <div style="position: absolute; top: 30%; left: 20%; width: 100px; height: 100px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%); border-radius: 50%;"></div>
+                    <div style="position: absolute; bottom: 30%; right: 20%; width: 120px; height: 120px; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%); border-radius: 50%;"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">漸變夢幻</h3>
+                    <p class="style-name-en">Gradient Dream</p>
+                    <div class="style-tags">
+                        <span class="tag">夢幻</span>
+                        <span class="tag">流動</span>
+                        <span class="tag">現代科技</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                        <div class="color-dot" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+                        <div class="color-dot" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+                        <div class="color-dot" style="background: #1a1a2e;"></div>
+                    </div>
+                    <a href="style-04-gradient-dream/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 05: 專業商務深色 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 100px; border: 2px solid #3b82f6; border-radius: 8px; opacity: 0.6;"></div>
+                    <div style="position: absolute; top: 30%; right: 20%; width: 60px; height: 60px; background: rgba(59, 130, 246, 0.2); border-radius: 4px;"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">專業商務深色</h3>
+                    <p class="style-name-en">Professional Dark</p>
+                    <div class="style-tags">
+                        <span class="tag">專業</span>
+                        <span class="tag">商務</span>
+                        <span class="tag">企業級</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #3b82f6;"></div>
+                        <div class="color-dot" style="background: #64748b;"></div>
+                        <div class="color-dot" style="background: #0f172a;"></div>
+                        <div class="color-dot" style="background: #1e293b;"></div>
+                    </div>
+                    <a href="style-05-professional-dark/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 06: 清新簡約 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 3px solid #8b5cf6; border-radius: 16px;"></div>
+                    <div style="position: absolute; top: 25%; right: 25%; width: 40px; height: 40px; background: #06b6d4; border-radius: 50%; opacity: 0.6;"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">清新簡約</h3>
+                    <p class="style-name-en">Clean Minimal</p>
+                    <div class="style-tags">
+                        <span class="tag">清新</span>
+                        <span class="tag">極簡</span>
+                        <span class="tag">現代</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #8b5cf6;"></div>
+                        <div class="color-dot" style="background: #06b6d4;"></div>
+                        <div class="color-dot" style="background: #f8fafc;"></div>
+                        <div class="color-dot" style="background: #1e293b;"></div>
+                    </div>
+                    <a href="style-06-clean-minimal/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 07: 遊戲化活潑 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fb923c 100%);">
+                    <div style="position: absolute; top: 30%; left: 20%; font-size: 3rem;">⭐</div>
+                    <div style="position: absolute; bottom: 30%; right: 25%; font-size: 2.5rem;">🎯</div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: rgba(255,255,255,0.3); border-radius: 50%;"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">遊戲化活潑</h3>
+                    <p class="style-name-en">Gamified Playful</p>
+                    <div class="style-tags">
+                        <span class="tag">活潑</span>
+                        <span class="tag">遊戲化</span>
+                        <span class="tag">趣味</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #fbbf24;"></div>
+                        <div class="color-dot" style="background: #f59e0b;"></div>
+                        <div class="color-dot" style="background: #8b5cf6;"></div>
+                        <div class="color-dot" style="background: #ec4899;"></div>
+                    </div>
+                    <a href="style-07-gamified-playful/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 08: NFT 收藏展示 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%);">
+                    <div style="position: absolute; top: 20%; left: 15%; width: 80px; height: 100px; background: rgba(167, 139, 250, 0.3); border-radius: 8px; border: 2px solid #a78bfa;"></div>
+                    <div style="position: absolute; top: 35%; right: 15%; width: 80px; height: 100px; background: rgba(251, 146, 60, 0.3); border-radius: 8px; border: 2px solid #fb923c;"></div>
+                    <div style="position: absolute; bottom: 15%; left: 40%; width: 80px; height: 100px; background: rgba(52, 211, 153, 0.3); border-radius: 8px; border: 2px solid #34d399;"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">NFT 收藏展示</h3>
+                    <p class="style-name-en">NFT Gallery</p>
+                    <div class="style-tags">
+                        <span class="tag">畫廊</span>
+                        <span class="tag">收藏</span>
+                        <span class="tag">展示</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #a78bfa;"></div>
+                        <div class="color-dot" style="background: #fb923c;"></div>
+                        <div class="color-dot" style="background: #34d399;"></div>
+                        <div class="color-dot" style="background: #111827;"></div>
+                    </div>
+                    <a href="style-08-nft-gallery/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 09: 復古未來 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #2d1b69 0%, #1a1a3e 50%, #ff6ec7 100%);">
+                    <div style="position: absolute; top: 40%; left: 50%; transform: translateX(-50%); width: 150px; height: 80px; border: 3px solid #00ffff; clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);"></div>
+                    <div style="position: absolute; bottom: 20%; left: 20%; width: 100px; height: 3px; background: linear-gradient(90deg, #ff6ec7, #ffd700); box-shadow: 0 0 10px #ff6ec7;"></div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">復古未來</h3>
+                    <p class="style-name-en">Retro Future</p>
+                    <div class="style-tags">
+                        <span class="tag">復古</span>
+                        <span class="tag">未來感</span>
+                        <span class="tag">蒸汽波</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #ff6ec7;"></div>
+                        <div class="color-dot" style="background: #00ffff;"></div>
+                        <div class="color-dot" style="background: #ffd700;"></div>
+                        <div class="color-dot" style="background: #2d1b69;"></div>
+                    </div>
+                    <a href="style-09-retro-future/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+
+            <!-- Style 10: 高端奢華 -->
+            <div class="style-card">
+                <div class="style-preview" style="background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #0a0a0a 100%);">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid #d4af37; border-radius: 4px;"></div>
+                    <div style="position: absolute; top: 30%; right: 25%; width: 40px; height: 40px; background: radial-gradient(circle, #d4af37, transparent); opacity: 0.5;"></div>
+                    <div style="position: absolute; bottom: 25%; left: 20%; font-size: 2rem; color: #d4af37; opacity: 0.3;">◆</div>
+                </div>
+                <div class="style-info">
+                    <h3 class="style-name">高端奢華</h3>
+                    <p class="style-name-en">Luxury Premium</p>
+                    <div class="style-tags">
+                        <span class="tag">奢華</span>
+                        <span class="tag">高端</span>
+                        <span class="tag">精緻</span>
+                    </div>
+                    <div class="color-dots">
+                        <div class="color-dot" style="background: #d4af37;"></div>
+                        <div class="color-dot" style="background: #c0c0c0;"></div>
+                        <div class="color-dot" style="background: #000000;"></div>
+                        <div class="color-dot" style="background: #1a1a1a;"></div>
+                    </div>
+                    <a href="style-10-luxury-premium/moodboard.html" class="view-button">查看完整風格</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
