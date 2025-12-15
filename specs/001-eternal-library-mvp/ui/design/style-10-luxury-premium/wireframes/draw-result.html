@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽取結果 - 高端奢華 | 永恆圖書館</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: var(--space-8); }
+        .result-container { max-width: 800px; width: 100%; }
+        .back-button { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-secondary); text-decoration: none; font-size: var(--text-sm); margin-bottom: var(--space-8); transition: color var(--transition-normal); }
+        .back-button:hover { color: var(--color-primary); }
+        .answer-card { background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-16); margin-bottom: var(--space-10); transition: all var(--transition-slow); }
+        .answer-card.legendary { border-color: var(--color-rarity-legendary); }
+        .rarity-badge { display: inline-block; padding: var(--space-2) var(--space-5); border: 1px solid var(--color-primary); border-radius: var(--radius-sm); font-size: var(--text-sm); font-weight: var(--font-weight-normal); margin-bottom: var(--space-10); color: var(--color-primary); }
+        .answer-text-en { font-family: var(--font-accent); font-size: var(--text-3xl); line-height: var(--line-height-relaxed); color: var(--color-text-primary); margin-bottom: var(--space-8); font-style: italic; }
+        .answer-text-zh { font-family: var(--font-body); font-size: var(--text-xl); line-height: var(--line-height-relaxed); color: var(--color-text-secondary); padding-left: var(--space-6); border-left: 1px solid var(--color-primary); }
+        .answer-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-6); padding: var(--space-8); background: transparent; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); margin: var(--space-10) 0; }
+        .meta-item { text-align: center; }
+        .meta-label { font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: var(--space-2); }
+        .meta-value { font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary); font-weight: var(--font-weight-normal); }
+        .actions { display: flex; gap: var(--space-5); }
+        .btn { flex: 1; padding: var(--space-5) var(--space-6); border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: var(--text-lg); cursor: pointer; transition: all var(--transition-slow); text-decoration: none; text-align: center; font-weight: var(--font-weight-normal); }
+        .btn-primary { background: transparent; color: var(--color-primary); border: 1px solid var(--color-primary); }
+        .btn-primary:hover { background: rgba(212, 175, 55, 0.1); box-shadow: var(--shadow-glow-gold); }
+        .btn-secondary { background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border-default); }
+        .btn-secondary:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <a href="home.html" class="back-button"><span>←</span> 返回</a>
+        <div class="answer-card legendary">
+            <div class="rarity-badge">Legendary</div>
+            <p class="answer-text-en">"The journey of a thousand miles begins with a single step."</p>
+            <p class="answer-text-zh">千里之行，始於足下。</p>
+            <div class="answer-meta">
+                <div class="meta-item">
+                    <div class="meta-label">稀有度</div>
+                    <div class="meta-value">Legendary</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">出處</div>
+                    <div class="meta-value">老子</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">掉落率</div>
+                    <div class="meta-value">1%</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">鑄造費用</div>
+                    <div class="meta-value">5 MGC + Gas</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="mintNFT()">鑄造為 NFT</button>
+                <a href="home.html" class="btn btn-secondary">繼續探索</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mintNFT() {
+            if (confirm('確定要鑄造此解答為 NFT 嗎？這將消耗 5 MGC + Gas 費用。')) {
+                // 模擬鑄造過程
+                const btn = event.target;
+                btn.textContent = '鑄造中...';
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+
+                setTimeout(() => {
+                    alert('✨ NFT 鑄造成功！您可以在「我的收藏」中查看。');
+                    window.location.href = 'collection.html';
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>

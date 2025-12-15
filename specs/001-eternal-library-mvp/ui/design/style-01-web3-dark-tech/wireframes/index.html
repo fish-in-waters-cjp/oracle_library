@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>線框圖總覽 | Web3 暗黑科技</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            padding: var(--space-8);
+            line-height: var(--line-height-normal);
+        }
+
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-5xl);
+            margin-bottom: var(--space-3);
+            color: var(--color-primary);
+            text-shadow: var(--shadow-glow-primary);
+        }
+
+        .subtitle {
+            font-size: var(--text-xl);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-12);
+        }
+
+        .wireframes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: var(--space-8);
+        }
+
+        .wireframe-card {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition-normal);
+        }
+
+        .wireframe-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .wireframe-preview {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: var(--color-background-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-5xl);
+            border-bottom: 1px solid var(--color-border-default);
+        }
+
+        .wireframe-info {
+            padding: var(--space-6);
+        }
+
+        .wireframe-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-3);
+            color: var(--color-primary);
+        }
+
+        .wireframe-desc {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-4);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .wireframe-link {
+            display: inline-block;
+            padding: var(--space-3) var(--space-5);
+            background: var(--color-secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: var(--font-weight-semibold);
+            transition: var(--transition-fast);
+            box-shadow: var(--shadow-glow-secondary);
+        }
+
+        .wireframe-link:hover {
+            background: var(--color-secondary-light);
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: var(--space-8);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: var(--text-base);
+        }
+
+        .back-link:hover {
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 768px) {
+            .wireframes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: var(--text-4xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../user-flow.html" class="back-link">← 返回使用者流程圖</a>
+
+        <h1>線框圖總覽</h1>
+        <p class="subtitle">永恆圖書館 MVP - Web3 暗黑科技風格</p>
+
+        <div class="wireframes-grid">
+            <!-- Login Page -->
+            <div class="wireframe-card">
+                <div class="wireframe-preview">🔐</div>
+                <div class="wireframe-info">
+                    <h2 class="wireframe-title">登入頁</h2>
+                    <p class="wireframe-desc">
+                        錢包連接入口，包含 Logo、標題、連接按鈕與錯誤訊息區域。
+                    </p>
+                    <a href="login.html" class="wireframe-link">查看線框圖 →</a>
+                </div>
+            </div>
+
+            <!-- Home Page -->
+            <div class="wireframe-card">
+                <div class="wireframe-preview">🏠</div>
+                <div class="wireframe-info">
+                    <h2 class="wireframe-title">主頁</h2>
+                    <p class="wireframe-desc">
+                        核心功能頁面：MGC 餘額顯示、每日簽到卡片、抽取解答入口。
+                    </p>
+                    <a href="home.html" class="wireframe-link">查看線框圖 →</a>
+                </div>
+            </div>
+
+            <!-- Draw Result Page -->
+            <div class="wireframe-card">
+                <div class="wireframe-preview">🎴</div>
+                <div class="wireframe-info">
+                    <h2 class="wireframe-title">抽取結果頁</h2>
+                    <p class="wireframe-desc">
+                        顯示答案卡片（雙語）、稀有度標籤、鑄造 NFT 按鈕。
+                    </p>
+                    <a href="draw-result.html" class="wireframe-link">查看線框圖 →</a>
+                </div>
+            </div>
+
+            <!-- Collection Page -->
+            <div class="wireframe-card">
+                <div class="wireframe-preview">📚</div>
+                <div class="wireframe-info">
+                    <h2 class="wireframe-title">收藏頁</h2>
+                    <p class="wireframe-desc">
+                        NFT 網格展示、統計卡片、響應式佈局（桌面 4 列 / 平板 3 列 / 手機 2 列）。
+                    </p>
+                    <a href="collection.html" class="wireframe-link">查看線框圖 →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

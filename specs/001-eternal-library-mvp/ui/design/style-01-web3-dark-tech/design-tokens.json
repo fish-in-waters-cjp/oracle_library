@@ -1,0 +1,278 @@
+{
+  "$schema": "https://design-tokens.org/schemas/v0.1/design-tokens.json",
+  "name": "Web3 暗黑科技",
+  "description": "Design tokens for Eternal Library MVP - Web3 Dark Tech style",
+  "colors": {
+    "primary": {
+      "value": "#00f3ff",
+      "type": "color",
+      "description": "霓虹青色 - 主要強調色"
+    },
+    "primary-light": {
+      "value": "#5ffbff",
+      "type": "color"
+    },
+    "primary-dark": {
+      "value": "#00b8c4",
+      "type": "color"
+    },
+    "secondary": {
+      "value": "#ff006e",
+      "type": "color",
+      "description": "霓虹粉 - 次要強調色"
+    },
+    "secondary-light": {
+      "value": "#ff4d9a",
+      "type": "color"
+    },
+    "secondary-dark": {
+      "value": "#cc0058",
+      "type": "color"
+    },
+    "accent": {
+      "value": "#8b5cf6",
+      "type": "color",
+      "description": "紫色科技感"
+    },
+    "accent-bright": {
+      "value": "#a78bfa",
+      "type": "color"
+    },
+    "background": {
+      "main": {
+        "value": "#0a0e27",
+        "type": "color",
+        "description": "深藍黑底"
+      },
+      "surface": {
+        "value": "#1a1a3e",
+        "type": "color",
+        "description": "卡片背景"
+      },
+      "elevated": {
+        "value": "#252550",
+        "type": "color",
+        "description": "浮起元素"
+      }
+    },
+    "text": {
+      "primary": {
+        "value": "#ffffff",
+        "type": "color"
+      },
+      "secondary": {
+        "value": "rgba(255, 255, 255, 0.8)",
+        "type": "color"
+      },
+      "muted": {
+        "value": "rgba(255, 255, 255, 0.5)",
+        "type": "color"
+      },
+      "disabled": {
+        "value": "rgba(255, 255, 255, 0.3)",
+        "type": "color"
+      }
+    },
+    "semantic": {
+      "success": {
+        "value": "#00ff88",
+        "type": "color",
+        "description": "霓虹綠"
+      },
+      "warning": {
+        "value": "#ffb800",
+        "type": "color",
+        "description": "霓虹黃"
+      },
+      "error": {
+        "value": "#ff006e",
+        "type": "color",
+        "description": "霓虹粉"
+      },
+      "info": {
+        "value": "#00f3ff",
+        "type": "color",
+        "description": "霓虹青"
+      }
+    },
+    "rarity": {
+      "common": {
+        "value": "#6b7280",
+        "type": "color",
+        "description": "灰色"
+      },
+      "rare": {
+        "value": "#3b82f6",
+        "type": "color",
+        "description": "藍色"
+      },
+      "epic": {
+        "value": "#a855f7",
+        "type": "color",
+        "description": "紫色"
+      },
+      "legendary": {
+        "value": "#fbbf24",
+        "type": "color",
+        "description": "金色"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "heading": {
+        "value": "'Orbitron', 'Noto Sans TC', sans-serif",
+        "type": "fontFamily",
+        "description": "科技感標題"
+      },
+      "body": {
+        "value": "'Inter', 'Noto Sans TC', sans-serif",
+        "type": "fontFamily",
+        "description": "現代內文"
+      },
+      "mono": {
+        "value": "'JetBrains Mono', 'Courier New', monospace",
+        "type": "fontFamily",
+        "description": "等寬字體"
+      }
+    },
+    "fontSize": {
+      "xs": {
+        "value": "0.75rem",
+        "type": "dimension"
+      },
+      "sm": {
+        "value": "0.875rem",
+        "type": "dimension"
+      },
+      "base": {
+        "value": "1rem",
+        "type": "dimension"
+      },
+      "lg": {
+        "value": "1.125rem",
+        "type": "dimension"
+      },
+      "xl": {
+        "value": "1.25rem",
+        "type": "dimension"
+      },
+      "2xl": {
+        "value": "1.5rem",
+        "type": "dimension"
+      },
+      "3xl": {
+        "value": "1.875rem",
+        "type": "dimension"
+      },
+      "4xl": {
+        "value": "2.25rem",
+        "type": "dimension"
+      },
+      "5xl": {
+        "value": "3rem",
+        "type": "dimension"
+      }
+    },
+    "fontWeight": {
+      "normal": {
+        "value": 400,
+        "type": "number"
+      },
+      "medium": {
+        "value": 500,
+        "type": "number"
+      },
+      "semibold": {
+        "value": 600,
+        "type": "number"
+      },
+      "bold": {
+        "value": 700,
+        "type": "number"
+      }
+    }
+  },
+  "spacing": {
+    "1": {
+      "value": "0.25rem",
+      "type": "dimension"
+    },
+    "2": {
+      "value": "0.5rem",
+      "type": "dimension"
+    },
+    "3": {
+      "value": "0.75rem",
+      "type": "dimension"
+    },
+    "4": {
+      "value": "1rem",
+      "type": "dimension"
+    },
+    "5": {
+      "value": "1.25rem",
+      "type": "dimension"
+    },
+    "6": {
+      "value": "1.5rem",
+      "type": "dimension"
+    },
+    "8": {
+      "value": "2rem",
+      "type": "dimension"
+    },
+    "10": {
+      "value": "2.5rem",
+      "type": "dimension"
+    },
+    "12": {
+      "value": "3rem",
+      "type": "dimension"
+    },
+    "16": {
+      "value": "4rem",
+      "type": "dimension"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "4px",
+      "type": "dimension"
+    },
+    "md": {
+      "value": "8px",
+      "type": "dimension"
+    },
+    "lg": {
+      "value": "12px",
+      "type": "dimension"
+    },
+    "xl": {
+      "value": "16px",
+      "type": "dimension"
+    },
+    "2xl": {
+      "value": "24px",
+      "type": "dimension"
+    },
+    "full": {
+      "value": "9999px",
+      "type": "dimension"
+    }
+  },
+  "transitions": {
+    "fast": {
+      "value": "150ms ease",
+      "type": "duration"
+    },
+    "normal": {
+      "value": "300ms ease",
+      "type": "duration"
+    },
+    "slow": {
+      "value": "500ms ease",
+      "type": "duration"
+    }
+  }
+}

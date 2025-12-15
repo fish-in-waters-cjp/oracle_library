@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按鈕元件 - 神秘圖書館 | 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            padding: var(--space-8);
+            min-height: 100vh;
+        }
+
+        .page-header {
+            max-width: 1200px;
+            margin: 0 auto var(--space-12);
+        }
+
+        .page-header h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-3);
+            text-shadow: var(--shadow-glow-gold);
+        }
+
+        .page-header p {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-6);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-normal);
+        }
+
+        .back-link:hover {
+            color: var(--color-primary);
+            background: var(--color-background-surface);
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--color-border-default);
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+            align-items: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .button-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+            width: 100%;
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+        }
+
+        /* Button Base */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-md);
+            font-family: var(--font-heading);
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--text-base);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            border: none;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        /* Primary Button */
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: var(--color-background-main);
+            border: 1px solid var(--color-primary);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-gold-strong);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        /* Secondary Button */
+        .btn-secondary {
+            background: var(--gradient-mystic);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-secondary);
+            box-shadow: var(--shadow-glow-blue);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-purple);
+        }
+
+        /* Ghost Button */
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-border-default);
+        }
+
+        .btn-ghost:hover:not(:disabled) {
+            border-color: var(--color-primary);
+            background: var(--color-background-elevated);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        /* Outline Button */
+        .btn-outline {
+            background: transparent;
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-text-secondary);
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        /* Link Button */
+        .btn-link {
+            background: transparent;
+            color: var(--color-primary);
+            border: none;
+            padding: var(--space-2) var(--space-3);
+            text-decoration: underline;
+        }
+
+        .btn-link:hover:not(:disabled) {
+            color: var(--color-primary-light);
+        }
+
+        /* Sizes */
+        .btn-sm {
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--text-sm);
+        }
+
+        .btn-md {
+            padding: var(--space-3) var(--space-6);
+            font-size: var(--text-base);
+        }
+
+        .btn-lg {
+            padding: var(--space-4) var(--space-8);
+            font-size: var(--text-lg);
+        }
+
+        /* States */
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid currentColor;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Icon Buttons */
+        .btn-icon {
+            padding: var(--space-3);
+            aspect-ratio: 1;
+        }
+
+        .btn-icon-sm {
+            padding: var(--space-2);
+        }
+
+        .btn-icon-lg {
+            padding: var(--space-4);
+        }
+
+        /* Full Width */
+        .btn-full {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .button-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .page-header h1 {
+                font-size: var(--text-3xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="index.html" class="back-link">
+            <span>←</span>
+            <span>返回元件庫</span>
+        </a>
+        <h1>按鈕元件</h1>
+        <p>神秘圖書館風格的按鈕元件系統，包含多種樣式、尺寸和狀態</p>
+    </div>
+
+    <div class="content-container">
+        <!-- Button Variants -->
+        <section class="section">
+            <h2 class="section-title">按鈕變體</h2>
+
+            <div class="button-group">
+                <span class="label">Primary - 主要動作</span>
+                <button class="btn btn-primary">主要按鈕</button>
+                <button class="btn btn-primary">🔮 抽取解答</button>
+                <button class="btn btn-primary">簽到 +100 MGC</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Secondary - 次要動作</span>
+                <button class="btn btn-secondary">次要按鈕</button>
+                <button class="btn btn-secondary">📚 查看收藏</button>
+                <button class="btn btn-secondary">連接錢包</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Ghost - 輕量動作</span>
+                <button class="btn btn-ghost">幽靈按鈕</button>
+                <button class="btn btn-ghost">取消</button>
+                <button class="btn btn-ghost">了解更多</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Outline - 邊框按鈕</span>
+                <button class="btn btn-outline">邊框按鈕</button>
+                <button class="btn btn-outline">返回主頁</button>
+                <button class="btn btn-outline">稍後提醒</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Link - 連結樣式</span>
+                <button class="btn btn-link">連結按鈕</button>
+                <button class="btn btn-link">查看詳情</button>
+                <button class="btn btn-link">前往官網</button>
+            </div>
+        </section>
+
+        <!-- Button Sizes -->
+        <section class="section">
+            <h2 class="section-title">按鈕尺寸</h2>
+
+            <div class="button-group">
+                <span class="label">Small - 小尺寸</span>
+                <button class="btn btn-primary btn-sm">小按鈕</button>
+                <button class="btn btn-secondary btn-sm">小按鈕</button>
+                <button class="btn btn-ghost btn-sm">小按鈕</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Medium - 中尺寸 (預設)</span>
+                <button class="btn btn-primary btn-md">中按鈕</button>
+                <button class="btn btn-secondary btn-md">中按鈕</button>
+                <button class="btn btn-ghost btn-md">中按鈕</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Large - 大尺寸</span>
+                <button class="btn btn-primary btn-lg">大按鈕</button>
+                <button class="btn btn-secondary btn-lg">大按鈕</button>
+                <button class="btn btn-ghost btn-lg">大按鈕</button>
+            </div>
+        </section>
+
+        <!-- Button States -->
+        <section class="section">
+            <h2 class="section-title">按鈕狀態</h2>
+
+            <div class="button-group">
+                <span class="label">Normal - 正常狀態</span>
+                <button class="btn btn-primary">正常狀態</button>
+                <button class="btn btn-secondary">正常狀態</button>
+                <button class="btn btn-ghost">正常狀態</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Hover - 懸停狀態 (請滑鼠移過查看)</span>
+                <button class="btn btn-primary">懸停效果</button>
+                <button class="btn btn-secondary">懸停效果</button>
+                <button class="btn btn-ghost">懸停效果</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Disabled - 禁用狀態</span>
+                <button class="btn btn-primary" disabled>禁用狀態</button>
+                <button class="btn btn-secondary" disabled>禁用狀態</button>
+                <button class="btn btn-ghost" disabled>禁用狀態</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Loading - 載入狀態</span>
+                <button class="btn btn-primary btn-loading">載入中</button>
+                <button class="btn btn-secondary btn-loading">載入中</button>
+                <button class="btn btn-ghost btn-loading">載入中</button>
+            </div>
+        </section>
+
+        <!-- Icon Buttons -->
+        <section class="section">
+            <h2 class="section-title">圖示按鈕</h2>
+
+            <div class="button-group">
+                <span class="label">Icon Buttons - 純圖示</span>
+                <button class="btn btn-primary btn-icon btn-icon-sm">⚙️</button>
+                <button class="btn btn-primary btn-icon">⚙️</button>
+                <button class="btn btn-primary btn-icon btn-icon-lg">⚙️</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Icon + Text - 圖示加文字</span>
+                <button class="btn btn-primary">
+                    <span>🎨</span>
+                    <span>鑄造 NFT</span>
+                </button>
+                <button class="btn btn-secondary">
+                    <span>✍️</span>
+                    <span>簽到</span>
+                </button>
+                <button class="btn btn-ghost">
+                    <span>📖</span>
+                    <span>閱讀更多</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Button Groups -->
+        <section class="section">
+            <h2 class="section-title">按鈕組合</h2>
+
+            <div class="button-group">
+                <span class="label">Horizontal Group - 水平排列</span>
+                <button class="btn btn-primary">確認</button>
+                <button class="btn btn-ghost">取消</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Full Width - 全寬按鈕</span>
+                <button class="btn btn-primary btn-full">全寬主要按鈕</button>
+            </div>
+
+            <div class="button-group">
+                <span class="label">Action Buttons - 動作按鈕</span>
+                <button class="btn btn-primary">儲存變更</button>
+                <button class="btn btn-outline">重設</button>
+                <button class="btn btn-link">取消</button>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽取結果 - 神秘圖書館 | 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, var(--color-accent) 0%, transparent 60%);
+            opacity: 0.1;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .result-container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            margin-bottom: var(--space-6);
+            transition: all var(--transition-normal);
+        }
+
+        .back-button:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateX(-4px);
+        }
+
+        .answer-card {
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-10);
+            box-shadow: var(--shadow-xl);
+            margin-bottom: var(--space-8);
+            position: relative;
+            overflow: hidden;
+            animation: cardReveal 0.6s ease-out;
+        }
+
+        @keyframes cardReveal {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .answer-card.legendary {
+            border-color: var(--color-rarity-legendary);
+            background: linear-gradient(135deg, var(--color-background-surface), var(--color-rarity-legendary-bg));
+            box-shadow: var(--shadow-glow-gold-strong);
+        }
+
+        .answer-card.epic {
+            border-color: var(--color-rarity-epic);
+            background: linear-gradient(135deg, var(--color-background-surface), var(--color-rarity-epic-bg));
+            box-shadow: 0 0 30px rgba(192, 132, 252, 0.4);
+        }
+
+        .answer-card.rare {
+            border-color: var(--color-rarity-rare);
+            background: linear-gradient(135deg, var(--color-background-surface), var(--color-rarity-rare-bg));
+            box-shadow: 0 0 30px rgba(96, 165, 250, 0.4);
+        }
+
+        .answer-card.common {
+            border-color: var(--color-rarity-common);
+            background: linear-gradient(135deg, var(--color-background-surface), var(--color-rarity-common-bg));
+        }
+
+        .rarity-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-6);
+        }
+
+        .rarity-badge.legendary {
+            background: var(--gradient-rarity-legendary);
+            color: var(--color-background-main);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .rarity-badge.epic {
+            background: var(--gradient-rarity-epic);
+            color: white;
+        }
+
+        .rarity-badge.rare {
+            background: var(--gradient-rarity-rare);
+            color: white;
+        }
+
+        .rarity-badge.common {
+            background: var(--gradient-rarity-common);
+            color: white;
+        }
+
+        .answer-content {
+            margin-bottom: var(--space-8);
+        }
+
+        .answer-text-en {
+            font-family: var(--font-accent);
+            font-size: var(--text-3xl);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-6);
+            font-style: italic;
+        }
+
+        .answer-text-zh {
+            font-family: var(--font-body);
+            font-size: var(--text-xl);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-secondary);
+            padding-left: var(--space-6);
+            border-left: 3px solid var(--color-primary);
+        }
+
+        .answer-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-4);
+            padding: var(--space-5);
+            background: var(--color-background-main);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-8);
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-1);
+        }
+
+        .meta-value {
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            color: var(--color-primary);
+        }
+
+        .actions {
+            display: flex;
+            gap: var(--space-4);
+        }
+
+        .btn {
+            flex: 1;
+            padding: var(--space-5) var(--space-6);
+            border-radius: var(--radius-md);
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            font-weight: var(--font-weight-semibold);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            border: none;
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+        }
+
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: var(--color-background-main);
+            border: 1px solid var(--color-primary);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-gold-strong);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border-default);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: var(--color-background-elevated);
+        }
+
+        @media (max-width: 768px) {
+            .answer-card {
+                padding: var(--space-6);
+            }
+
+            .answer-text-en {
+                font-size: var(--text-2xl);
+            }
+
+            .answer-text-zh {
+                font-size: var(--text-lg);
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <a href="home.html" class="back-button">
+            <span>←</span>
+            <span>返回</span>
+        </a>
+
+        <div class="answer-card legendary">
+            <div class="rarity-badge legendary">
+                <span>✦</span>
+                <span>Legendary 傳說</span>
+            </div>
+
+            <div class="answer-content">
+                <p class="answer-text-en">
+                    "The journey of a thousand miles begins with a single step."
+                </p>
+                <p class="answer-text-zh">
+                    千里之行，始於足下。
+                </p>
+            </div>
+
+            <div class="answer-meta">
+                <div class="meta-item">
+                    <div class="meta-label">稀有度</div>
+                    <div class="meta-value">Legendary</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">出處</div>
+                    <div class="meta-value">老子</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">掉落率</div>
+                    <div class="meta-value">1%</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">鑄造費用</div>
+                    <div class="meta-value">5 MGC + Gas</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="mintNFT()">
+                    <span>🎨</span>
+                    <span>鑄造為 NFT</span>
+                </button>
+                <a href="home.html" class="btn btn-secondary">
+                    繼續探索
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mintNFT() {
+            if (confirm('確定要鑄造此解答為 NFT 嗎？這將消耗 5 MGC + Gas 費用。')) {
+                console.log('開始鑄造 NFT');
+                alert('NFT 鑄造成功！您可以在「我的收藏」中查看。');
+                window.location.href = 'collection.html';
+            }
+        }
+    </script>
+</body>
+</html>

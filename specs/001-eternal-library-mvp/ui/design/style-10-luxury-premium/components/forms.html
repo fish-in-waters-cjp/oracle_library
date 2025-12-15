@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表單元件 - 高端奢華</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); padding: var(--space-12); }
+        .page-header { max-width: 1200px; margin: 0 auto var(--space-12); }
+        .page-header h1 { font-family: var(--font-heading); font-size: var(--text-4xl); color: var(--color-primary); margin-bottom: var(--space-6); font-weight: var(--font-weight-normal); }
+        .back-link { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-secondary); text-decoration: none; font-size: var(--text-sm); margin-bottom: var(--space-6); }
+        .back-link:hover { color: var(--color-primary); }
+        .content { max-width: 1200px; margin: 0 auto; }
+        .section { background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-10); margin-bottom: var(--space-10); }
+        .section-title { font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-primary); margin-bottom: var(--space-8); border-bottom: 1px solid var(--color-border-default); padding-bottom: var(--space-4); font-weight: var(--font-weight-normal); }
+        .form-group { margin-bottom: var(--space-8); }
+        .form-label { display: block; font-size: var(--text-sm); font-weight: var(--font-weight-medium); color: var(--color-text-primary); margin-bottom: var(--space-3); }
+        .form-input, .form-textarea, .form-select { width: 100%; max-width: 400px; padding: var(--space-4); background: transparent; border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); color: var(--color-text-primary); font-family: var(--font-body); font-size: var(--text-base); transition: all var(--transition-normal); }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--shadow-glow-gold); }
+        .form-textarea { min-height: 120px; resize: vertical; }
+        .form-input.error { border-color: var(--color-error); }
+        .form-help { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-2); }
+        .form-error { font-size: var(--text-sm); color: var(--color-error); margin-top: var(--space-2); }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="index.html" class="back-link"><span>←</span> 返回元件庫</a>
+        <h1>表單元件</h1>
+    </div>
+    <div class="content">
+        <section class="section">
+            <h2 class="section-title">輸入框</h2>
+            <div class="form-group">
+                <label class="form-label">文字輸入</label>
+                <input type="text" class="form-input" placeholder="請輸入文字...">
+                <div class="form-help">這是輔助說明文字</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">錯誤狀態</label>
+                <input type="text" class="form-input error" value="錯誤的輸入">
+                <div class="form-error">此欄位為必填</div>
+            </div>
+        </section>
+        <section class="section">
+            <h2 class="section-title">文字區域</h2>
+            <div class="form-group">
+                <label class="form-label">多行文字輸入</label>
+                <textarea class="form-textarea" placeholder="輸入您的問題..."></textarea>
+            </div>
+        </section>
+        <section class="section">
+            <h2 class="section-title">下拉選單</h2>
+            <div class="form-group">
+                <label class="form-label">選擇稀有度</label>
+                <select class="form-select">
+                    <option>全部稀有度</option>
+                    <option>Legendary</option>
+                    <option>Epic</option>
+                    <option>Rare</option>
+                    <option>Common</option>
+                </select>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

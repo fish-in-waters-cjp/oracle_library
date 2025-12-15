@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡片元件 - 神秘圖書館</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); padding: var(--space-8); }
+        .page-header { max-width: 1200px; margin: 0 auto var(--space-8); }
+        .page-header h1 { font-family: var(--font-heading); font-size: var(--text-4xl); color: var(--color-primary); margin-bottom: var(--space-4); text-shadow: var(--shadow-glow-gold); }
+        .back-link { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-secondary); text-decoration: none; margin-bottom: var(--space-4); transition: color var(--transition-normal); }
+        .back-link:hover { color: var(--color-primary); }
+        .content { max-width: 1200px; margin: 0 auto; }
+        .section { background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-8); margin-bottom: var(--space-8); }
+        .section-title { font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-primary); margin-bottom: var(--space-6); padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-border-default); }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6); }
+        .card { background: var(--color-background-elevated); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-6); transition: all var(--transition-normal); }
+        .card:hover { box-shadow: var(--shadow-glow-gold); transform: translateY(-2px); }
+        .card-title { font-family: var(--font-heading); font-size: var(--text-xl); color: var(--color-primary); margin-bottom: var(--space-3); }
+        .card-content { color: var(--color-text-secondary); font-size: var(--text-sm); line-height: var(--line-height-relaxed); }
+        .card.legendary { border-color: var(--color-rarity-legendary); background: linear-gradient(135deg, var(--color-background-elevated), var(--color-rarity-legendary-bg)); box-shadow: var(--shadow-glow-gold); }
+        .card.epic { border-color: var(--color-rarity-epic); background: linear-gradient(135deg, var(--color-background-elevated), var(--color-rarity-epic-bg)); }
+        .card.rare { border-color: var(--color-rarity-rare); background: linear-gradient(135deg, var(--color-background-elevated), var(--color-rarity-rare-bg)); }
+        .card.common { border-color: var(--color-rarity-common); background: linear-gradient(135deg, var(--color-background-elevated), var(--color-rarity-common-bg)); }
+        .rarity-badge { display: inline-block; padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: var(--font-weight-semibold); margin-bottom: var(--space-3); }
+        .rarity-badge.legendary { background: var(--gradient-rarity-legendary); color: var(--color-background-main); }
+        .rarity-badge.epic { background: var(--gradient-rarity-epic); color: white; }
+        .rarity-badge.rare { background: var(--gradient-rarity-rare); color: white; }
+        .rarity-badge.common { background: var(--gradient-rarity-common); color: white; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="index.html" class="back-link"><span>←</span> 返回元件庫</a>
+        <h1>卡片元件</h1>
+    </div>
+    <div class="content">
+        <section class="section">
+            <h2 class="section-title">基礎卡片</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3 class="card-title">基礎卡片</h3>
+                    <p class="card-content">這是一個基礎卡片，包含標題和內容區域。</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">資訊卡片</h3>
+                    <p class="card-content">可用於顯示各種資訊內容，支援懸停效果。</p>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2 class="section-title">稀有度卡片</h2>
+            <div class="cards-grid">
+                <div class="card legendary">
+                    <span class="rarity-badge legendary">Legendary</span>
+                    <h3 class="card-title">傳說級卡片</h3>
+                    <p class="card-content">最稀有的卡片，帶有金色光暈效果。</p>
+                </div>
+                <div class="card epic">
+                    <span class="rarity-badge epic">Epic</span>
+                    <h3 class="card-title">史詩級卡片</h3>
+                    <p class="card-content">史詩級稀有度，紫色漸層背景。</p>
+                </div>
+                <div class="card rare">
+                    <span class="rarity-badge rare">Rare</span>
+                    <h3 class="card-title">稀有卡片</h3>
+                    <p class="card-content">稀有級別，藍色漸層背景。</p>
+                </div>
+                <div class="card common">
+                    <span class="rarity-badge common">Common</span>
+                    <h3 class="card-title">普通卡片</h3>
+                    <p class="card-content">普通級別，灰色漸層背景。</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

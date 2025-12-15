@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面 - 高端奢華 | 永恆圖書館</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: var(--space-8); }
+        .login-container { max-width: 480px; width: 100%; }
+        .logo-section { text-align: center; margin-bottom: var(--space-16); }
+        .logo { width: 100px; height: 100px; margin: 0 auto var(--space-8); background: transparent; border: 1px solid var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: var(--text-3xl); color: var(--color-primary); }
+        .app-title { font-family: var(--font-heading); font-size: var(--text-4xl); color: var(--color-primary); margin-bottom: var(--space-4); font-weight: var(--font-weight-normal); letter-spacing: 0.02em; }
+        .app-subtitle { font-size: var(--text-base); color: var(--color-text-secondary); line-height: var(--line-height-relaxed); }
+        .login-card { background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-12); }
+        .card-title { font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-primary); margin-bottom: var(--space-6); font-weight: var(--font-weight-normal); }
+        .wallet-options { display: flex; flex-direction: column; gap: var(--space-5); margin-bottom: var(--space-10); }
+        .wallet-button { display: flex; align-items: center; gap: var(--space-5); padding: var(--space-6); background: transparent; border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); cursor: pointer; transition: all var(--transition-slow); font-family: var(--font-body); font-size: var(--text-base); color: var(--color-text-primary); }
+        .wallet-button:hover { border-color: var(--color-primary); box-shadow: var(--shadow-glow-gold); }
+        .wallet-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: transparent; border: 1px solid var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: var(--font-weight-semibold); color: var(--color-primary); }
+        .wallet-name { font-weight: var(--font-weight-medium); color: var(--color-primary); }
+        .wallet-desc { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-1); }
+        .footer-note { margin-top: var(--space-8); text-align: center; font-size: var(--text-sm); color: var(--color-text-muted); }
+        .footer-note a { color: var(--color-primary); text-decoration: none; }
+        .footer-note a:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-section">
+            <div class="logo">L</div>
+            <h1 class="app-title">永恆圖書館</h1>
+            <p class="app-subtitle">探索智慧的殿堂</p>
+        </div>
+        <div class="login-card">
+            <h2 class="card-title">連接錢包</h2>
+            <div class="wallet-options">
+                <button class="wallet-button">
+                    <div class="wallet-icon">P</div>
+                    <div style="flex: 1; text-align: left;">
+                        <div class="wallet-name">Petra Wallet</div>
+                        <div class="wallet-desc">官方推薦錢包</div>
+                    </div>
+                </button>
+                <button class="wallet-button">
+                    <div class="wallet-icon">M</div>
+                    <div style="flex: 1; text-align: left;">
+                        <div class="wallet-name">Martian Wallet</div>
+                        <div class="wallet-desc">多鏈支援錢包</div>
+                    </div>
+                </button>
+                <button class="wallet-button">
+                    <div class="wallet-icon">P</div>
+                    <div style="flex: 1; text-align: left;">
+                        <div class="wallet-name">Pontem Wallet</div>
+                        <div class="wallet-desc">Chrome 擴充錢包</div>
+                    </div>
+                </button>
+            </div>
+            <div class="footer-note">
+                還沒有錢包？<a href="https://petra.app" target="_blank">下載 Petra</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

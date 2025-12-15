@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁 - 線框圖 | Web3 暗黑科技</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--space-8);
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            color: var(--color-primary);
+            box-shadow: var(--shadow-glow-primary);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-3);
+            color: var(--color-primary);
+            text-shadow: var(--shadow-glow-primary);
+        }
+
+        .subtitle {
+            font-size: var(--text-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-12);
+        }
+
+        .connect-card {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-10);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .connect-btn {
+            width: 100%;
+            padding: var(--space-4) var(--space-6);
+            background: var(--color-primary);
+            color: var(--color-background-main);
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .connect-btn:hover {
+            background: var(--color-primary-light);
+            box-shadow: var(--shadow-glow-primary-strong);
+            transform: translateY(-2px);
+        }
+
+        .connect-btn:active {
+            transform: translateY(0);
+        }
+
+        .info-text {
+            margin-top: var(--space-6);
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .info-text a {
+            color: var(--color-secondary);
+            text-decoration: none;
+        }
+
+        .info-text a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: rgba(255, 0, 110, 0.1);
+            border: 1px solid var(--color-error);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin-top: var(--space-4);
+            color: var(--color-error);
+            font-size: var(--text-sm);
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .features {
+            margin-top: var(--space-12);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto var(--space-3);
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-3xl);
+        }
+
+        .feature-title {
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-2);
+            color: var(--color-text-primary);
+        }
+
+        .feature-desc {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: var(--text-3xl);
+            }
+
+            .subtitle {
+                font-size: var(--text-base);
+            }
+
+            .connect-card {
+                padding: var(--space-6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Logo -->
+        <div class="logo">
+            <span>Ω</span>
+        </div>
+
+        <!-- Title -->
+        <h1>永恆圖書館</h1>
+        <p class="subtitle">探索智慧之書，鑄造專屬 NFT</p>
+
+        <!-- Connect Card -->
+        <div class="connect-card">
+            <button class="connect-btn" onclick="simulateConnect()">
+                連接 IOTA 錢包
+            </button>
+
+            <div class="error-message" id="errorMessage">
+                ⚠️ 連接失敗，請稍後再試
+            </div>
+
+            <p class="info-text">
+                還沒有錢包？<a href="https://chrome.google.com/webstore" target="_blank">安裝 IOTA Wallet</a>
+            </p>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">📅</div>
+                <div class="feature-title">每日簽到</div>
+                <div class="feature-desc">獲得智慧碎片獎勵</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🎴</div>
+                <div class="feature-title">抽取解答</div>
+                <div class="feature-desc">探索人生問題的答案</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">✨</div>
+                <div class="feature-title">鑄造 NFT</div>
+                <div class="feature-desc">永久保存珍貴答案</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function simulateConnect() {
+            const errorMsg = document.getElementById('errorMessage');
+            const btn = document.querySelector('.connect-btn');
+
+            btn.textContent = '連接中...';
+            btn.disabled = true;
+
+            // 模擬連接流程
+            setTimeout(() => {
+                const success = Math.random() > 0.3; // 70% 成功率
+
+                if (success) {
+                    btn.textContent = '連接成功 ✓';
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 1000);
+                } else {
+                    errorMsg.classList.add('show');
+                    btn.textContent = '連接 IOTA 錢包';
+                    btn.disabled = false;
+
+                    setTimeout(() => {
+                        errorMsg.classList.remove('show');
+                    }, 3000);
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

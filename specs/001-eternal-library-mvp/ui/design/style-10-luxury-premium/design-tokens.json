@@ -1,0 +1,34 @@
+{
+  "$schema": "https://design-tokens.org/schemas/v0.1/design-tokens.json",
+  "name": "高端奢華",
+  "description": "Design tokens for Eternal Library MVP - Luxury Premium style",
+  "colors": {
+    "primary": {
+      "value": "#d4af37",
+      "type": "color",
+      "description": "金色"
+    },
+    "secondary": {
+      "value": "#c0c0c0",
+      "type": "color",
+      "description": "銀色"
+    },
+    "accent": {
+      "value": "#8b7355",
+      "type": "color",
+      "description": "古銅色"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "heading": {
+        "value": "'Playfair Display', 'Noto Serif TC', serif",
+        "type": "fontFamily"
+      },
+      "body": {
+        "value": "'Inter', 'Noto Sans TC', sans-serif",
+        "type": "fontFamily"
+      }
+    }
+  }
+}

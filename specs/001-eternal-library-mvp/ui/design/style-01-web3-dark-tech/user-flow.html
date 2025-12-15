@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用者流程圖 - Web3 暗黑科技</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            padding: var(--space-8);
+            line-height: var(--line-height-normal);
+        }
+
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-2);
+            color: var(--color-primary);
+            text-shadow: var(--shadow-glow-primary);
+        }
+
+        .subtitle {
+            font-size: var(--text-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-12);
+        }
+
+        .flow-section {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+        }
+
+        .flow-section h2 {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            color: var(--color-secondary);
+            margin-bottom: var(--space-6);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .flow-number {
+            background: var(--color-secondary);
+            color: var(--color-background-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--font-weight-bold);
+            box-shadow: var(--shadow-glow-secondary);
+        }
+
+        .user-flow {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            flex-wrap: wrap;
+        }
+
+        .flow-node {
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-weight: var(--font-weight-medium);
+            min-width: 160px;
+            text-align: center;
+            transition: var(--transition-normal);
+        }
+
+        .flow-start {
+            background: var(--color-success);
+            color: var(--color-background-main);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-glow-success);
+        }
+
+        .flow-end {
+            background: var(--color-error);
+            color: white;
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-glow-secondary);
+        }
+
+        .flow-page {
+            background: var(--color-background-elevated);
+            border: 2px solid var(--color-primary);
+            color: var(--color-text-primary);
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .flow-action {
+            background: var(--color-accent);
+            color: white;
+            border: 1px solid var(--color-accent-bright);
+        }
+
+        .flow-decision {
+            background: var(--color-warning);
+            color: var(--color-background-main);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            min-width: 180px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-6);
+        }
+
+        .flow-arrow {
+            color: var(--color-primary);
+            font-size: var(--text-2xl);
+            font-weight: var(--font-weight-bold);
+            flex-shrink: 0;
+        }
+
+        .flow-branch {
+            display: flex;
+            gap: var(--space-8);
+            margin-left: var(--space-12);
+            margin-top: var(--space-4);
+        }
+
+        .flow-path {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+            align-items: center;
+        }
+
+        .flow-label {
+            background: var(--color-background-elevated);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            color: var(--color-primary);
+            border: 1px solid var(--color-border-default);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .flow-note {
+            background: rgba(255, 0, 110, 0.1);
+            border-left: 3px solid var(--color-secondary);
+            padding: var(--space-4);
+            margin-top: var(--space-4);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .flow-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .flow-branch {
+                flex-direction: column;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>使用者流程圖</h1>
+        <p class="subtitle">永恆圖書館 MVP - 五個核心使用者故事</p>
+
+        <!-- US1: 錢包連接 -->
+        <div class="flow-section">
+            <h2><span class="flow-number">1</span>錢包連接與身份驗證</h2>
+
+            <div class="user-flow">
+                <div class="flow-row">
+                    <div class="flow-node flow-start">開始</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-page">登入頁</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-action">點擊「連接錢包」</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-action">喚起 IOTA Wallet</div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-node flow-decision">
+                        <span>使用者確認？</span>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path">
+                        <span class="flow-label">是 - 確認連接</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示錢包地址</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-page">導航至主頁</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-end">完成</div>
+                    </div>
+
+                    <div class="flow-path">
+                        <span class="flow-label">否 - 拒絕連接</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示錯誤訊息</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-page">保持登入頁</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-note">
+                <strong>技術要點：</strong>使用 @iota/dapp-kit 整合 IOTA Wallet，支援自動重連與帳號切換偵測
+            </div>
+        </div>
+
+        <!-- US2: 每日簽到 -->
+        <div class="flow-section">
+            <h2><span class="flow-number">2</span>每日簽到獲得智慧碎片</h2>
+
+            <div class="user-flow">
+                <div class="flow-row">
+                    <div class="flow-node flow-start">開始</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-page">主頁</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-action">檢查簽到狀態</div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-node flow-decision">
+                        <span>今日已簽到？</span>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path">
+                        <span class="flow-label">否 - 可簽到</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">點擊「在訪客簿上簽名」</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">發起鏈上交易</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">獲得 5 MGC</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">餘額動畫更新 (+5)</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示連續天數</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-end">完成</div>
+                    </div>
+
+                    <div class="flow-path">
+                        <span class="flow-label">是 - 已簽到</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">按鈕禁用</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示倒計時</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-end">等待明日</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-note">
+                <strong>技術要點：</strong>UTC+8 日曆日制，從 Event Log 計算連續天數，固定獎勵 5 MGC
+            </div>
+        </div>
+
+        <!-- US3: 抽取解答 -->
+        <div class="flow-section">
+            <h2><span class="flow-number">3</span>提問並抽取解答之書</h2>
+
+            <div class="user-flow">
+                <div class="flow-row">
+                    <div class="flow-node flow-start">開始</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-page">主頁</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-action">輸入問題</div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-node flow-decision">
+                        <span>MGC ≥ 10？</span>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path">
+                        <span class="flow-label">是 - 餘額充足</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">點擊「抽取解答」</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">前端隨機選擇答案 ID</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">Optimistic UI 扣除 10 MGC</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">發起鏈上交易</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">播放抽取動畫</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-page">導航至結果頁</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示答案卡片</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-end">完成</div>
+                    </div>
+
+                    <div class="flow-path">
+                        <span class="flow-label">否 - 餘額不足</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示錯誤提示</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">建議每日簽到</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-note">
+                <strong>技術要點：</strong>前端隨機（crypto.getRandomValues），從 50 個答案中選擇，雙語顯示（英文+中文），稀有度視覺差異
+            </div>
+        </div>
+
+        <!-- US4: 鑄造 NFT -->
+        <div class="flow-section">
+            <h2><span class="flow-number">4</span>將答案鑄造成 NFT</h2>
+
+            <div class="user-flow">
+                <div class="flow-row">
+                    <div class="flow-node flow-start">開始</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-page">抽取結果頁</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-action">檢查餘額</div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-node flow-decision">
+                        <span>MGC ≥ 5？</span>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path">
+                        <span class="flow-label">是 - 餘額充足</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">點擊「鑄造 NFT」</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示確認對話框</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">喚起錢包簽署</div>
+                    </div>
+
+                    <div class="flow-path">
+                        <span class="flow-label">否 - 餘額不足</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示錯誤提示</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-end">無法鑄造</div>
+                    </div>
+                </div>
+
+                <div class="flow-row" style="margin-top: var(--space-4);">
+                    <div class="flow-node flow-decision">
+                        <span>使用者確認？</span>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path">
+                        <span class="flow-label">是 - 確認簽署</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">發起鏈上交易</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">銷毀 DrawRecord</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">產生 OracleNFT</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">播放慶祝動畫</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示 Explorer 連結</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-end">完成</div>
+                    </div>
+
+                    <div class="flow-path">
+                        <span class="flow-label">否 - 拒絕簽署</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示「交易已取消」</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">按鈕恢復可用</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-note">
+                <strong>技術要點：</strong>僅限結果頁鑄造，消耗 5 MGC + Gas，NFT 包含 IPFS 圖片與 metadata
+            </div>
+        </div>
+
+        <!-- US5: 查看收藏 -->
+        <div class="flow-section">
+            <h2><span class="flow-number">5</span>查看我的 NFT 收藏</h2>
+
+            <div class="user-flow">
+                <div class="flow-row">
+                    <div class="flow-node flow-start">開始</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-action">點擊導航列「我的收藏」</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-page">收藏頁</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-node flow-action">查詢使用者 NFT</div>
+                </div>
+
+                <div class="flow-row">
+                    <div class="flow-node flow-decision">
+                        <span>有 NFT？</span>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path">
+                        <span class="flow-label">是 - 有收藏</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示統計卡片</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">渲染 NFT 網格</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">載入 IPFS 圖片</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">點擊卡片查看詳情</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示詳情彈窗</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-end">完成</div>
+                    </div>
+
+                    <div class="flow-path">
+                        <span class="flow-label">否 - 無收藏</span>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">顯示空狀態</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-action">提示文字</div>
+                        <span class="flow-arrow">↓</span>
+                        <div class="flow-node flow-end">完成</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-note">
+                <strong>技術要點：</strong>響應式網格（桌面 4 列、平板 3 列、手機 2 列），骨架屏過渡，IPFS 圖片載入
+            </div>
+        </div>
+    </div>
+</body>
+</html>

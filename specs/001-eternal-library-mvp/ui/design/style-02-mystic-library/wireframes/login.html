@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面 - 神秘圖書館 | 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 背景裝飾 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--color-secondary) 0%, transparent 70%);
+            opacity: 0.05;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .login-container {
+            max-width: 480px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: var(--space-12);
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--space-6);
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            color: var(--color-background-main);
+            box-shadow: var(--shadow-glow-gold);
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        .app-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-3);
+            text-shadow: var(--shadow-glow-gold);
+        }
+
+        .app-subtitle {
+            font-size: var(--text-lg);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .login-card {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-10);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-3);
+        }
+
+        .card-desc {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .wallet-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+        }
+
+        .wallet-button {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-5);
+            background: var(--color-background-elevated);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            color: var(--color-text-primary);
+        }
+
+        .wallet-button:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow-gold);
+            transform: translateX(4px);
+        }
+
+        .wallet-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: var(--gradient-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-background-main);
+            flex-shrink: 0;
+        }
+
+        .wallet-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .wallet-name {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .wallet-desc {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .wallet-arrow {
+            font-size: var(--text-xl);
+            color: var(--color-primary);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all var(--transition-normal);
+        }
+
+        .wallet-button:hover .wallet-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin: var(--space-8) 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--color-border-default);
+        }
+
+        .divider-text {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .info-section {
+            padding: var(--space-5);
+            background: var(--color-background-main);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-md);
+        }
+
+        .info-title {
+            font-size: var(--text-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-secondary);
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--color-secondary);
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xs);
+        }
+
+        .info-list {
+            list-style: none;
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .info-list li {
+            padding-left: var(--space-5);
+            position: relative;
+        }
+
+        .info-list li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+        }
+
+        .footer-note {
+            margin-top: var(--space-8);
+            text-align: center;
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .footer-note a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .footer-note a:hover {
+            color: var(--color-primary-light);
+        }
+
+        /* 錯誤訊息 */
+        .error-message {
+            display: none;
+            padding: var(--space-4);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--color-error);
+            border-radius: var(--radius-md);
+            color: var(--color-error);
+            font-size: var(--text-sm);
+            margin-top: var(--space-4);
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-section {
+                margin-bottom: var(--space-8);
+            }
+
+            .logo {
+                width: 100px;
+                height: 100px;
+                font-size: var(--text-3xl);
+            }
+
+            .app-title {
+                font-size: var(--text-3xl);
+            }
+
+            .login-card {
+                padding: var(--space-6);
+            }
+
+            .card-title {
+                font-size: var(--text-xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Logo 區域 -->
+        <div class="logo-section">
+            <div class="logo">📚</div>
+            <h1 class="app-title">永恆圖書館</h1>
+            <p class="app-subtitle">探索智慧的神秘殿堂<br>每個問題都有答案在等待</p>
+        </div>
+
+        <!-- 登入卡片 -->
+        <div class="login-card">
+            <div class="card-header">
+                <h2 class="card-title">連接錢包</h2>
+                <p class="card-desc">請選擇您的 Aptos 錢包以開始您的智慧探索之旅</p>
+            </div>
+
+            <!-- 錢包選項 -->
+            <div class="wallet-options">
+                <button class="wallet-button" onclick="connectWallet('petra')">
+                    <div class="wallet-icon">P</div>
+                    <div class="wallet-info">
+                        <div class="wallet-name">Petra Wallet</div>
+                        <div class="wallet-desc">官方推薦錢包</div>
+                    </div>
+                    <div class="wallet-arrow">→</div>
+                </button>
+
+                <button class="wallet-button" onclick="connectWallet('martian')">
+                    <div class="wallet-icon">M</div>
+                    <div class="wallet-info">
+                        <div class="wallet-name">Martian Wallet</div>
+                        <div class="wallet-desc">多鏈支援錢包</div>
+                    </div>
+                    <div class="wallet-arrow">→</div>
+                </button>
+
+                <button class="wallet-button" onclick="connectWallet('pontem')">
+                    <div class="wallet-icon">P</div>
+                    <div class="wallet-info">
+                        <div class="wallet-name">Pontem Wallet</div>
+                        <div class="wallet-desc">Chrome 擴充錢包</div>
+                    </div>
+                    <div class="wallet-arrow">→</div>
+                </button>
+            </div>
+
+            <!-- 錯誤訊息 -->
+            <div class="error-message" id="errorMessage">
+                <strong>連接失敗：</strong>請確保您已安裝錢包擴充程式並解鎖錢包。
+            </div>
+
+            <!-- 分隔線 -->
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">初次使用？</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <!-- 資訊區塊 -->
+            <div class="info-section">
+                <div class="info-title">
+                    <span class="info-icon">i</span>
+                    您將獲得
+                </div>
+                <ul class="info-list">
+                    <li>每日簽到獎勵 100 MGC</li>
+                    <li>免費抽取神秘解答</li>
+                    <li>鑄造獨特的 NFT 收藏</li>
+                    <li>探索無盡的智慧寶藏</li>
+                </ul>
+            </div>
+
+            <!-- 頁尾說明 -->
+            <div class="footer-note">
+                還沒有錢包？<a href="https://petra.app" target="_blank">下載 Petra</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function connectWallet(walletType) {
+            console.log('嘗試連接:', walletType);
+
+            // 模擬連接過程
+            const errorMsg = document.getElementById('errorMessage');
+            errorMsg.classList.remove('show');
+
+            // 實際實作中，這裡會呼叫錢包 SDK
+            setTimeout(() => {
+                // 示範錯誤訊息
+                // errorMsg.classList.add('show');
+
+                // 成功後導向主頁
+                // window.location.href = 'home.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

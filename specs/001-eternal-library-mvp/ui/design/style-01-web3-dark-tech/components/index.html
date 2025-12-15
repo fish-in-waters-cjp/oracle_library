@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元件庫總覽 | Web3 暗黑科技</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            padding: var(--space-8);
+        }
+
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-5xl);
+            margin-bottom: var(--space-3);
+            color: var(--color-primary);
+            text-shadow: var(--shadow-glow-primary);
+        }
+
+        .subtitle {
+            font-size: var(--text-xl);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-12);
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .component-card {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            transition: var(--transition-normal);
+        }
+
+        .component-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow-primary);
+            transform: translateY(-2px);
+        }
+
+        .component-icon {
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-4);
+        }
+
+        .component-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-3);
+            color: var(--color-primary);
+        }
+
+        .component-desc {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-4);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .component-link {
+            display: inline-block;
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            font-weight: var(--font-weight-semibold);
+            transition: var(--transition-fast);
+        }
+
+        .component-link:hover {
+            background: var(--color-secondary-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>元件庫總覽</h1>
+        <p class="subtitle">永恆圖書館 MVP - Web3 暗黑科技風格元件系統</p>
+
+        <div class="components-grid">
+            <div class="component-card">
+                <div class="component-icon">🔘</div>
+                <h2 class="component-title">Buttons</h2>
+                <p class="component-desc">
+                    主要、次要、Ghost、Icon 按鈕，包含不同尺寸與狀態。
+                </p>
+                <a href="buttons.html" class="component-link">查看元件 →</a>
+            </div>
+
+            <div class="component-card">
+                <div class="component-icon">📝</div>
+                <h2 class="component-title">Forms</h2>
+                <p class="component-desc">
+                    輸入框、文字區域、選擇器、核取方塊、開關等表單元件。
+                </p>
+                <a href="forms.html" class="component-link">查看元件 →</a>
+            </div>
+
+            <div class="component-card">
+                <div class="component-icon">🎴</div>
+                <h2 class="component-title">Cards</h2>
+                <p class="component-desc">
+                    基礎卡片、圖片卡片、稀有度卡片、NFT 卡片等。
+                </p>
+                <a href="cards.html" class="component-link">查看元件 →</a>
+            </div>
+
+            <div class="component-card">
+                <div class="component-icon">🧭</div>
+                <h2 class="component-title">Navigation</h2>
+                <p class="component-desc">
+                    Header 導航、移動端選單、麵包屑、標籤頁。
+                </p>
+                <a href="navigation.html" class="component-link">查看元件 →</a>
+            </div>
+
+            <div class="component-card">
+                <div class="component-icon">💬</div>
+                <h2 class="component-title">Feedback</h2>
+                <p class="component-desc">
+                    Alert 提示、Toast 通知、Loading 動畫、進度條。
+                </p>
+                <a href="feedback.html" class="component-link">查看元件 →</a>
+            </div>
+
+            <div class="component-card">
+                <div class="component-icon">📊</div>
+                <h2 class="component-title">Data Display</h2>
+                <p class="component-desc">
+                    統計卡片、列表項目、徽章、倒計時器。
+                </p>
+                <a href="data-display.html" class="component-link">查看元件 →</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

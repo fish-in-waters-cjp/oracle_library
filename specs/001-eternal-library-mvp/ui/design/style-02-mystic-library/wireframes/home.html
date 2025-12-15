@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主頁 - 神秘圖書館 | 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--color-background-surface);
+            border-bottom: 1px solid var(--color-border-default);
+            padding: var(--space-4) var(--space-6);
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-4);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .app-name {
+            font-family: var(--font-heading);
+            font-size: var(--text-xl);
+            color: var(--color-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .nav-link {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-normal);
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+            background: var(--color-background-elevated);
+        }
+
+        .wallet-address {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-background-elevated);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .wallet-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-success);
+            box-shadow: 0 0 8px var(--color-success);
+        }
+
+        .disconnect-btn {
+            padding: var(--space-2) var(--space-4);
+            background: transparent;
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+        }
+
+        .disconnect-btn:hover {
+            border-color: var(--color-error);
+            color: var(--color-error);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--space-8);
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-3xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-8);
+            text-align: center;
+            text-shadow: var(--shadow-glow-gold);
+        }
+
+        .cards-grid {
+            display: grid;
+            gap: var(--space-6);
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-normal);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .card-header {
+            margin-bottom: var(--space-6);
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .card-subtitle {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        /* Balance Card */
+        .balance-amount {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+        }
+
+        .balance-number {
+            font-family: var(--font-heading);
+            font-size: var(--text-5xl);
+            color: var(--color-primary);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .balance-unit {
+            font-size: var(--text-xl);
+            color: var(--color-text-secondary);
+        }
+
+        .balance-note {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            padding: var(--space-3);
+            background: var(--color-background-main);
+            border-radius: var(--radius-sm);
+        }
+
+        /* Check-in Card */
+        .checkin-status {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--space-6);
+            align-items: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .streak-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .streak-number {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            color: var(--color-secondary);
+        }
+
+        .streak-label {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .checkin-btn {
+            padding: var(--space-4) var(--space-8);
+            background: var(--gradient-gold);
+            border: 1px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            color: var(--color-background-main);
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            font-weight: var(--font-weight-semibold);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .checkin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-gold-strong);
+        }
+
+        .checkin-btn:disabled {
+            background: var(--color-background-elevated);
+            color: var(--color-text-disabled);
+            border-color: var(--color-border-subtle);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .countdown {
+            text-align: center;
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            padding: var(--space-3);
+            background: var(--color-background-main);
+            border-radius: var(--radius-sm);
+        }
+
+        .countdown-time {
+            font-family: var(--font-mono);
+            color: var(--color-secondary);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        /* Draw Card */
+        .question-input {
+            width: 100%;
+            padding: var(--space-4);
+            background: var(--color-background-main);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            margin-bottom: var(--space-4);
+            resize: vertical;
+            min-height: 120px;
+            transition: all var(--transition-normal);
+        }
+
+        .question-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .question-input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .draw-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+            padding: var(--space-3);
+            background: var(--color-background-main);
+            border-radius: var(--radius-sm);
+        }
+
+        .cost-label {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .cost-amount {
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            color: var(--color-primary);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .draw-btn {
+            width: 100%;
+            padding: var(--space-5) var(--space-8);
+            background: var(--gradient-mystic);
+            border: 1px solid var(--color-secondary);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-family: var(--font-heading);
+            font-size: var(--text-xl);
+            font-weight: var(--font-weight-semibold);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-glow-blue);
+        }
+
+        .draw-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-purple);
+        }
+
+        .draw-btn:disabled {
+            background: var(--color-background-elevated);
+            color: var(--color-text-disabled);
+            border-color: var(--color-border-subtle);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            .nav-actions {
+                order: 3;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .wallet-address {
+                font-size: var(--text-xs);
+            }
+
+            .checkin-status {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .balance-number {
+                font-size: var(--text-4xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">📚</div>
+                <span class="app-name">永恆圖書館</span>
+            </div>
+
+            <nav class="nav-actions">
+                <a href="collection.html" class="nav-link">我的收藏</a>
+                <div class="wallet-address">
+                    <span class="wallet-dot"></span>
+                    <span>0x1234...5678</span>
+                </div>
+                <button class="disconnect-btn" onclick="disconnect()">斷開連接</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">歡迎來到智慧的殿堂</h1>
+
+        <div class="cards-grid">
+            <!-- MGC 餘額卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">我的 MGC 餘額</h2>
+                    <p class="card-subtitle">Mystic Gold Coin - 探索智慧的通行證</p>
+                </div>
+
+                <div class="balance-amount">
+                    <span class="balance-number">1,250</span>
+                    <span class="balance-unit">MGC</span>
+                </div>
+
+                <div class="balance-note">
+                    💡 每日簽到可獲得 5 MGC
+                </div>
+            </div>
+
+            <!-- 每日簽到卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">在訪客簿上簽名</h2>
+                    <p class="card-subtitle">每日簽到，收集智慧能量</p>
+                </div>
+
+                <div class="checkin-status">
+                    <div class="streak-info">
+                        <div class="streak-number">7 天</div>
+                        <div class="streak-label">連續簽到</div>
+                    </div>
+
+                    <button class="checkin-btn" onclick="checkIn()">
+                        簽到 +5 MGC
+                    </button>
+                </div>
+
+                <div class="countdown">
+                    下次簽到：<span class="countdown-time">23:45:32</span>
+                </div>
+            </div>
+
+            <!-- 抽取解答卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">向圖書館提問</h2>
+                    <p class="card-subtitle">輸入您的問題，獲得神秘的解答</p>
+                </div>
+
+                <textarea
+                    class="question-input"
+                    placeholder="在這裡輸入您的問題...&#10;&#10;例如：What path should I take in my journey?"
+                    id="questionInput"
+                ></textarea>
+
+                <div class="draw-info">
+                    <span class="cost-label">每次抽取消耗</span>
+                    <span class="cost-amount">10 MGC</span>
+                </div>
+
+                <button class="draw-btn" onclick="drawAnswer()">
+                    🔮 抽取解答
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function checkIn() {
+            console.log('執行簽到');
+            // 實際會呼叫智能合約
+            alert('簽到成功！獲得 5 MGC');
+        }
+
+        function drawAnswer() {
+            const question = document.getElementById('questionInput').value;
+            if (!question.trim()) {
+                alert('請輸入您的問題');
+                return;
+            }
+            console.log('抽取解答:', question);
+            // 實際會呼叫智能合約
+            window.location.href = 'draw-result.html';
+        }
+
+        function disconnect() {
+            if (confirm('確定要斷開錢包連接嗎？')) {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

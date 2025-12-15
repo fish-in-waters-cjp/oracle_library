@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按鈕元件 - 高端奢華</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); padding: var(--space-12); }
+        .page-header { max-width: 1200px; margin: 0 auto var(--space-12); }
+        .page-header h1 { font-family: var(--font-heading); font-size: var(--text-4xl); color: var(--color-primary); margin-bottom: var(--space-6); font-weight: var(--font-weight-normal); letter-spacing: 0.02em; }
+        .back-link { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-secondary); text-decoration: none; font-size: var(--text-sm); margin-bottom: var(--space-6); }
+        .back-link:hover { color: var(--color-primary); }
+        .content { max-width: 1200px; margin: 0 auto; }
+        .section { background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-10); margin-bottom: var(--space-10); }
+        .section-title { font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-primary); margin-bottom: var(--space-8); padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-border-default); font-weight: var(--font-weight-normal); }
+        .button-group { display: flex; flex-wrap: wrap; gap: var(--space-5); align-items: center; margin-bottom: var(--space-10); }
+        .label { width: 100%; font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-3); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); padding: var(--space-4) var(--space-8); border-radius: var(--radius-sm); font-family: var(--font-heading); font-weight: var(--font-weight-normal); font-size: var(--text-base); cursor: pointer; transition: all var(--transition-slow); border: none; text-decoration: none; }
+        .btn-primary { background: transparent; color: var(--color-primary); border: 1px solid var(--color-primary); }
+        .btn-primary:hover:not(:disabled) { background: rgba(212, 175, 55, 0.1); box-shadow: var(--shadow-glow-gold); }
+        .btn-secondary { background: transparent; color: var(--color-secondary); border: 1px solid var(--color-secondary); }
+        .btn-secondary:hover:not(:disabled) { background: rgba(192, 192, 192, 0.05); box-shadow: var(--shadow-glow-silver); }
+        .btn-ghost { background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border-default); }
+        .btn-ghost:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); }
+        .btn-link { background: transparent; color: var(--color-primary); border: none; text-decoration: underline; padding: var(--space-2) var(--space-3); }
+        .btn-link:hover:not(:disabled) { opacity: 0.8; }
+        .btn-sm { padding: var(--space-2) var(--space-5); font-size: var(--text-sm); }
+        .btn-lg { padding: var(--space-5) var(--space-10); font-size: var(--text-lg); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-full { width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="index.html" class="back-link"><span>←</span> 返回元件庫</a>
+        <h1>按鈕元件</h1>
+    </div>
+    <div class="content">
+        <section class="section">
+            <h2 class="section-title">按鈕變體</h2>
+            <div class="button-group">
+                <span class="label">Primary - 主要動作</span>
+                <button class="btn btn-primary">主要按鈕</button>
+                <button class="btn btn-primary">鑄造 NFT</button>
+                <button class="btn btn-primary">簽到</button>
+            </div>
+            <div class="button-group">
+                <span class="label">Secondary - 次要動作</span>
+                <button class="btn btn-secondary">次要按鈕</button>
+                <button class="btn btn-secondary">查看收藏</button>
+            </div>
+            <div class="button-group">
+                <span class="label">Ghost - 輕量動作</span>
+                <button class="btn btn-ghost">幽靈按鈕</button>
+                <button class="btn btn-ghost">取消</button>
+            </div>
+            <div class="button-group">
+                <span class="label">Link - 連結樣式</span>
+                <button class="btn btn-link">連結按鈕</button>
+                <button class="btn btn-link">查看詳情</button>
+            </div>
+        </section>
+        <section class="section">
+            <h2 class="section-title">按鈕尺寸</h2>
+            <div class="button-group">
+                <span class="label">尺寸變化</span>
+                <button class="btn btn-primary btn-sm">小按鈕</button>
+                <button class="btn btn-primary">中按鈕</button>
+                <button class="btn btn-primary btn-lg">大按鈕</button>
+            </div>
+        </section>
+        <section class="section">
+            <h2 class="section-title">按鈕狀態</h2>
+            <div class="button-group">
+                <span class="label">正常與禁用狀態</span>
+                <button class="btn btn-primary">正常狀態</button>
+                <button class="btn btn-primary" disabled>禁用狀態</button>
+            </div>
+            <div class="button-group">
+                <span class="label">全寬按鈕</span>
+                <button class="btn btn-primary btn-full">全寬主要按鈕</button>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

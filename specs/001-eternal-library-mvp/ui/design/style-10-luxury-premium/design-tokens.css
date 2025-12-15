@@ -1,0 +1,161 @@
+/**
+ * Design Tokens - 高端奢華 (Luxury Premium)
+ * 調性: 奢華 | 高端 | 精緻
+ * 用於：永恆圖書館 MVP
+ */
+
+:root {
+    /* ===== Color System ===== */
+    --color-primary: #d4af37;
+    --color-primary-light: #e8c96f;
+    --color-primary-dark: #b8941f;
+
+    --color-secondary: #c0c0c0;
+    --color-secondary-light: #e0e0e0;
+    --color-secondary-dark: #a0a0a0;
+
+    --color-accent: #8b7355;
+    --color-accent-light: #a68a6d;
+
+    --color-background-main: #000000;
+    --color-background-surface: #1a1a1a;
+    --color-background-elevated: #2a2a2a;
+    --color-background-overlay: rgba(0, 0, 0, 0.95);
+
+    --color-text-primary: #f5f5f5;
+    --color-text-secondary: rgba(245, 245, 245, 0.85);
+    --color-text-muted: rgba(245, 245, 245, 0.6);
+    --color-text-disabled: rgba(245, 245, 245, 0.3);
+
+    --color-border-default: rgba(212, 175, 55, 0.3);
+    --color-border-focus: #d4af37;
+    --color-border-subtle: rgba(245, 245, 245, 0.1);
+
+    --color-success: #10b981;
+    --color-warning: #d4af37;
+    --color-error: #dc2626;
+    --color-info: #c0c0c0;
+
+    --color-rarity-common: #9ca3af;
+    --color-rarity-rare: #60a5fa;
+    --color-rarity-epic: #a78bfa;
+    --color-rarity-legendary: #d4af37;
+
+    --color-rarity-common-bg: rgba(156, 163, 175, 0.08);
+    --color-rarity-rare-bg: rgba(96, 165, 250, 0.08);
+    --color-rarity-epic-bg: rgba(167, 139, 250, 0.08);
+    --color-rarity-legendary-bg: rgba(212, 175, 55, 0.08);
+
+    --gradient-rarity-common: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+    --gradient-rarity-rare: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    --gradient-rarity-epic: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+    --gradient-rarity-legendary: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+
+    --gradient-gold: linear-gradient(135deg, #d4af37 0%, #e8c96f 50%, #b8941f 100%);
+    --gradient-silver: linear-gradient(135deg, #c0c0c0 0%, #e0e0e0 50%, #a0a0a0 100%);
+
+    /* ===== Typography ===== */
+    --font-heading: 'Playfair Display', 'Noto Serif TC', serif;
+    --font-body: 'Inter', 'Noto Sans TC', sans-serif;
+    --font-accent: 'Cormorant Garamond', 'Noto Serif TC', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 6px;
+    --radius-xl: 8px;
+    --radius-2xl: 12px;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.9);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.95);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 1);
+
+    --shadow-glow-gold: 0 0 20px rgba(212, 175, 55, 0.5);
+    --shadow-glow-gold-strong: 0 0 30px rgba(212, 175, 55, 0.7);
+    --shadow-glow-silver: 0 0 20px rgba(192, 192, 192, 0.3);
+
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+
+    --duration-instant: 100ms;
+    --duration-fast: 200ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 800ms;
+
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-popover: 400;
+    --z-tooltip: 500;
+
+    --container-max-width: 1280px;
+    --header-height: 80px;
+    --mobile-header-height: 64px;
+}
+
+@keyframes elegant-glow {
+    0%, 100% {
+        box-shadow: var(--shadow-glow-gold);
+    }
+    50% {
+        box-shadow: var(--shadow-glow-gold-strong);
+    }
+}
+
+@keyframes subtle-shimmer {
+    0% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}

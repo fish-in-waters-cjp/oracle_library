@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主頁 - 線框圖 | Web3 暗黑科技</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+        }
+
+        /* Header Navigation */
+        .header {
+            background: var(--color-background-surface);
+            border-bottom: 1px solid var(--color-border-default);
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            text-decoration: none;
+            color: var(--color-primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--color-background-elevated);
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-size: var(--text-xl);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-6);
+        }
+
+        .nav-link {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-medium);
+            transition: var(--transition-fast);
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+        }
+
+        .wallet-info {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .wallet-address {
+            background: var(--color-background-elevated);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            border: 1px solid var(--color-border-subtle);
+        }
+
+        .disconnect-btn {
+            background: transparent;
+            border: 1px solid var(--color-error);
+            color: var(--color-error);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .disconnect-btn:hover {
+            background: var(--color-error);
+            color: white;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6);
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-2);
+            color: var(--color-primary);
+            text-shadow: var(--shadow-glow-primary);
+        }
+
+        .page-subtitle {
+            font-size: var(--text-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-10);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-10);
+        }
+
+        /* MGC Balance Card */
+        .card {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-title {
+            font-size: var(--text-lg);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-4);
+            color: var(--color-text-primary);
+        }
+
+        .mgc-balance {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-2);
+            margin-bottom: var(--space-3);
+        }
+
+        .mgc-amount {
+            font-family: var(--font-heading);
+            font-size: var(--text-5xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            text-shadow: var(--shadow-glow-primary);
+        }
+
+        .mgc-unit {
+            font-size: var(--text-xl);
+            color: var(--color-text-secondary);
+        }
+
+        .mgc-desc {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        /* Check-in Card */
+        .checkin-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+            padding: var(--space-3);
+            background: var(--color-background-elevated);
+            border-radius: var(--radius-md);
+        }
+
+        .checkin-icon {
+            font-size: var(--text-2xl);
+        }
+
+        .checkin-text {
+            flex: 1;
+        }
+
+        .checkin-days {
+            font-size: var(--text-sm);
+            color: var(--color-primary);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .checkin-timer {
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+
+        .checkin-btn {
+            width: 100%;
+            padding: var(--space-4);
+            background: var(--color-success);
+            color: var(--color-background-main);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-glow-success);
+        }
+
+        .checkin-btn:hover:not(:disabled) {
+            background: #00ff99;
+            transform: translateY(-2px);
+        }
+
+        .checkin-btn:disabled {
+            background: var(--color-background-elevated);
+            color: var(--color-text-disabled);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Draw Card */
+        .draw-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--color-background-surface) 0%, var(--color-background-elevated) 100%);
+            border: 2px solid var(--color-secondary);
+            box-shadow: var(--shadow-glow-secondary);
+        }
+
+        .question-input {
+            width: 100%;
+            padding: var(--space-4);
+            background: var(--color-background-main);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            margin-bottom: var(--space-4);
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .question-input:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            box-shadow: var(--shadow-glow-secondary);
+        }
+
+        .question-input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .draw-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-4);
+            padding: var(--space-3);
+            background: var(--color-background-main);
+            border-radius: var(--radius-md);
+        }
+
+        .draw-cost {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .draw-cost-amount {
+            color: var(--color-secondary);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .draw-btn {
+            width: 100%;
+            padding: var(--space-4);
+            background: var(--color-secondary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-glow-secondary);
+        }
+
+        .draw-btn:hover:not(:disabled) {
+            background: var(--color-secondary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-secondary-strong);
+        }
+
+        .draw-btn:disabled {
+            background: var(--color-background-elevated);
+            color: var(--color-text-disabled);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: var(--space-4);
+                align-items: flex-start;
+            }
+
+            .nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .wallet-info {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .disconnect-btn {
+                width: 100%;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: var(--text-3xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="#" class="logo-link">
+            <div class="logo-icon">Ω</div>
+            <span class="logo-text">永恆圖書館</span>
+        </a>
+
+        <nav class="nav">
+            <a href="#" class="nav-link">主頁</a>
+            <a href="collection.html" class="nav-link">我的收藏</a>
+        </nav>
+
+        <div class="wallet-info">
+            <div class="wallet-address">0x1234...5678</div>
+            <button class="disconnect-btn" onclick="disconnect()">斷開連接</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h1 class="page-title">歡迎回來，探索者</h1>
+        <p class="page-subtitle">準備好探索今天的智慧之書了嗎？</p>
+
+        <div class="cards-grid">
+            <!-- MGC Balance Card -->
+            <div class="card">
+                <h2 class="card-title">智慧碎片餘額</h2>
+                <div class="mgc-balance">
+                    <span class="mgc-amount" id="mgcBalance">25</span>
+                    <span class="mgc-unit">MGC</span>
+                </div>
+                <p class="mgc-desc">用於抽取解答之書與鑄造 NFT</p>
+            </div>
+
+            <!-- Check-in Card -->
+            <div class="card">
+                <h2 class="card-title">每日簽到</h2>
+
+                <div class="checkin-status">
+                    <span class="checkin-icon">🔥</span>
+                    <div class="checkin-text">
+                        <div class="checkin-days">已連續簽到 7 天</div>
+                        <div class="checkin-timer">距離下次簽到: 18:32:45</div>
+                    </div>
+                </div>
+
+                <button class="checkin-btn" id="checkinBtn" onclick="checkIn()">
+                    在訪客簿上簽名 (+5 MGC)
+                </button>
+            </div>
+
+            <!-- Draw Card -->
+            <div class="card draw-card">
+                <h2 class="card-title">抽取解答之書</h2>
+
+                <textarea
+                    class="question-input"
+                    placeholder="在心中默念你的問題...&#10;&#10;例如：我應該如何面對未來的挑戰？"
+                    id="questionInput"
+                ></textarea>
+
+                <div class="draw-info">
+                    <span class="draw-cost">消耗 <span class="draw-cost-amount">10 MGC</span></span>
+                    <span class="draw-cost">獲得隨機答案卡片</span>
+                </div>
+
+                <button class="draw-btn" onclick="draw()">
+                    抽取解答
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let mgcBalance = 25;
+        let hasCheckedInToday = false;
+
+        function checkIn() {
+            if (hasCheckedInToday) return;
+
+            const btn = document.getElementById('checkinBtn');
+            btn.textContent = '簽到中...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                mgcBalance += 5;
+                document.getElementById('mgcBalance').textContent = mgcBalance;
+
+                // 動畫效果
+                const balanceEl = document.getElementById('mgcBalance');
+                balanceEl.style.transform = 'scale(1.2)';
+                balanceEl.style.color = 'var(--color-success)';
+
+                setTimeout(() => {
+                    balanceEl.style.transform = 'scale(1)';
+                    balanceEl.style.color = 'var(--color-primary)';
+                }, 500);
+
+                btn.textContent = '今天已經簽到 ✓';
+                hasCheckedInToday = true;
+            }, 1500);
+        }
+
+        function draw() {
+            const question = document.getElementById('questionInput').value;
+
+            if (!question.trim()) {
+                alert('請先在心中默念你的問題');
+                document.getElementById('questionInput').focus();
+                return;
+            }
+
+            if (mgcBalance < 10) {
+                alert('智慧碎片不足！需要 10 MGC，你目前有 ' + mgcBalance + ' MGC');
+                return;
+            }
+
+            // Optimistic UI
+            mgcBalance -= 10;
+            document.getElementById('mgcBalance').textContent = mgcBalance;
+
+            // 導航至結果頁
+            setTimeout(() => {
+                window.location.href = 'draw-result.html';
+            }, 1000);
+        }
+
+        function disconnect() {
+            if (confirm('確定要斷開錢包連接？')) {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

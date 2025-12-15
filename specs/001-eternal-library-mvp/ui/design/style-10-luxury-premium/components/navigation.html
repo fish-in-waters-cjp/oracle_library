@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>導航元件 - 高端奢華</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); padding: var(--space-12); }
+        .page-header { max-width: 1200px; margin: 0 auto var(--space-12); }
+        .page-header h1 { font-family: var(--font-heading); font-size: var(--text-4xl); color: var(--color-primary); margin-bottom: var(--space-6); font-weight: var(--font-weight-normal); }
+        .back-link { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-secondary); text-decoration: none; font-size: var(--text-sm); margin-bottom: var(--space-6); }
+        .back-link:hover { color: var(--color-primary); }
+        .content { max-width: 1200px; margin: 0 auto; }
+        .section { background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-10); margin-bottom: var(--space-10); }
+        .section-title { font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-primary); margin-bottom: var(--space-8); border-bottom: 1px solid var(--color-border-default); padding-bottom: var(--space-4); font-weight: var(--font-weight-normal); }
+        .header-nav { background: transparent; border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: var(--space-5); display: flex; justify-content: space-between; align-items: center; }
+        .nav-brand { font-family: var(--font-heading); font-size: var(--text-xl); color: var(--color-primary); font-weight: var(--font-weight-normal); }
+        .nav-links { display: flex; gap: var(--space-6); }
+        .nav-link { color: var(--color-text-secondary); text-decoration: none; font-size: var(--text-sm); transition: color var(--transition-normal); }
+        .nav-link:hover, .nav-link.active { color: var(--color-primary); }
+        .tabs { display: flex; gap: var(--space-4); border-bottom: 1px solid var(--color-border-default); }
+        .tab { padding: var(--space-4) var(--space-6); color: var(--color-text-secondary); border-bottom: 1px solid transparent; transition: all var(--transition-normal); cursor: pointer; font-size: var(--text-sm); }
+        .tab:hover, .tab.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+        .breadcrumbs { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-sm); }
+        .breadcrumb-link { color: var(--color-text-muted); text-decoration: none; transition: color var(--transition-normal); }
+        .breadcrumb-link:hover { color: var(--color-primary); }
+        .breadcrumb-separator { color: var(--color-text-muted); }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="index.html" class="back-link"><span>←</span> 返回元件庫</a>
+        <h1>導航元件</h1>
+    </div>
+    <div class="content">
+        <section class="section">
+            <h2 class="section-title">頁首導航</h2>
+            <div class="header-nav">
+                <div class="nav-brand">永恆圖書館</div>
+                <nav class="nav-links">
+                    <a href="#" class="nav-link active">首頁</a>
+                    <a href="#" class="nav-link">我的收藏</a>
+                    <a href="#" class="nav-link">關於</a>
+                </nav>
+            </div>
+        </section>
+        <section class="section">
+            <h2 class="section-title">分頁標籤</h2>
+            <div class="tabs">
+                <div class="tab active">全部</div>
+                <div class="tab">Legendary</div>
+                <div class="tab">Epic</div>
+                <div class="tab">Rare</div>
+                <div class="tab">Common</div>
+            </div>
+        </section>
+        <section class="section">
+            <h2 class="section-title">麵包屑</h2>
+            <nav class="breadcrumbs">
+                <a href="#" class="breadcrumb-link">首頁</a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="#" class="breadcrumb-link">我的收藏</a>
+                <span class="breadcrumb-separator">›</span>
+                <span style="color: var(--color-primary);">NFT 詳情</span>
+            </nav>
+        </section>
+    </div>
+</body>
+</html>

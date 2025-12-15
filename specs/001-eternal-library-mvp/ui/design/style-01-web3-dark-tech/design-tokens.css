@@ -1,0 +1,222 @@
+/**
+ * Design Tokens - Web3 暗黑科技 (Web3 Dark Tech)
+ * 調性: Web3科技 | 暗黑 | 賽博龐克
+ * 用於：永恆圖書館 MVP
+ */
+
+:root {
+    /* ===== Color System ===== */
+
+    /* Primary Colors - 霓虹青色 */
+    --color-primary: #00f3ff;           /* 霓虹青色 - 主要強調 */
+    --color-primary-light: #5ffbff;     /* 亮霓虹青 */
+    --color-primary-dark: #00b8c4;      /* 深霓虹青 */
+
+    /* Secondary Colors - 霓虹粉 */
+    --color-secondary: #ff006e;         /* 霓虹粉 - 次要強調 */
+    --color-secondary-light: #ff4d9a;   /* 亮霓虹粉 */
+    --color-secondary-dark: #cc0058;    /* 深霓虹粉 */
+
+    /* Accent Colors - 紫色科技感 */
+    --color-accent: #8b5cf6;            /* 紫色科技感 */
+    --color-accent-bright: #a78bfa;     /* 亮紫 */
+
+    /* Background Layers */
+    --color-background-main: #0a0e27;   /* 深藍黑底 */
+    --color-background-surface: #1a1a3e; /* 卡片背景 */
+    --color-background-elevated: #252550; /* 浮起元素 */
+    --color-background-overlay: rgba(10, 14, 39, 0.95); /* 遮罩 */
+
+    /* Text Colors */
+    --color-text-primary: #ffffff;      /* 主要文字 */
+    --color-text-secondary: rgba(255, 255, 255, 0.8); /* 次要文字 */
+    --color-text-muted: rgba(255, 255, 255, 0.5); /* 弱化文字 */
+    --color-text-disabled: rgba(255, 255, 255, 0.3); /* 禁用文字 */
+
+    /* Border Colors */
+    --color-border-default: rgba(0, 243, 255, 0.3); /* 預設邊框 */
+    --color-border-focus: #00f3ff;      /* 焦點邊框 */
+    --color-border-subtle: rgba(255, 255, 255, 0.1); /* 細微邊框 */
+
+    /* Semantic Colors */
+    --color-success: #00ff88;           /* 成功 - 霓虹綠 */
+    --color-warning: #ffb800;           /* 警告 - 霓虹黃 */
+    --color-error: #ff006e;             /* 錯誤 - 霓虹粉 */
+    --color-info: #00f3ff;              /* 資訊 - 霓虹青 */
+
+    /* Rarity Colors - NFT 稀有度系統 */
+    --color-rarity-common: #6b7280;     /* Common - 灰 */
+    --color-rarity-rare: #3b82f6;       /* Rare - 藍 */
+    --color-rarity-epic: #a855f7;       /* Epic - 紫 */
+    --color-rarity-legendary: #fbbf24;  /* Legendary - 金 */
+
+    /* Rarity Background Colors (with opacity) */
+    --color-rarity-common-bg: rgba(107, 114, 128, 0.15);
+    --color-rarity-rare-bg: rgba(59, 130, 246, 0.15);
+    --color-rarity-epic-bg: rgba(168, 85, 247, 0.15);
+    --color-rarity-legendary-bg: rgba(251, 191, 36, 0.15);
+
+    /* Rarity Gradients */
+    --gradient-rarity-common: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    --gradient-rarity-rare: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --gradient-rarity-epic: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+    --gradient-rarity-legendary: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+
+    /* ===== Typography ===== */
+
+    /* Font Families */
+    --font-heading: 'Orbitron', 'Noto Sans TC', sans-serif;  /* 科技感標題 */
+    --font-body: 'Inter', 'Noto Sans TC', sans-serif;        /* 現代內文 */
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace; /* 等寬字體 */
+
+    /* Font Sizes */
+    --text-xs: 0.75rem;      /* 12px */
+    --text-sm: 0.875rem;     /* 14px */
+    --text-base: 1rem;       /* 16px */
+    --text-lg: 1.125rem;     /* 18px */
+    --text-xl: 1.25rem;      /* 20px */
+    --text-2xl: 1.5rem;      /* 24px */
+    --text-3xl: 1.875rem;    /* 30px */
+    --text-4xl: 2.25rem;     /* 36px */
+    --text-5xl: 3rem;        /* 48px */
+
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Line Heights */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    /* ===== Spacing Scale ===== */
+    --space-1: 0.25rem;      /* 4px */
+    --space-2: 0.5rem;       /* 8px */
+    --space-3: 0.75rem;      /* 12px */
+    --space-4: 1rem;         /* 16px */
+    --space-5: 1.25rem;      /* 20px */
+    --space-6: 1.5rem;       /* 24px */
+    --space-8: 2rem;         /* 32px */
+    --space-10: 2.5rem;      /* 40px */
+    --space-12: 3rem;        /* 48px */
+    --space-16: 4rem;        /* 64px */
+    --space-20: 5rem;        /* 80px */
+    --space-24: 6rem;        /* 96px */
+
+    /* ===== Border Radius ===== */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+
+    /* ===== Shadows ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+
+    /* Neon Glow Shadows - 霓虹發光效果 */
+    --shadow-glow-primary: 0 0 20px rgba(0, 243, 255, 0.5);
+    --shadow-glow-primary-strong: 0 0 30px rgba(0, 243, 255, 0.7);
+    --shadow-glow-secondary: 0 0 20px rgba(255, 0, 110, 0.5);
+    --shadow-glow-secondary-strong: 0 0 30px rgba(255, 0, 110, 0.7);
+    --shadow-glow-accent: 0 0 20px rgba(139, 92, 246, 0.5);
+    --shadow-glow-success: 0 0 20px rgba(0, 255, 136, 0.5);
+
+    /* ===== Transitions & Animations ===== */
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+
+    /* Animation Durations */
+    --duration-instant: 100ms;
+    --duration-fast: 200ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 800ms;
+
+    /* ===== Z-Index Scale ===== */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-popover: 400;
+    --z-tooltip: 500;
+
+    /* ===== Layout Constants ===== */
+    --container-max-width: 1280px;
+    --header-height: 80px;
+    --mobile-header-height: 64px;
+
+    /* ===== Breakpoints (for reference in media queries) ===== */
+    /* 使用方式: @media (min-width: 768px) { ... } */
+    /* --breakpoint-sm: 640px;  */
+    /* --breakpoint-md: 768px;  */
+    /* --breakpoint-lg: 1024px; */
+    /* --breakpoint-xl: 1280px; */
+}
+
+/* ===== Animation Keyframes ===== */
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: var(--shadow-glow-primary);
+    }
+    50% {
+        box-shadow: var(--shadow-glow-primary-strong);
+    }
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+    }
+    20%, 24%, 55% {
+        opacity: 0.4;
+    }
+}
+
+@keyframes float-up {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}

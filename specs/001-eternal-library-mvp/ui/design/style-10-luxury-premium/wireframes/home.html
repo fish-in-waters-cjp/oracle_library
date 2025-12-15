@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主頁 - 高端奢華 | 永恆圖書館</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); min-height: 100vh; }
+        .header { background: var(--color-background-surface); border-bottom: 1px solid var(--color-border-default); padding: var(--space-6) var(--space-8); }
+        .header-content { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-family: var(--font-heading); font-size: var(--text-xl); color: var(--color-primary); font-weight: var(--font-weight-normal); letter-spacing: 0.02em; }
+        .nav-actions { display: flex; align-items: center; gap: var(--space-6); }
+        .nav-link { color: var(--color-text-secondary); text-decoration: none; font-size: var(--text-sm); transition: color var(--transition-normal); }
+        .nav-link:hover { color: var(--color-primary); }
+        .wallet-address { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-text-muted); padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); }
+        .main-content { max-width: 1280px; margin: 0 auto; padding: var(--space-16) var(--space-8); }
+        .page-title { font-family: var(--font-heading); font-size: var(--text-3xl); color: var(--color-primary); margin-bottom: var(--space-12); text-align: center; font-weight: var(--font-weight-normal); letter-spacing: 0.02em; }
+        .cards-grid { display: grid; gap: var(--space-10); }
+        .card { background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-10); }
+        .card-title { font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-primary); margin-bottom: var(--space-6); font-weight: var(--font-weight-normal); }
+        .balance-amount { font-family: var(--font-heading); font-size: var(--text-5xl); color: var(--color-primary); margin-bottom: var(--space-4); font-weight: var(--font-weight-normal); }
+        .checkin-btn { padding: var(--space-4) var(--space-10); background: transparent; border: 1px solid var(--color-primary); border-radius: var(--radius-sm); color: var(--color-primary); font-family: var(--font-heading); font-size: var(--text-lg); cursor: pointer; transition: all var(--transition-slow); font-weight: var(--font-weight-normal); }
+        .checkin-btn:hover { background: rgba(212, 175, 55, 0.1); box-shadow: var(--shadow-glow-gold); }
+        .question-input { width: 100%; padding: var(--space-5); background: transparent; border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); color: var(--color-text-primary); font-family: var(--font-body); font-size: var(--text-base); resize: vertical; min-height: 120px; margin-bottom: var(--space-6); transition: all var(--transition-normal); }
+        .question-input:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--shadow-glow-gold); }
+        .draw-btn { width: 100%; padding: var(--space-5); background: transparent; border: 1px solid var(--color-primary); border-radius: var(--radius-sm); color: var(--color-primary); font-family: var(--font-heading); font-size: var(--text-xl); cursor: pointer; transition: all var(--transition-slow); font-weight: var(--font-weight-normal); }
+        .draw-btn:hover { background: rgba(212, 175, 55, 0.1); box-shadow: var(--shadow-glow-gold); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">永恆圖書館</div>
+            <nav class="nav-actions">
+                <a href="collection.html" class="nav-link">我的收藏</a>
+                <div class="wallet-address">0x1234...5678</div>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <h1 class="page-title">歡迎來到智慧的殿堂</h1>
+        <div class="cards-grid">
+            <div class="card">
+                <h2 class="card-title">MGC 餘額</h2>
+                <div class="balance-amount">1,250 <span style="font-size: var(--text-xl); color: var(--color-text-secondary);">MGC</span></div>
+            </div>
+            <div class="card">
+                <h2 class="card-title">每日簽到</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-6);">
+                    <div>
+                        <div style="font-family: var(--font-heading); font-size: var(--text-3xl); color: var(--color-primary);">7 天</div>
+                        <div style="color: var(--color-text-muted); font-size: var(--text-sm); margin-top: var(--space-2);">連續簽到</div>
+                    </div>
+                    <button class="checkin-btn">簽到</button>
+                </div>
+            </div>
+            <div class="card">
+                <h2 class="card-title">向圖書館提問</h2>
+                <textarea id="questionInput" class="question-input" placeholder="在這裡輸入您的問題..."></textarea>
+                <div style="color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-6);">每次抽取消耗 10 MGC</div>
+                <button class="draw-btn" onclick="drawAnswer()">抽取解答</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 簽到功能
+        document.querySelector('.checkin-btn').addEventListener('click', function() {
+            if (confirm('確定要進行每日簽到嗎？簽到成功將獲得 5 MGC。')) {
+                this.textContent = '簽到中...';
+                this.disabled = true;
+
+                setTimeout(() => {
+                    alert('✨ 簽到成功！您獲得了 5 MGC');
+                    this.textContent = '已簽到 ✓';
+                    this.style.opacity = '0.6';
+                }, 1000);
+            }
+        });
+
+        // 抽取解答功能
+        function drawAnswer() {
+            const question = document.getElementById('questionInput').value.trim();
+
+            if (!question) {
+                alert('請先輸入您的問題');
+                document.getElementById('questionInput').focus();
+                return;
+            }
+
+            const currentMGC = 1250; // 示例餘額
+            if (currentMGC < 10) {
+                alert('智慧碎片不足！需要 10 MGC，您目前有 ' + currentMGC + ' MGC');
+                return;
+            }
+
+            if (confirm('確定要抽取解答嗎？這將消耗 10 MGC。')) {
+                const btn = event.target;
+                btn.textContent = '抽取中...';
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+
+                // 模擬抽取過程
+                setTimeout(() => {
+                    // 跳轉到結果頁面
+                    window.location.href = 'draw-result.html';
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>

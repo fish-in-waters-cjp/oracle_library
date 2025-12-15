@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>線框圖總覽 - 高端奢華 | 永恆圖書館</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--color-background-main); color: var(--color-text-primary); padding: var(--space-12); min-height: 100vh; }
+        .page-header { max-width: 1400px; margin: 0 auto var(--space-16); text-align: center; }
+        .page-header h1 { font-family: var(--font-heading); font-size: var(--text-4xl); color: var(--color-primary); margin-bottom: var(--space-6); font-weight: var(--font-weight-normal); letter-spacing: 0.02em; }
+        .page-header p { font-size: var(--text-base); color: var(--color-text-secondary); }
+        .wireframes-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: var(--space-10); }
+        .wireframe-card { background: var(--color-background-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition-slow); text-decoration: none; color: inherit; }
+        .wireframe-card:hover { border-color: var(--color-primary); box-shadow: var(--shadow-glow-gold); }
+        .wireframe-preview { width: 100%; aspect-ratio: 16 / 10; background: var(--color-background-main); border-bottom: 1px solid var(--color-border-default); display: flex; align-items: center; justify-content: center; padding: var(--space-8); }
+        .preview-mockup { width: 100%; height: 100%; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-background-elevated); padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
+        .mockup-header { height: 40px; background: transparent; border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); }
+        .mockup-content { flex: 1; background: transparent; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); }
+        .wireframe-info { padding: var(--space-8); }
+        .wireframe-title { font-family: var(--font-heading); font-size: var(--text-xl); color: var(--color-primary); margin-bottom: var(--space-4); font-weight: var(--font-weight-normal); }
+        .wireframe-desc { font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-5); line-height: var(--line-height-relaxed); }
+        .wireframe-meta { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+        .meta-tag { font-size: var(--text-xs); padding: var(--space-2) var(--space-4); background: transparent; border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); color: var(--color-text-muted); }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>線框圖總覽</h1>
+        <p>高端奢華風格 - 永恆圖書館 MVP</p>
+    </div>
+    <div class="wireframes-grid">
+        <a href="login.html" class="wireframe-card">
+            <div class="wireframe-preview"><div class="preview-mockup"><div class="mockup-header"></div><div class="mockup-content"></div></div></div>
+            <div class="wireframe-info">
+                <h3 class="wireframe-title">登入頁面</h3>
+                <p class="wireframe-desc">展示永恆圖書館的歡迎介面，提供錢包連接選項，支援 Petra、Martian 和 Pontem 錢包。</p>
+                <div class="wireframe-meta">
+                    <span class="meta-tag">入口頁</span>
+                    <span class="meta-tag">錢包連接</span>
+                    <span class="meta-tag">身份驗證</span>
+                </div>
+            </div>
+        </a>
+        <a href="home.html" class="wireframe-card">
+            <div class="wireframe-preview"><div class="preview-mockup"><div class="mockup-header"></div><div class="mockup-content"></div></div></div>
+            <div class="wireframe-info">
+                <h3 class="wireframe-title">主頁</h3>
+                <p class="wireframe-desc">核心功能頁面，包含 MGC 餘額顯示、每日簽到系統和解答抽取功能。用戶可以輸入問題並抽取神秘解答。</p>
+                <div class="wireframe-meta">
+                    <span class="meta-tag">主要功能</span>
+                    <span class="meta-tag">簽到系統</span>
+                    <span class="meta-tag">抽取解答</span>
+                </div>
+            </div>
+        </a>
+        <a href="draw-result.html" class="wireframe-card">
+            <div class="wireframe-preview"><div class="preview-mockup"><div class="mockup-header"></div><div class="mockup-content"></div></div></div>
+            <div class="wireframe-info">
+                <h3 class="wireframe-title">抽取結果頁</h3>
+                <p class="wireframe-desc">展示獲得的解答卡片，包含英文原文、中文翻譯、稀有度標籤，並提供鑄造 NFT 的選項。</p>
+                <div class="wireframe-meta">
+                    <span class="meta-tag">結果展示</span>
+                    <span class="meta-tag">稀有度系統</span>
+                    <span class="meta-tag">NFT 鑄造</span>
+                </div>
+            </div>
+        </a>
+        <a href="collection.html" class="wireframe-card">
+            <div class="wireframe-preview"><div class="preview-mockup"><div class="mockup-header"></div><div class="mockup-content"></div></div></div>
+            <div class="wireframe-info">
+                <h3 class="wireframe-title">我的收藏</h3>
+                <p class="wireframe-desc">展示用戶收藏的所有 NFT 解答卡，以響應式網格呈現，包含統計資訊和稀有度篩選功能。</p>
+                <div class="wireframe-meta">
+                    <span class="meta-tag">NFT 展示</span>
+                    <span class="meta-tag">收藏管理</span>
+                    <span class="meta-tag">統計資訊</span>
+                </div>
+            </div>
+        </a>
+    </div>
+</body>
+</html>

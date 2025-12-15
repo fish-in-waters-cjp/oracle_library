@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用者流程圖 - 高端奢華 | 永恆圖書館</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-tokens.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            padding: var(--space-12);
+            min-height: 100vh;
+        }
+
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto var(--space-16);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-6);
+            font-weight: var(--font-weight-normal);
+            letter-spacing: 0.02em;
+        }
+
+        .page-header p {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            font-weight: var(--font-weight-normal);
+        }
+
+        .flow-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-16);
+        }
+
+        .flow-section {
+            margin-bottom: var(--space-20);
+        }
+
+        .flow-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-section-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-10);
+            padding-bottom: var(--space-5);
+            border-bottom: 1px solid var(--color-border-default);
+            font-weight: var(--font-weight-normal);
+        }
+
+        .flow-path {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-5);
+            align-items: center;
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-5);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .flow-node {
+            background: transparent;
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-sm);
+            padding: var(--space-8);
+            min-width: 200px;
+            text-align: center;
+            transition: all var(--transition-slow);
+        }
+
+        .flow-node:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .flow-node.flow-start {
+            border-color: var(--color-primary);
+            background: rgba(212, 175, 55, 0.03);
+        }
+
+        .flow-node.flow-action {
+            background: transparent;
+        }
+
+        .flow-node.flow-decision {
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            padding: var(--space-10);
+            min-width: 220px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-color: var(--color-secondary);
+        }
+
+        .flow-node.flow-end {
+            border-color: var(--color-primary);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .flow-node-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            font-weight: var(--font-weight-normal);
+            margin-bottom: var(--space-2);
+            color: var(--color-primary);
+        }
+
+        .flow-node-desc {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            font-weight: var(--font-weight-normal);
+        }
+
+        .flow-arrow {
+            font-size: var(--text-2xl);
+            color: var(--color-primary);
+            opacity: 0.5;
+            animation: elegant-glow 3s ease-in-out infinite;
+        }
+
+        .flow-branch {
+            display: flex;
+            gap: var(--space-10);
+            justify-content: center;
+            margin-top: var(--space-5);
+            flex-wrap: wrap;
+        }
+
+        .flow-path-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-5);
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .flow-label {
+            display: inline-block;
+            background: transparent;
+            color: var(--color-primary);
+            padding: var(--space-2) var(--space-5);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-sm);
+            font-weight: var(--font-weight-normal);
+            border: 1px solid var(--color-border-default);
+        }
+
+        .legend {
+            margin-top: var(--space-16);
+            padding-top: var(--space-10);
+            border-top: 1px solid var(--color-border-default);
+        }
+
+        .legend-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-xl);
+            color: var(--color-primary);
+            margin-bottom: var(--space-8);
+            font-weight: var(--font-weight-normal);
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .legend-box {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border-default);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: var(--space-6);
+            }
+
+            .flow-container {
+                padding: var(--space-8);
+            }
+
+            .flow-row {
+                flex-direction: column;
+            }
+
+            .flow-branch {
+                flex-direction: column;
+            }
+
+            .page-header h1 {
+                font-size: var(--text-3xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>使用者流程圖</h1>
+        <p>高端奢華風格 - 永恆圖書館 MVP</p>
+    </div>
+
+    <div class="flow-container">
+        <!-- 主要流程 -->
+        <div class="flow-section">
+            <h2 class="flow-section-title">主要使用者流程</h2>
+
+            <div class="flow-path">
+                <div class="flow-node flow-start">
+                    <div class="flow-node-title">開始</div>
+                    <div class="flow-node-desc">訪問永恆圖書館</div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="flow-node flow-decision">
+                    <div class="flow-node-title">錢包已連接？</div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path-branch">
+                        <span class="flow-label">否</span>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">登入頁面</div>
+                            <div class="flow-node-desc">顯示連接錢包選項</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">連接錢包</div>
+                            <div class="flow-node-desc">Petra / Martian / Pontem</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-decision">
+                            <div class="flow-node-title">連接成功？</div>
+                        </div>
+                    </div>
+
+                    <div class="flow-path-branch">
+                        <span class="flow-label">是</span>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">進入主頁</div>
+                            <div class="flow-node-desc">顯示餘額和簽到</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 簽到流程 -->
+        <div class="flow-section">
+            <h2 class="flow-section-title">簽到流程</h2>
+
+            <div class="flow-path">
+                <div class="flow-row">
+                    <div class="flow-node flow-action">
+                        <div class="flow-node-title">主頁</div>
+                        <div class="flow-node-desc">檢視簽到狀態</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node flow-decision">
+                        <div class="flow-node-title">今日已簽到？</div>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path-branch">
+                        <span class="flow-label">否</span>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">點擊簽到按鈕</div>
+                            <div class="flow-node-desc">在訪客簿上簽名</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">交易確認</div>
+                            <div class="flow-node-desc">錢包彈窗確認</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-end">
+                            <div class="flow-node-title">獲得 MGC</div>
+                            <div class="flow-node-desc">+100 MGC (連續獎勵)</div>
+                        </div>
+                    </div>
+
+                    <div class="flow-path-branch">
+                        <span class="flow-label">是</span>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">顯示倒計時</div>
+                            <div class="flow-node-desc">下次簽到時間</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 抽取解答流程 -->
+        <div class="flow-section">
+            <h2 class="flow-section-title">抽取解答流程</h2>
+
+            <div class="flow-path">
+                <div class="flow-row">
+                    <div class="flow-node flow-action">
+                        <div class="flow-node-title">主頁</div>
+                        <div class="flow-node-desc">輸入問題</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node flow-action">
+                        <div class="flow-node-title">點擊抽取</div>
+                        <div class="flow-node-desc">消耗 100 MGC</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node flow-decision">
+                        <div class="flow-node-title">餘額足夠？</div>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="flow-path-branch">
+                        <span class="flow-label">是</span>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">交易確認</div>
+                            <div class="flow-node-desc">錢包彈窗確認</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">顯示結果頁</div>
+                            <div class="flow-node-desc">答案 + 稀有度</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-decision">
+                            <div class="flow-node-title">要鑄造 NFT？</div>
+                        </div>
+                    </div>
+
+                    <div class="flow-path-branch">
+                        <span class="flow-label">否</span>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-action">
+                            <div class="flow-node-title">顯示錯誤</div>
+                            <div class="flow-node-desc">提示簽到獲取 MGC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 圖例 -->
+        <div class="legend">
+            <h3 class="legend-title">流程節點圖例</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-box" style="background: rgba(212, 175, 55, 0.03); border-color: var(--color-primary);"></div>
+                    <span>開始節點</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: transparent; border-color: var(--color-border-default);"></div>
+                    <span>動作節點</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: transparent; border-color: var(--color-secondary); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);"></div>
+                    <span>決策節點</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: rgba(212, 175, 55, 0.05); border-color: var(--color-primary);"></div>
+                    <span>結束節點</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>永恆圖書館 - 風格比較</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #f5f5f5;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #00f3ff, #ff006e, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: rgba(245, 245, 245, 0.7);
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            color: rgba(245, 245, 245, 0.6);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Navigation Tabs */
+        .view-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .view-selector button {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .view-selector button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .view-selector button.active {
+            background: linear-gradient(135deg, #00f3ff, #ff006e);
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(0, 243, 255, 0.3);
+        }
+
+        /* Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .style-column {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .style-column:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .style-column.style-01 {
+            border-top: 3px solid #00f3ff;
+        }
+
+        .style-column.style-02 {
+            border-top: 3px solid #d4af37;
+        }
+
+        .style-column.style-10 {
+            border-top: 3px solid #c0c0c0;
+        }
+
+        .style-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .style-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .style-01 .style-name { color: #00f3ff; }
+        .style-02 .style-name { color: #d4af37; }
+        .style-10 .style-name { color: #c0c0c0; }
+
+        .style-description {
+            font-size: 0.9rem;
+            color: rgba(245, 245, 245, 0.7);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .style-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.9rem;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons a {
+            flex: 1;
+            min-width: 140px;
+            padding: 0.65rem 1rem;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-preview {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f5f5f5;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-preview:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .style-01 .btn-primary {
+            background: linear-gradient(135deg, #00f3ff, #00b8c4);
+            color: #0a0e27;
+            border: none;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .style-02 .btn-primary {
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            color: #1a0b2e;
+            border: none;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .style-10 .btn-primary {
+            background: linear-gradient(135deg, #d4af37, #c0c0c0);
+            color: #000;
+            border: none;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Color Palette Display */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .color-swatch {
+            text-align: center;
+        }
+
+        .color-box {
+            width: 100%;
+            height: 60px;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .color-label {
+            font-size: 0.7rem;
+            color: rgba(245, 245, 245, 0.6);
+        }
+
+        /* Content Views */
+        .view-content {
+            display: none;
+        }
+
+        .view-content.active {
+            display: block;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #00f3ff, #ff006e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(245, 245, 245, 0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .iframe-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>永恆圖書館設計系統比較</h1>
+            <p class="subtitle">三種風格並列比較 | Style Comparison</p>
+            <p class="description">
+                比較三種不同視覺風格的設計系統，包含 Design Tokens、Wireframes 和 Components。
+                選擇下方標籤切換不同的檢視模式，點擊「開啟完整版」查看更多細節。
+            </p>
+        </header>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">設計風格</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">主要頁面</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">7</div>
+                <div class="stat-label">元件類別</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">響應式設計</div>
+            </div>
+        </div>
+
+        <!-- View Selector -->
+        <div class="view-selector">
+            <button class="active" data-view="wireframes">Wireframes 線框圖</button>
+            <button data-view="components">Components 元件庫</button>
+            <button data-view="flow">User Flow 流程圖</button>
+            <button data-view="tokens">Design Tokens 設計代幣</button>
+        </div>
+
+        <!-- Wireframes View -->
+        <div id="wireframes-view" class="view-content active">
+            <div class="comparison-grid">
+                <!-- Style 01 -->
+                <div class="style-column style-01">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 01 · Web3 暗黑科技</h2>
+                        <p class="style-description">
+                            賽博龐克風格，霓虹發光效果，高對比度設計，科技感十足。
+                        </p>
+                        <div class="style-tags">
+                            <span class="tag">Web3</span>
+                            <span class="tag">賽博龐克</span>
+                            <span class="tag">霓虹</span>
+                            <span class="tag">科技</span>
+                        </div>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-01-web3-dark-tech/wireframes/index.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-01-web3-dark-tech/wireframes/index.html" target="_blank" class="btn-preview">
+                            📱 開啟完整版
+                        </a>
+                        <a href="style-01-web3-dark-tech/wireframes/home.html" target="_blank" class="btn-primary">
+                            🏠 查看主頁
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Style 02 -->
+                <div class="style-column style-02">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 02 · 神秘圖書館</h2>
+                        <p class="style-description">
+                            古典神秘風格，金色與靛藍配色，魔法氛圍，優雅知性。
+                        </p>
+                        <div class="style-tags">
+                            <span class="tag">古典</span>
+                            <span class="tag">神秘</span>
+                            <span class="tag">金色</span>
+                            <span class="tag">知識</span>
+                        </div>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-02-mystic-library/wireframes/index.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-02-mystic-library/wireframes/index.html" target="_blank" class="btn-preview">
+                            📱 開啟完整版
+                        </a>
+                        <a href="style-02-mystic-library/wireframes/home.html" target="_blank" class="btn-primary">
+                            🏠 查看主頁
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Style 10 -->
+                <div class="style-column style-10">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 10 · 高端奢華</h2>
+                        <p class="style-description">
+                            極簡奢華風格，金銀配色，大量留白，低調精緻高端質感。
+                        </p>
+                        <div class="style-tags">
+                            <span class="tag">奢華</span>
+                            <span class="tag">極簡</span>
+                            <span class="tag">精緻</span>
+                            <span class="tag">高端</span>
+                        </div>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-10-luxury-premium/wireframes/index.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-10-luxury-premium/wireframes/index.html" target="_blank" class="btn-preview">
+                            📱 開啟完整版
+                        </a>
+                        <a href="style-10-luxury-premium/wireframes/home.html" target="_blank" class="btn-primary">
+                            🏠 查看主頁
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Components View -->
+        <div id="components-view" class="view-content">
+            <div class="comparison-grid">
+                <!-- Style 01 -->
+                <div class="style-column style-01">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 01 · 元件庫</h2>
+                        <p class="style-description">
+                            包含 Buttons, Cards, Forms, Navigation, Feedback, Data Display 等完整元件。
+                        </p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-01-web3-dark-tech/components/index.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-01-web3-dark-tech/components/index.html" target="_blank" class="btn-preview">
+                            🧩 查看所有元件
+                        </a>
+                        <a href="style-01-web3-dark-tech/components/buttons.html" target="_blank" class="btn-primary">
+                            🔘 按鈕元件
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Style 02 -->
+                <div class="style-column style-02">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 02 · 元件庫</h2>
+                        <p class="style-description">
+                            包含 Buttons, Cards, Forms, Navigation, Feedback, Data Display 等完整元件。
+                        </p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-02-mystic-library/components/index.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-02-mystic-library/components/index.html" target="_blank" class="btn-preview">
+                            🧩 查看所有元件
+                        </a>
+                        <a href="style-02-mystic-library/components/buttons.html" target="_blank" class="btn-primary">
+                            🔘 按鈕元件
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Style 10 -->
+                <div class="style-column style-10">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 10 · 元件庫</h2>
+                        <p class="style-description">
+                            包含 Buttons, Cards, Forms, Navigation, Feedback, Data Display 等完整元件。
+                        </p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-10-luxury-premium/components/index.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-10-luxury-premium/components/index.html" target="_blank" class="btn-preview">
+                            🧩 查看所有元件
+                        </a>
+                        <a href="style-10-luxury-premium/components/buttons.html" target="_blank" class="btn-primary">
+                            🔘 按鈕元件
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Flow View -->
+        <div id="flow-view" class="view-content">
+            <div class="comparison-grid">
+                <!-- Style 01 -->
+                <div class="style-column style-01">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 01 · 使用者流程</h2>
+                        <p class="style-description">
+                            5 個核心 User Story 的完整互動流程圖
+                        </p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-01-web3-dark-tech/user-flow.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-01-web3-dark-tech/user-flow.html" target="_blank" class="btn-primary">
+                            🔄 開啟完整流程圖
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Style 02 -->
+                <div class="style-column style-02">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 02 · 使用者流程</h2>
+                        <p class="style-description">
+                            5 個核心 User Story 的完整互動流程圖
+                        </p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-02-mystic-library/user-flow.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-02-mystic-library/user-flow.html" target="_blank" class="btn-primary">
+                            🔄 開啟完整流程圖
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Style 10 -->
+                <div class="style-column style-10">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 10 · 使用者流程</h2>
+                        <p class="style-description">
+                            5 個核心 User Story 的完整互動流程圖
+                        </p>
+                    </div>
+                    <div class="iframe-container">
+                        <iframe src="style-10-luxury-premium/user-flow.html" loading="lazy"></iframe>
+                        <div class="loading-overlay">載入中...</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="style-10-luxury-premium/user-flow.html" target="_blank" class="btn-primary">
+                            🔄 開啟完整流程圖
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design Tokens View -->
+        <div id="tokens-view" class="view-content">
+            <div class="comparison-grid">
+                <!-- Style 01 -->
+                <div class="style-column style-01">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 01 · Design Tokens</h2>
+                        <p class="style-description">
+                            霓虹青 (#00f3ff) + 霓虹粉 (#ff006e)<br>
+                            Orbitron 字體 | 科技感
+                        </p>
+                    </div>
+                    <div class="color-palette">
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #00f3ff; box-shadow: 0 0 20px rgba(0,243,255,0.5);"></div>
+                            <div class="color-label">Primary</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #ff006e; box-shadow: 0 0 20px rgba(255,0,110,0.5);"></div>
+                            <div class="color-label">Secondary</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #8b5cf6;"></div>
+                            <div class="color-label">Accent</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #0a0e27;"></div>
+                            <div class="color-label">Background</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons" style="margin-top: 1.5rem;">
+                        <a href="style-01-web3-dark-tech/design-tokens.css" target="_blank" class="btn-preview">
+                            📄 CSS Tokens
+                        </a>
+                        <a href="style-01-web3-dark-tech/design-tokens.json" target="_blank" class="btn-primary">
+                            📋 JSON Tokens
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Style 02 -->
+                <div class="style-column style-02">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 02 · Design Tokens</h2>
+                        <p class="style-description">
+                            典雅金 (#d4af37) + 神秘靛藍 (#6366f1)<br>
+                            Cinzel 字體 | 古典神秘
+                        </p>
+                    </div>
+                    <div class="color-palette">
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #d4af37; box-shadow: 0 0 20px rgba(212,175,55,0.4);"></div>
+                            <div class="color-label">Primary</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #6366f1;"></div>
+                            <div class="color-label">Secondary</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #9333ea;"></div>
+                            <div class="color-label">Accent</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #1a0b2e;"></div>
+                            <div class="color-label">Background</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons" style="margin-top: 1.5rem;">
+                        <a href="style-02-mystic-library/design-tokens.css" target="_blank" class="btn-preview">
+                            📄 CSS Tokens
+                        </a>
+                        <a href="style-02-mystic-library/design-tokens.json" target="_blank" class="btn-primary">
+                            📋 JSON Tokens
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Style 10 -->
+                <div class="style-column style-10">
+                    <div class="style-header">
+                        <h2 class="style-name">Style 10 · Design Tokens</h2>
+                        <p class="style-description">
+                            金色 (#d4af37) + 銀色 (#c0c0c0)<br>
+                            Playfair Display 字體 | 高端奢華
+                        </p>
+                    </div>
+                    <div class="color-palette">
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #d4af37; box-shadow: 0 0 20px rgba(212,175,55,0.5);"></div>
+                            <div class="color-label">Primary</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #c0c0c0;"></div>
+                            <div class="color-label">Secondary</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #8b7355;"></div>
+                            <div class="color-label">Accent</div>
+                        </div>
+                        <div class="color-swatch">
+                            <div class="color-box" style="background: #000000;"></div>
+                            <div class="color-label">Background</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons" style="margin-top: 1.5rem;">
+                        <a href="style-10-luxury-premium/design-tokens.css" target="_blank" class="btn-preview">
+                            📄 CSS Tokens
+                        </a>
+                        <a href="style-10-luxury-premium/design-tokens.json" target="_blank" class="btn-primary">
+                            📋 JSON Tokens
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // View Switching
+        const viewButtons = document.querySelectorAll('.view-selector button');
+        const viewContents = document.querySelectorAll('.view-content');
+
+        viewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const viewName = button.dataset.view;
+
+                // Update active button
+                viewButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Update active view
+                viewContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`${viewName}-view`).classList.add('active');
+            });
+        });
+
+        // Hide loading overlay when iframe loads
+        const iframes = document.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+            iframe.addEventListener('load', () => {
+                const overlay = iframe.nextElementSibling;
+                if (overlay && overlay.classList.contains('loading-overlay')) {
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                    }, 500);
+                }
+            });
+        });
+
+        // Prevent iframe navigation from affecting parent
+        window.addEventListener('message', (event) => {
+            // Handle iframe messages if needed
+        });
+    </script>
+</body>
+</html>

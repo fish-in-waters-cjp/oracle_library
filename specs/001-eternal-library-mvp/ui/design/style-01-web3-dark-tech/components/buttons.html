@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按鈕元件 | Web3 暗黑科技</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            padding: var(--space-8);
+        }
+
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: var(--text-4xl);
+            margin-bottom: var(--space-2);
+            color: var(--color-primary);
+            text-shadow: var(--shadow-glow-primary);
+        }
+
+        .subtitle {
+            font-size: var(--text-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-10);
+        }
+
+        .section {
+            background: var(--color-background-surface);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            margin-bottom: var(--space-6);
+            color: var(--color-secondary);
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        /* Base Button Styles */
+        .btn {
+            padding: var(--space-3) var(--space-6);
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-semibold);
+            cursor: pointer;
+            transition: var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        /* Primary Button */
+        .btn-primary {
+            background: var(--color-primary);
+            color: var(--color-background-main);
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--color-primary-light);
+            box-shadow: var(--shadow-glow-primary-strong);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        /* Secondary Button */
+        .btn-secondary {
+            background: var(--color-secondary);
+            color: white;
+            box-shadow: var(--shadow-glow-secondary);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--color-secondary-light);
+            box-shadow: var(--shadow-glow-secondary-strong);
+            transform: translateY(-2px);
+        }
+
+        /* Ghost Button */
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border-default);
+        }
+
+        .btn-ghost:hover:not(:disabled) {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        /* Link Button */
+        .btn-link {
+            background: transparent;
+            color: var(--color-primary);
+            padding: var(--space-2) var(--space-3);
+        }
+
+        .btn-link:hover:not(:disabled) {
+            color: var(--color-primary-light);
+            text-decoration: underline;
+        }
+
+        /* Sizes */
+        .btn-sm {
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--text-sm);
+        }
+
+        .btn-lg {
+            padding: var(--space-4) var(--space-8);
+            font-size: var(--text-lg);
+        }
+
+        /* States */
+        .btn:disabled {
+            background: var(--color-background-elevated);
+            color: var(--color-text-disabled);
+            cursor: not-allowed;
+            box-shadow: none;
+            border-color: var(--color-border-subtle);
+        }
+
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Icon Button */
+        .btn-icon {
+            padding: var(--space-3);
+            aspect-ratio: 1;
+            justify-content: center;
+        }
+
+        /* Button Group */
+        .btn-group {
+            display: inline-flex;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .btn-group .btn {
+            border-radius: 0;
+            border-right: 1px solid var(--color-background-main);
+        }
+
+        .btn-group .btn:first-child {
+            border-top-left-radius: var(--radius-md);
+            border-bottom-left-radius: var(--radius-md);
+        }
+
+        .btn-group .btn:last-child {
+            border-top-right-radius: var(--radius-md);
+            border-bottom-right-radius: var(--radius-md);
+            border-right: none;
+        }
+
+        .code {
+            background: var(--color-background-main);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-sm);
+            padding: var(--space-4);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            margin-top: var(--space-4);
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>按鈕元件</h1>
+        <p class="subtitle">Web3 暗黑科技風格的按鈕系統</p>
+
+        <!-- Primary Buttons -->
+        <div class="section">
+            <h2 class="section-title">主要按鈕 (Primary)</h2>
+
+            <div class="button-row">
+                <button class="btn btn-primary btn-sm">Small</button>
+                <button class="btn btn-primary">Default</button>
+                <button class="btn btn-primary btn-lg">Large</button>
+            </div>
+
+            <div class="button-row">
+                <button class="btn btn-primary">Normal</button>
+                <button class="btn btn-primary" disabled>Disabled</button>
+                <button class="btn btn-primary btn-loading">Loading</button>
+            </div>
+
+            <div class="code">&lt;button class="btn btn-primary"&gt;Primary Button&lt;/button&gt;</div>
+        </div>
+
+        <!-- Secondary Buttons -->
+        <div class="section">
+            <h2 class="section-title">次要按鈕 (Secondary)</h2>
+
+            <div class="button-row">
+                <button class="btn btn-secondary btn-sm">Small</button>
+                <button class="btn btn-secondary">Default</button>
+                <button class="btn btn-secondary btn-lg">Large</button>
+            </div>
+
+            <div class="button-row">
+                <button class="btn btn-secondary">✨ 鑄造 NFT</button>
+                <button class="btn btn-secondary">🎴 抽取解答</button>
+            </div>
+
+            <div class="code">&lt;button class="btn btn-secondary"&gt;Secondary Button&lt;/button&gt;</div>
+        </div>
+
+        <!-- Ghost Buttons -->
+        <div class="section">
+            <h2 class="section-title">幽靈按鈕 (Ghost)</h2>
+
+            <div class="button-row">
+                <button class="btn btn-ghost">返回</button>
+                <button class="btn btn-ghost">取消</button>
+                <button class="btn btn-ghost" disabled>Disabled</button>
+            </div>
+
+            <div class="code">&lt;button class="btn btn-ghost"&gt;Ghost Button&lt;/button&gt;</div>
+        </div>
+
+        <!-- Link Buttons -->
+        <div class="section">
+            <h2 class="section-title">連結按鈕 (Link)</h2>
+
+            <div class="button-row">
+                <button class="btn btn-link">查看更多 →</button>
+                <button class="btn btn-link">返回主頁 ←</button>
+            </div>
+
+            <div class="code">&lt;button class="btn btn-link"&gt;Link Button&lt;/button&gt;</div>
+        </div>
+
+        <!-- Icon Buttons -->
+        <div class="section">
+            <h2 class="section-title">圖示按鈕 (Icon)</h2>
+
+            <div class="button-row">
+                <button class="btn btn-primary btn-icon">🔍</button>
+                <button class="btn btn-secondary btn-icon">🔔</button>
+                <button class="btn btn-ghost btn-icon">⚙️</button>
+                <button class="btn btn-ghost btn-icon">✖</button>
+            </div>
+
+            <div class="code">&lt;button class="btn btn-primary btn-icon"&gt;🔍&lt;/button&gt;</div>
+        </div>
+
+        <!-- Button Group -->
+        <div class="section">
+            <h2 class="section-title">按鈕群組 (Button Group)</h2>
+
+            <div class="btn-group">
+                <button class="btn btn-ghost">全部</button>
+                <button class="btn btn-ghost">Common</button>
+                <button class="btn btn-ghost">Rare</button>
+                <button class="btn btn-ghost">Epic</button>
+                <button class="btn btn-ghost">Legendary</button>
+            </div>
+
+            <div class="code">&lt;div class="btn-group"&gt;...&lt;/div&gt;</div>
+        </div>
+    </div>
+</body>
+</html>

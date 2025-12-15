@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽取結果 - 線框圖 | Web3 暗黑科技</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-tokens.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--color-background-main);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4);
+        }
+
+        .result-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid var(--color-border-subtle);
+            color: var(--color-text-secondary);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            margin-bottom: var(--space-6);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: var(--transition-fast);
+        }
+
+        .back-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .answer-card {
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-rarity-epic);
+            border-radius: var(--radius-xl);
+            padding: var(--space-10);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+            text-align: center;
+            margin-bottom: var(--space-6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-rarity-epic);
+        }
+
+        .rarity-badge {
+            display: inline-block;
+            padding: var(--space-2) var(--space-5);
+            background: var(--gradient-rarity-epic);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-6);
+        }
+
+        .answer-en {
+            font-size: var(--text-2xl);
+            font-weight: var(--font-weight-semibold);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-4);
+            font-style: italic;
+        }
+
+        .answer-zh {
+            font-size: var(--text-xl);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .card-id {
+            margin-top: var(--space-6);
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+        }
+
+        .actions {
+            display: flex;
+            gap: var(--space-4);
+        }
+
+        .mint-btn {
+            flex: 1;
+            padding: var(--space-4);
+            background: var(--color-secondary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-heading);
+            font-size: var(--text-lg);
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-glow-secondary);
+        }
+
+        .mint-btn:hover {
+            background: var(--color-secondary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-secondary-strong);
+        }
+
+        .mint-btn:disabled {
+            background: var(--color-background-elevated);
+            color: var(--color-text-disabled);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .home-btn {
+            flex: 1;
+            padding: var(--space-4);
+            background: transparent;
+            border: 1px solid var(--color-border-default);
+            color: var(--color-text-primary);
+            border-radius: var(--radius-md);
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .home-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .mint-info {
+            background: rgba(255, 0, 110, 0.1);
+            border: 1px solid var(--color-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .success-message {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--color-success);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+            color: var(--color-success);
+            font-size: var(--text-sm);
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .explorer-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .explorer-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .answer-card {
+                padding: var(--space-6);
+            }
+
+            .answer-en {
+                font-size: var(--text-xl);
+            }
+
+            .answer-zh {
+                font-size: var(--text-lg);
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <button class="back-btn" onclick="goBack()">← 返回主頁</button>
+
+        <div class="answer-card">
+            <span class="rarity-badge">Epic</span>
+
+            <div class="answer-en">
+                "The journey of a thousand miles begins with a single step."
+            </div>
+
+            <div class="answer-zh">
+                千里之行，始於足下。
+            </div>
+
+            <div class="card-id">#042</div>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            ✨ 鑄造成功！<br>
+            <a href="collection.html" class="explorer-link">前往我的收藏 →</a>
+            <span style="margin: 0 0.5rem;">|</span>
+            <a href="#" class="explorer-link" onclick="viewOnExplorer(event)">在 IOTA Explorer 查看 ↗</a>
+        </div>
+
+        <div class="mint-info">
+            💎 鑄造此答案為 NFT 需要消耗 <strong>5 MGC</strong> + Gas 費用
+        </div>
+
+        <div class="actions">
+            <button class="mint-btn" id="mintBtn" onclick="mint()">
+                鑄造 NFT
+            </button>
+            <button class="home-btn" onclick="goHome()">
+                返回主頁
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function goHome() {
+            window.location.href = 'home.html';
+        }
+
+        function mint() {
+            const btn = document.getElementById('mintBtn');
+            const successMsg = document.getElementById('successMessage');
+
+            if (!confirm('鑄造將消耗 5 MGC + Gas 費用，確定要鑄造嗎？')) {
+                return;
+            }
+
+            btn.textContent = '鑄造中...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.textContent = '已鑄造 ✓';
+                successMsg.classList.add('show');
+            }, 2000);
+        }
+
+        function viewOnExplorer(event) {
+            event.preventDefault();
+            // 模擬 IOTA Explorer 連結
+            const explorerUrl = 'https://explorer.iota.org/testnet/object/0x1234567890abcdef';
+            alert('正在開啟 IOTA Explorer...\n\n實際應用中將開啟：\n' + explorerUrl);
+            // window.open(explorerUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
