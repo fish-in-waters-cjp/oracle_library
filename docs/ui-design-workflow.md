@@ -59,7 +59,14 @@ AI 會根據 `spec.md` 中的：
 ### Step 2: 選擇風格並產出設計系統
 
 ```bash
+# 單選一個風格
 /speckit.ui-design --style=3
+
+# 選擇多個風格，分別產出（方便比較）
+/speckit.ui-design --style=1,3,5
+
+# 選擇多個風格，合併為可切換主題
+/speckit.ui-design --style=1,3,5 --merge
 ```
 
 根據選定的風格產出完整設計系統：
@@ -67,6 +74,12 @@ AI 會根據 `spec.md` 中的：
 - **User Flow**: 互動式使用者流程圖
 - **Wireframes**: 每個頁面的 HTML 線框稿
 - **Component Library**: 可複用的元件庫
+
+**多選模式說明**：
+| 模式 | 命令 | 產出 |
+|------|------|------|
+| 分別產出 | `--style=1,3,5` | 每個風格獨立目錄 + 比較頁面 |
+| 合併主題 | `--style=1,3,5 --merge` | 單一設計系統 + 主題切換器 |
 
 ### Step 3: 產出互動原型
 
@@ -83,53 +96,83 @@ AI 會根據 `spec.md` 中的：
 
 ## 輸出目錄結構
 
+### 單選模式 (`--style=3`)
+
 ```
 specs/[feature]/ui/
 ├── explore/                        # Phase 1: 風格探索
 │   ├── index.html                  # 風格總覽頁
-│   ├── style-01-modern-minimal/
-│   │   ├── moodboard.html
-│   │   └── tokens.css
-│   ├── style-02-web3-crypto/
-│   │   ├── moodboard.html
-│   │   └── tokens.css
-│   └── ... (共 10 個風格)
+│   └── style-[N]-[name]/           # 10 個風格
+│       ├── moodboard.html
+│       └── tokens.css
 │
 ├── design/                         # Phase 2: 設計系統
-│   ├── design-tokens.css           # 設計代幣
-│   ├── design-tokens.json          # JSON 格式
-│   ├── user-flow.html              # 使用者流程圖
-│   ├── wireframes/                 # 線框稿
-│   │   ├── index.html
+│   ├── design-tokens.css
+│   ├── design-tokens.json
+│   ├── user-flow.html
+│   ├── wireframes/
 │   │   └── [page].html
-│   ├── components/                 # 元件庫
-│   │   ├── index.html
-│   │   ├── buttons.html
-│   │   ├── forms.html
-│   │   ├── cards.html
-│   │   ├── navigation.html
-│   │   ├── feedback.html
-│   │   └── data-display.html
+│   ├── components/
+│   │   └── [component].html
 │   └── README.md
-│
-└── prototype/                      # Phase 3: 互動原型
-    ├── index.html                  # 入口頁面
-    ├── css/
-    │   ├── tokens.css
-    │   ├── base.css
-    │   ├── components.css
-    │   ├── utilities.css
-    │   └── pages.css
-    ├── js/
-    │   ├── main.js
-    │   ├── navigation.js
-    │   └── interactions.js
-    ├── pages/
-    │   └── [page].html
-    ├── assets/
-    │   ├── images/
-    │   └── icons/
-    └── README.md
+```
+
+### 多選分別模式 (`--style=1,3,5`)
+
+```
+specs/[feature]/ui/design/
+├── style-01-[name]/                # 風格 1 完整設計系統
+│   ├── design-tokens.css
+│   ├── wireframes/
+│   └── components/
+├── style-03-[name]/                # 風格 3 完整設計系統
+│   ├── design-tokens.css
+│   ├── wireframes/
+│   └── components/
+├── style-05-[name]/                # 風格 5 完整設計系統
+│   ├── design-tokens.css
+│   ├── wireframes/
+│   └── components/
+├── comparison.html                 # 風格比較頁面（iframe 並排）
+└── README.md
+```
+
+### 多選合併模式 (`--style=1,3,5 --merge`)
+
+```
+specs/[feature]/ui/design/
+├── design-tokens.css               # 合併的 tokens（含主題切換）
+├── design-tokens.json
+├── theme-switcher.js               # 主題切換 JavaScript
+├── user-flow.html
+├── wireframes/
+│   └── [page].html                 # 每頁都支援主題切換
+├── components/
+│   └── [component].html
+└── README.md
+```
+
+### 原型輸出結構
+
+```
+specs/[feature]/ui/prototype/        # Phase 3: 互動原型
+├── index.html                       # 入口頁面
+├── css/
+│   ├── tokens.css
+│   ├── base.css
+│   ├── components.css
+│   ├── utilities.css
+│   └── pages.css
+├── js/
+│   ├── main.js
+│   ├── navigation.js
+│   └── interactions.js
+├── pages/
+│   └── [page].html
+├── assets/
+│   ├── images/
+│   └── icons/
+└── README.md
 ```
 
 ## 風格調性類型
