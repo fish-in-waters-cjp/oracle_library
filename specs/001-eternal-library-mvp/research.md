@@ -256,9 +256,13 @@ oracle_library/
 ├── frontend/                 # Next.js 前端
 │   ├── app/
 │   ├── components/
+│   │   ├── ui/              # B 級：基礎 UI
+│   │   ├── animated/        # A 級：Framer Motion
+│   │   └── phaser/          # S 級：Phaser 遊戲場景
 │   ├── hooks/
 │   ├── lib/
 │   └── public/
+│       └── game/            # Phaser 遊戲資源
 ├── contracts/                # Move 合約
 │   ├── sources/
 │   ├── tests/
@@ -266,6 +270,129 @@ oracle_library/
 ├── specs/                    # 規格文件
 └── package.json
 ```
+
+### 11. 遊戲引擎整合（Phaser 3）
+
+**決定**：使用 Phaser 3 處理核心抽卡動畫
+
+**理由**：
+- 抽卡動畫是核心體驗，需要專業級粒子效果和 3D 翻轉
+- Phaser 3 提供完整的遊戲開發能力
+- 官方提供 [Next.js 整合模板](https://github.com/phaserjs/template-nextjs)
+- 最新版本 3.90.0（2024 年 11 月更新）
+
+**替代方案評估**：
+- GSAP (~70KB)：動畫品質較低，但 bundle size 小
+- PixiJS (~300KB)：純 2D 渲染，缺少遊戲引擎功能
+- 純 CSS/Framer Motion (~50KB)：無法實現粒子效果
+
+**使用範圍（僅 3 個場景）**：
+
+| 場景 | 用途 | 效果 |
+|------|------|------|
+| DrawScene | 抽取動畫 | 卡牌飛入、能量粒子聚集、3D 翻轉 |
+| CardRevealScene | 卡片展示 | 稀有度對應光效、粒子環繞 |
+| CelebrationScene | 鑄造慶祝 | 煙火、金幣飛散 |
+
+**Next.js App Router 整合**：
+```tsx
+// components/phaser/PhaserContainer.tsx
+'use client';
+
+import dynamic from 'next/dynamic';
+
+// 懶載入 Phaser（避免 SSR 和首頁載入延遲）
+const PhaserGame = dynamic(
+  () => import('./PhaserGame'),
+  {
+    ssr: false,
+    loading: () => <LoadingSkeleton />
+  }
+);
+
+export function PhaserContainer({ scene }: { scene: string }) {
+  return <PhaserGame initialScene={scene} />;
+}
+```
+
+**React ↔ Phaser 通訊**：
+```typescript
+// EventBridge.ts
+import { EventEmitter } from 'events';
+
+export const GameEvents = new EventEmitter();
+
+// React → Phaser
+export const GAME_EVENTS = {
+  START_DRAW: 'start-draw',
+  REVEAL_CARD: 'reveal-card',
+  START_CELEBRATION: 'start-celebration',
+} as const;
+
+// Phaser → React
+export const UI_EVENTS = {
+  DRAW_COMPLETE: 'draw-complete',
+  CARD_REVEALED: 'card-revealed',
+  CELEBRATION_DONE: 'celebration-done',
+} as const;
+```
+
+**Bundle Size 影響**：
+- Phaser 3.90：~400KB gzipped
+- 使用 Code Splitting 懶載入
+- 首頁不載入 Phaser，進入抽取時才載入
+
+### 12. UI 動畫（Framer Motion）
+
+**決定**：使用 Framer Motion 處理 UI 動畫
+
+**理由**：
+- React 原生整合，宣告式 API
+- 較輕量（~50KB gzipped）
+- 適合頁面轉場、hover 效果、數字跳動等
+
+**使用範圍（A 級元件）**：
+- 頁面轉場動畫
+- MGC 餘額數字跳動
+- 簽到書本翻頁效果
+- Toast 通知滑入滑出
+- NFT 卡片 hover 效果
+- 彈窗開啟/關閉動畫
+
+**關鍵程式碼模式**：
+```tsx
+// 數字跳動動畫
+import { motion, useSpring, useTransform } from 'framer-motion';
+
+function AnimatedBalance({ value }: { value: number }) {
+  const spring = useSpring(value, { stiffness: 100, damping: 30 });
+  const display = useTransform(spring, (v) => Math.round(v));
+
+  return <motion.span>{display}</motion.span>;
+}
+```
+
+### 13. 畫面技術分級
+
+**決定**：三級分類系統
+
+| 等級 | 技術 | 適用場景 | Bundle 影響 |
+|------|------|----------|-------------|
+| S 級 | Phaser 3 | 遊戲動畫、粒子效果 | 懶載入 ~400KB |
+| A 級 | Framer Motion | UI 動畫、轉場 | 即時 ~50KB |
+| B 級 | React + CSS | 靜態 UI、表單 | 即時 ~0KB |
+
+**畫面分級結果**：
+- 登入頁：B/A 級
+- 導航列：B 級
+- 簽到區塊：A 級
+- **抽取動畫**：**S 級**
+- **答案卡片**：**S 級**
+- **鑄造慶祝**：**S 級**
+- 收藏頁：B/A 級
+- 全域元件：A/B 級
+
+詳細分級表請參閱 [plan.md](./plan.md#畫面技術分級)。
 
 ## 風險與緩解
 
@@ -307,13 +434,62 @@ oracle_library/
    - Coin 標準
    - Display 標準
 
+### 風險 4：Phaser + Next.js App Router 相容性
+
+**緩解**：
+- 使用 `'use client'` 指令
+- 使用 `dynamic()` 懶載入並設定 `ssr: false`
+- EventBridge 模式解耦 React 和 Phaser 狀態
+- 參考官方 Next.js 模板調整
+
+### 風險 5：Bundle Size 過大
+
+**緩解**：
+- Phaser 懶載入（進入抽取時才載入）
+- 首頁 Bundle < 500KB
+- 完整 Bundle < 800KB
+- Tree Shaking 移除未使用的 Phaser 功能
+
+## 參考資源
+
+1. **IOTA Move Workshop 2025**
+   - 路徑：`/Documents/github-projects/IOTA-move-workshop-2025/`
+   - Lesson-3：Coin 和 NFT 範例
+   - Lesson-6：完整 dApp 範例
+
+2. **@iota/dapp-kit 文件**
+   - Provider 設定
+   - Hooks 使用方式
+   - 交易執行模式
+
+3. **IOTA Move 文件**
+   - Object 模型
+   - Coin 標準
+   - Display 標準
+
+4. **Phaser 3 整合**
+   - [Official Phaser 3 + Next.js Template](https://github.com/phaserjs/template-nextjs)
+   - [3D Card Flip Tutorial](https://emanueleferonato.com/2017/08/18/how-to-create-a-html5-3d-flipping-card-animation-in-2d-using-phaser/)
+   - [Rex Rainbow Plugins](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/)
+
+5. **Framer Motion**
+   - [官方文件](https://www.framer.com/motion/)
+   - 數字動畫、頁面轉場、手勢處理
+
 ## 結論
 
-技術研究確認所有 NEEDS CLARIFICATION 項目已解決。專案將採用：
+技術研究確認所有項目已解決。專案將採用：
 
 - **前端**：Next.js 16 + React 19 + @iota/dapp-kit
+- **遊戲引擎**：Phaser 3（抽卡動畫、慶祝特效）
+- **UI 動畫**：Framer Motion（頁面轉場、數字動畫）
 - **合約**：IOTA Move（多模組設計）
 - **狀態管理**：TanStack Query（@iota/dapp-kit 內建）
 - **樣式**：Tailwind CSS 4
 
-下一步：進入 Phase 1 產生 data-model.md 和 contracts/。
+**畫面技術分級**：
+- S 級（Phaser）：抽取動畫、答案卡片、鑄造慶祝
+- A 級（Framer Motion）：簽到動畫、餘額顯示、Toast、彈窗
+- B 級（React + CSS）：表單、列表、導航列
+
+下一步：更新 tasks.md 加入 Phaser 相關任務。
