@@ -109,12 +109,16 @@ Dependent Artifacts Status:
 **Requirements**:
 
 - **Response Time** < 100ms (perceived instant)
-- **Page Load** < 2s on 3G
+- **Page Load** < 3s (standard network conditions)
 - **TTI** (Time to Interactive) < 3s
 - **API Latency** p95 < 200ms
 - **DB Queries** — No N+1; use indexes
 - **Memory** < 200MB (client)
-- **Bundle Size** < 500KB gzipped (total), < 100KB critical path
+- **Bundle Size**:
+  - **Critical Path** < 100KB gzipped (required for first interaction)
+  - **Initial Page** < 500KB gzipped (excluding lazy-loaded modules)
+  - **Full Application** < 1MB gzipped (including all lazy-loaded modules)
+  - **Lazy Loading** — Non-critical features SHOULD use dynamic imports
 
 **Monitoring**:
 
@@ -232,4 +236,4 @@ Dependent Artifacts Status:
 - **Retrospectives** — Track and discuss violations openly
 - **Living Document** — The constitution evolves to serve the team
 
-**Version**: 1.1.0 | **Ratified**: 2025-11-18 | **Last Amended**: 2025-12-10
+**Version**: 1.2.0 | **Ratified**: 2025-11-18 | **Last Amended**: 2025-12-16

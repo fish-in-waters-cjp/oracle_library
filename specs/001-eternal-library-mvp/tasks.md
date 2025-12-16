@@ -130,6 +130,9 @@ oracle_library/
 - [ ] T034 [US1] 實作應用佈局（含導航列 B 級）`frontend/app/(app)/layout.tsx`
 - [ ] T035 [US1] 實作連接成功轉場動畫（A 級）
 - [ ] T036 [US1] 實作錢包斷線偵測與自動重連邏輯
+  - 靜默嘗試自動重連（重新進入網站時）
+  - 重連失敗不顯示錯誤提示，停留在登入頁
+  - 支援帳號切換偵測與自動更新狀態
 
 **Checkpoint**: User Story 1 完成 — 使用者可連接錢包並進入主頁面
 
@@ -213,7 +216,7 @@ oracle_library/
 - [ ] T065 [US3] 實作 DrawResultOverlay 結果覆蓋層 `frontend/components/draw-result-overlay.tsx`
   - 答案文字顯示（疊在 Phaser 上方）
   - 稀有度標籤
-  - 鑄造按鈕入口
+  - 預留鑄造按鈕位置（佔位元件，實際功能由 T073 實作）
 - [ ] T066 [US3] 整合抽取區塊至主頁面 `frontend/app/(app)/page.tsx`
 - [ ] T067 [US3] 實作 Optimistic UI 餘額更新與回滾邏輯（-10 MGC）
 
@@ -250,7 +253,10 @@ oracle_library/
 
 #### 前端元件
 
-- [ ] T073 [US4] 在 DrawResultOverlay 加入鑄造按鈕（A 級 hover）`frontend/components/draw-result-overlay.tsx`
+- [ ] T073 [US4] 實作鑄造按鈕功能（A 級 hover）`frontend/components/draw-result-overlay.tsx`
+  - 替換 T065 的佔位元件為完整功能按鈕
+  - 加入 hover 動畫效果
+  - 整合 useMintNFT Hook
 - [ ] T074 [US4] 實作鑄造確認對話框（A 級）`frontend/components/mint-confirm-modal.tsx`
 - [ ] T075 [US4] 整合慶祝動畫與 Explorer 連結
 - [ ] T076 [US4] 實作 -5 MGC 扣除動畫

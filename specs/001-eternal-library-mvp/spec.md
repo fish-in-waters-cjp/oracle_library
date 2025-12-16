@@ -4,7 +4,7 @@
 **建立日期**：2025-12-15
 **狀態**：已審閱
 **輸入**：產品需求規格書 (PRD) v1.0 MVP
-**最後更新**：2025-12-15（Phase 2 Grooming 完成）
+**最後更新**：2025-12-16（技術決策補充遊戲引擎、US4 AC 對齊）
 
 ## 技術決策摘要
 
@@ -13,6 +13,9 @@
 | 區塊鏈 | IOTA Testnet（Move 語言）|
 | 錢包 | IOTA Wallet + @iota/dapp-kit |
 | 架構 | 純前端 + 智能合約（無後端）|
+| 前端框架 | Next.js 16 + React 19 |
+| 遊戲引擎 | Phaser 3（抽卡動畫、慶祝特效，懶載入）|
+| UI 動畫 | Framer Motion（一般 UI 動效）|
 | Token | MGC（Coin 標準，不可交易）|
 | NFT | Move Object with UID |
 | 儲存 | On-chain 指標 + IPFS（圖片/metadata）|
@@ -162,7 +165,7 @@ module oracle_library::oracle_draw {
 **驗收情境**：
 
 1. **Given** 使用者在抽取結果頁面，擁有 ≥5 MGC，錢包有足夠 Gas，**When** 點擊「鑄造 NFT」按鈕，**Then** 顯示確認對話框：「鑄造將消耗 5 MGC + Gas 費用」，確認後喚起錢包簽署，按鈕變為「鑄造中...」
-2. **Given** 錢包交易確認完成，**When** 鑄造成功，**Then** 播放慶祝動畫，顯示成功訊息，按鈕變為「已鑄造 ✓」（禁用），顯示「查看 NFT ↗」連結（IOTA Explorer），MGC 餘額更新 -5
+2. **Given** 錢包交易確認完成，**When** 鑄造成功，**Then** 播放慶祝動畫（Phaser 3：煙火爆發、金幣/星星飛散、光芒閃爍），顯示成功訊息，按鈕變為「已鑄造 ✓」（禁用），顯示「查看 NFT ↗」連結（IOTA Explorer），MGC 餘額更新 -5
 3. **Given** 使用者 MGC < 5，**When** 點擊鑄造按鈕，**Then** 顯示「智慧碎片不足！鑄造需要 5 MGC，你目前有 X MGC」
 4. **Given** 錢包簽署介面已開啟，**When** 使用者拒絕簽署，**Then** 顯示「交易已取消」，鑄造按鈕恢復可用
 5. **Given** 使用者錢包 IOTA 餘額不足，**When** 發起鑄造，**Then** 顯示「Gas 費用不足，請先取得一些 IOTA」並提供 Testnet Faucet 連結

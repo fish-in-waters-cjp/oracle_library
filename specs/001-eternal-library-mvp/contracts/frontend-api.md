@@ -463,3 +463,206 @@ NEXT_PUBLIC_NETWORK=testnet
 
 - `ipfs://Qm.../images/` - NFT 圖片 (0.png ~ 49.png)
 - `ipfs://Qm.../metadata/` - NFT metadata (0.json ~ 49.json)
+
+---
+
+## EventBridge API（React ↔ Phaser 通訊）
+
+### 概述
+
+EventBridge 提供 React 與 Phaser 遊戲場景之間的雙向通訊機制。使用 EventEmitter 模式實現鬆耦合。
+
+### 事件定義
+
+```typescript
+// frontend/components/phaser/EventBridge.ts
+import { EventEmitter } from 'events';
+
+export const GameEvents = new EventEmitter();
+
+// 設定最大監聽器數量，避免記憶體洩漏警告
+GameEvents.setMaxListeners(20);
+```
+
+### React → Phaser 事件
+
+| 事件名稱 | Payload | 說明 |
+|----------|---------|------|
+| `START_DRAW` | `StartDrawPayload` | 開始抽取動畫 |
+| `REVEAL_CARD` | `RevealCardPayload` | 揭示卡片（交易確認後）|
+| `START_CELEBRATION` | `CelebrationPayload` | 開始慶祝動畫（鑄造成功）|
+| `STOP_SCENE` | `{ sceneKey: string }` | 停止指定場景 |
+
+```typescript
+// Payload 型別定義
+interface StartDrawPayload {
+  questionHash: string;  // 用於視覺效果種子
+}
+
+interface RevealCardPayload {
+  answerId: number;      // 0-49
+  rarity: Rarity;        // 0-3
+  answerEn: string;      // 英文答案（顯示用）
+  answerZh: string;      // 中文答案（顯示用）
+}
+
+interface CelebrationPayload {
+  rarity: Rarity;        // 影響慶祝效果強度
+  nftId: string;         // NFT Object ID
+}
+
+// 常數定義
+export const GAME_EVENTS = {
+  START_DRAW: 'game:start-draw',
+  REVEAL_CARD: 'game:reveal-card',
+  START_CELEBRATION: 'game:start-celebration',
+  STOP_SCENE: 'game:stop-scene',
+} as const;
+```
+
+### Phaser → React 事件
+
+| 事件名稱 | Payload | 說明 |
+|----------|---------|------|
+| `DRAW_ANIMATION_READY` | `void` | 抽取動畫就緒，可發送交易 |
+| `DRAW_COMPLETE` | `void` | 抽取動畫完成 |
+| `CARD_REVEALED` | `void` | 卡片揭示完成 |
+| `CELEBRATION_DONE` | `void` | 慶祝動畫完成 |
+| `SCENE_ERROR` | `SceneErrorPayload` | 場景發生錯誤 |
+
+```typescript
+interface SceneErrorPayload {
+  sceneKey: string;
+  error: string;
+  recoverable: boolean;
+}
+
+export const UI_EVENTS = {
+  DRAW_ANIMATION_READY: 'ui:draw-animation-ready',
+  DRAW_COMPLETE: 'ui:draw-complete',
+  CARD_REVEALED: 'ui:card-revealed',
+  CELEBRATION_DONE: 'ui:celebration-done',
+  SCENE_ERROR: 'ui:scene-error',
+} as const;
+```
+
+### 使用範例
+
+```typescript
+// React 端發送事件
+import { GameEvents, GAME_EVENTS } from '@/components/phaser/EventBridge';
+
+function handleDraw() {
+  GameEvents.emit(GAME_EVENTS.START_DRAW, {
+    questionHash: '0x1234...',
+  });
+}
+
+// React 端監聽事件
+useEffect(() => {
+  const handleComplete = () => {
+    setDrawState('complete');
+  };
+
+  GameEvents.on(UI_EVENTS.DRAW_COMPLETE, handleComplete);
+
+  return () => {
+    GameEvents.off(UI_EVENTS.DRAW_COMPLETE, handleComplete);
+  };
+}, []);
+```
+
+```typescript
+// Phaser 端（場景內）
+import { GameEvents, GAME_EVENTS, UI_EVENTS } from '../EventBridge';
+
+export class DrawScene extends Phaser.Scene {
+  create() {
+    GameEvents.on(GAME_EVENTS.START_DRAW, this.handleStartDraw, this);
+  }
+
+  handleStartDraw(payload: StartDrawPayload) {
+    // 播放動畫...
+    this.playDrawAnimation();
+  }
+
+  onAnimationComplete() {
+    GameEvents.emit(UI_EVENTS.DRAW_COMPLETE);
+  }
+
+  shutdown() {
+    // 清理監聽器，避免記憶體洩漏
+    GameEvents.off(GAME_EVENTS.START_DRAW, this.handleStartDraw, this);
+  }
+}
+```
+
+### 錯誤處理
+
+```typescript
+// 超時處理
+const ANIMATION_TIMEOUT = 10000; // 10 秒
+
+function waitForEvent(eventName: string, timeout = ANIMATION_TIMEOUT): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      GameEvents.off(eventName, handler);
+      reject(new OracleError(
+        OracleErrorCode.ANIMATION_TIMEOUT,
+        '動畫載入超時，請重新整理頁面'
+      ));
+    }, timeout);
+
+    const handler = () => {
+      clearTimeout(timer);
+      resolve();
+    };
+
+    GameEvents.once(eventName, handler);
+  });
+}
+
+// 場景錯誤處理
+GameEvents.on(UI_EVENTS.SCENE_ERROR, (payload: SceneErrorPayload) => {
+  console.error(`Scene error in ${payload.sceneKey}:`, payload.error);
+
+  if (payload.recoverable) {
+    // 嘗試重新載入場景
+    GameEvents.emit(GAME_EVENTS.STOP_SCENE, { sceneKey: payload.sceneKey });
+  } else {
+    // 顯示錯誤訊息給使用者
+    toast.error('遊戲載入失敗，請重新整理頁面');
+  }
+});
+```
+
+### 生命週期管理
+
+```typescript
+// PhaserContainer.tsx 中的清理邏輯
+useEffect(() => {
+  return () => {
+    // 組件卸載時清理所有事件
+    GameEvents.removeAllListeners();
+  };
+}, []);
+```
+
+### 錯誤碼擴展
+
+```typescript
+// 新增動畫相關錯誤碼
+enum OracleErrorCode {
+  // ... 現有錯誤碼
+  ANIMATION_TIMEOUT = 'ANIMATION_TIMEOUT',
+  SCENE_LOAD_FAILED = 'SCENE_LOAD_FAILED',
+  ASSET_LOAD_FAILED = 'ASSET_LOAD_FAILED',
+}
+
+const ERROR_MESSAGES: Record<OracleErrorCode, string> = {
+  // ... 現有訊息
+  ANIMATION_TIMEOUT: '動畫載入超時，請重新整理頁面',
+  SCENE_LOAD_FAILED: '遊戲場景載入失敗',
+  ASSET_LOAD_FAILED: '遊戲資源載入失敗',
+};
+```
