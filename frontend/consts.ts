@@ -29,10 +29,10 @@ export const TOTAL_ANSWERS = 50;
 
 // Rarity Constants
 export const RARITY_INFO = {
-  0: { name: "Common", color: "gray", probability: 0.6 },
-  1: { name: "Rare", color: "blue", probability: 0.3 },
-  2: { name: "Epic", color: "purple", probability: 0.08 },
-  3: { name: "Legendary", color: "gold", probability: 0.02 },
+  0: { name: "Common", color: "gray", probability: 0.35 },
+  1: { name: "Rare", color: "blue", probability: 0.30 },
+  2: { name: "Epic", color: "purple", probability: 0.20 },
+  3: { name: "Legendary", color: "gold", probability: 0.15 },
 } as const;
 
 export type Rarity = 0 | 1 | 2 | 3;
