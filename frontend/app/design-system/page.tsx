@@ -8,6 +8,7 @@ import Alert from '@/components/ui/alert';
 import Spinner from '@/components/ui/spinner';
 import Badge from '@/components/ui/badge';
 import FadeIn from '@/components/animation/fade-in';
+import ScaleSpring from '@/components/animation/scale-spring';
 
 const styles = {
   section: {
@@ -386,6 +387,119 @@ export default function DesignSystemPage() {
               <FadeIn direction="right" delay={0.3}>
                 <Badge variant="common">Common</Badge>
               </FadeIn>
+            </div>
+          </div>
+        </section>
+
+        {/* 彈性縮放動畫 */}
+        <section style={styles.section}>
+          <h2 style={styles.sectionTitle}>彈性縮放動畫</h2>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>基本 Hover 縮放（預設 1.05x）</div>
+            <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap' as const }}>
+              <ScaleSpring>
+                <Button variant="primary">Hover 我</Button>
+              </ScaleSpring>
+              <ScaleSpring>
+                <Button variant="secondary">試試看</Button>
+              </ScaleSpring>
+              <ScaleSpring>
+                <Button variant="ghost">懸停效果</Button>
+              </ScaleSpring>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>自訂縮放比例（1.1x）</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--space-4)' }}>
+              <ScaleSpring scale={1.1}>
+                <Card title="Hover 我" rarity="common">
+                  放大 1.1 倍
+                </Card>
+              </ScaleSpring>
+              <ScaleSpring scale={1.1}>
+                <Card title="試試看" rarity="rare">
+                  彈性縮放
+                </Card>
+              </ScaleSpring>
+              <ScaleSpring scale={1.1}>
+                <Card title="互動效果" rarity="epic">
+                  Spring 動畫
+                </Card>
+              </ScaleSpring>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>初始彈性放大動畫</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--space-4)' }}>
+              <ScaleSpring initialScale={0.8} delay={0}>
+                <Card title="卡片 1" rarity="common" showRarityBadge>
+                  從 0.8 彈性放大
+                </Card>
+              </ScaleSpring>
+              <ScaleSpring initialScale={0.8} delay={0.1}>
+                <Card title="卡片 2" rarity="rare" showRarityBadge>
+                  延遲 0.1s
+                </Card>
+              </ScaleSpring>
+              <ScaleSpring initialScale={0.8} delay={0.2}>
+                <Card title="卡片 3" rarity="epic" showRarityBadge>
+                  延遲 0.2s
+                </Card>
+              </ScaleSpring>
+              <ScaleSpring initialScale={0.8} delay={0.3}>
+                <Card title="卡片 4" rarity="legendary" showRarityBadge>
+                  延遲 0.3s
+                </Card>
+              </ScaleSpring>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>組合淡入效果</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)' }}>
+              <ScaleSpring initialScale={0.9} withFadeIn delay={0}>
+                <Card title="淡入 + 縮放">
+                  同時淡入與彈性放大
+                </Card>
+              </ScaleSpring>
+              <ScaleSpring initialScale={0.9} withFadeIn delay={0.15}>
+                <Card title="組合動畫">
+                  更豐富的視覺效果
+                </Card>
+              </ScaleSpring>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>組合向上滑動效果</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+              <ScaleSpring initialScale={0.95} withSlideUp delay={0}>
+                <Alert type="info">向上滑動 + 彈性放大</Alert>
+              </ScaleSpring>
+              <ScaleSpring initialScale={0.95} withSlideUp delay={0.1}>
+                <Alert type="success">組合動畫效果更生動</Alert>
+              </ScaleSpring>
+            </div>
+          </div>
+
+          <div>
+            <div style={styles.label}>Badge 彈性縮放</div>
+            <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap' as const }}>
+              <ScaleSpring scale={1.15}>
+                <Badge variant="legendary">Legendary</Badge>
+              </ScaleSpring>
+              <ScaleSpring scale={1.15}>
+                <Badge variant="epic">Epic</Badge>
+              </ScaleSpring>
+              <ScaleSpring scale={1.15}>
+                <Badge variant="rare">Rare</Badge>
+              </ScaleSpring>
+              <ScaleSpring scale={1.15}>
+                <Badge variant="common">Common</Badge>
+              </ScaleSpring>
             </div>
           </div>
         </section>
