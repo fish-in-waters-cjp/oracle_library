@@ -7,6 +7,7 @@ import Card from '@/components/ui/card';
 import Alert from '@/components/ui/alert';
 import Spinner from '@/components/ui/spinner';
 import Badge from '@/components/ui/badge';
+import FadeIn from '@/components/animation/fade-in';
 
 const styles = {
   section: {
@@ -312,6 +313,79 @@ export default function DesignSystemPage() {
                   <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', fontFamily: 'monospace' }}>#000000</p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 動畫元件 */}
+        <section style={styles.section}>
+          <h2 style={styles.sectionTitle}>淡入動畫</h2>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>基本淡入（無位移）</div>
+            <FadeIn>
+              <Card title="淡入卡片">
+                這個卡片會在頁面載入時淡入顯示。
+              </Card>
+            </FadeIn>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>從下向上淡入</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)' }}>
+              <FadeIn direction="up" delay={0}>
+                <Card title="卡片 1" rarity="common">
+                  無延遲
+                </Card>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.1}>
+                <Card title="卡片 2" rarity="rare">
+                  延遲 0.1s
+                </Card>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.2}>
+                <Card title="卡片 3" rarity="epic">
+                  延遲 0.2s
+                </Card>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.3}>
+                <Card title="卡片 4" rarity="legendary">
+                  延遲 0.3s
+                </Card>
+              </FadeIn>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>從左向右淡入</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+              <FadeIn direction="left" delay={0}>
+                <Alert type="info">資訊訊息 - 從左淡入（無延遲）</Alert>
+              </FadeIn>
+              <FadeIn direction="left" delay={0.2}>
+                <Alert type="success">成功訊息 - 從左淡入（延遲 0.2s）</Alert>
+              </FadeIn>
+              <FadeIn direction="left" delay={0.4}>
+                <Alert type="warning">警告訊息 - 從左淡入（延遲 0.4s）</Alert>
+              </FadeIn>
+            </div>
+          </div>
+
+          <div>
+            <div style={styles.label}>從右向左淡入</div>
+            <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap' as const }}>
+              <FadeIn direction="right" delay={0}>
+                <Badge variant="legendary">Legendary</Badge>
+              </FadeIn>
+              <FadeIn direction="right" delay={0.1}>
+                <Badge variant="epic">Epic</Badge>
+              </FadeIn>
+              <FadeIn direction="right" delay={0.2}>
+                <Badge variant="rare">Rare</Badge>
+              </FadeIn>
+              <FadeIn direction="right" delay={0.3}>
+                <Badge variant="common">Common</Badge>
+              </FadeIn>
             </div>
           </div>
         </section>
