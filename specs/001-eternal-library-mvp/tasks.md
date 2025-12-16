@@ -162,6 +162,33 @@ oracle_library/
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/pages/collection.html` (NFT 卡片)
   - **功能**: 支援 header, body, footer, hover 效果
 
+### 補充任務：基礎 UI 元件（後續發現需要）
+
+- [x] Phase0-Badge [P] [Phase0] 建立 Badge 元件 `frontend/components/ui/badge.tsx`
+  - **Prototype**: `specs/001-eternal-library-mvp/ui/design/style-10-luxury-premium/components/data-display.html`
+  - **功能**: 支援 4 種稀有度 (legendary, epic, rare, common), Style 10 設計
+  - **測試**: 8/8 通過, 100% 覆蓋率
+  - **學習報告**: `specs/001-eternal-library-mvp/learning/developer-b/badge-component-learning-report.md`
+  - **用途**: US3 DrawResultOverlay, US5 NFTCard 稀有度標籤
+
+- [x] Phase0-FadeIn [P] [Phase0] 建立 FadeIn 動畫元件 `frontend/components/animation/fade-in.tsx`
+  - **功能**: 支援 5 個方向淡入 (up, down, left, right, none), 可配置延遲與持續時間
+  - **測試**: 8/8 通過, 100% 覆蓋率
+  - **學習報告**: `specs/001-eternal-library-mvp/learning/developer-b/fadein-component-learning-report.md`
+  - **用途**: US3 DrawResultOverlay, US5 NFTDetailModal 入場動畫
+
+- [x] Phase0-ScaleSpring [P] [Phase0] 建立 ScaleSpring 動畫元件 `frontend/components/animation/scale-spring.tsx`
+  - **功能**: Spring physics 彈性縮放, hover 互動, 組合動畫 (withFadeIn, withSlideUp)
+  - **測試**: 9/9 通過, 100% 覆蓋率
+  - **學習報告**: `specs/001-eternal-library-mvp/learning/developer-b/scalespring-component-learning-report.md`
+  - **用途**: US5 NFTCard hover 效果, 按鈕互動增強
+
+- [x] Phase0-CountUp [P] [Phase0] 建立 CountUp 動畫元件 `frontend/components/animation/count-up.tsx`
+  - **功能**: 數字計數動畫, 支援貨幣格式化、千分位、前後綴, 3 種緩動函數
+  - **測試**: 9/9 通過, 100% 覆蓋率
+  - **學習報告**: `specs/001-eternal-library-mvp/learning/developer-b/countup-component-learning-report.md`
+  - **用途**: US2 BalanceDisplay, US5 CollectionStats 統計數據
+
 ### A 級：Framer Motion 基礎（可平行完成）
 
 - [x] T021 [P] [Phase0] 建立 Toast 通知元件 `frontend/components/animated/toast.tsx`
@@ -351,7 +378,7 @@ oracle_library/
 - [x] T052 [P] [DevB] [US3] 撰寫 oracle_draw 合約測試 `contracts/tests/oracle_draw_tests.move`
 - [ ] T053 [P] [DevB] [US3] 撰寫 useOracleDraw Hook 測試 `frontend/__tests__/hooks/use-oracle-draw.test.ts`
 - [ ] T054 [P] [DevB] [US3] 撰寫 useAnswers Hook 測試 `frontend/__tests__/hooks/use-answers.test.ts`
-- [ ] T055 [P] [DevB] [US3] 撰寫 DrawForm 元件測試 `frontend/__tests__/components/draw-form.test.tsx`
+- [x] T055 [P] [DevB] [US3] 撰寫 DrawForm 元件測試 `frontend/__tests__/components/draw-form.test.tsx`
 
 ### Implementation for User Story 3
 
