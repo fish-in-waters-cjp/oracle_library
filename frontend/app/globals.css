@@ -1,26 +1,184 @@
+/**
+ * 永恆圖書館 - 全域樣式
+ * Design System: Style 10 - 高端奢華
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    /* ===== Color System ===== */
+    --color-primary: #d4af37;
+    --color-primary-light: #e8c96f;
+    --color-primary-dark: #b8941f;
+
+    --color-secondary: #c0c0c0;
+    --color-secondary-light: #e0e0e0;
+    --color-secondary-dark: #a0a0a0;
+
+    --color-accent: #8b7355;
+    --color-accent-light: #a68a6d;
+
+    --color-background-main: #000000;
+    --color-background-surface: #1a1a1a;
+    --color-background-elevated: #2a2a2a;
+    --color-background-overlay: rgba(0, 0, 0, 0.95);
+
+    --color-text-primary: #f5f5f5;
+    --color-text-secondary: rgba(245, 245, 245, 0.85);
+    --color-text-muted: rgba(245, 245, 245, 0.6);
+    --color-text-disabled: rgba(245, 245, 245, 0.3);
+
+    --color-border-default: rgba(212, 175, 55, 0.3);
+    --color-border-focus: #d4af37;
+    --color-border-subtle: rgba(245, 245, 245, 0.1);
+
+    --color-success: #10b981;
+    --color-warning: #d4af37;
+    --color-error: #dc2626;
+    --color-info: #c0c0c0;
+
+    --color-rarity-common: #9ca3af;
+    --color-rarity-rare: #60a5fa;
+    --color-rarity-epic: #a78bfa;
+    --color-rarity-legendary: #d4af37;
+
+    --color-rarity-common-bg: rgba(156, 163, 175, 0.08);
+    --color-rarity-rare-bg: rgba(96, 165, 250, 0.08);
+    --color-rarity-epic-bg: rgba(167, 139, 250, 0.08);
+    --color-rarity-legendary-bg: rgba(212, 175, 55, 0.08);
+
+    /* ===== Typography ===== */
+    --font-heading: 'Playfair Display', 'Noto Serif TC', serif;
+    --font-body: 'Inter', 'Noto Sans TC', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* ===== Spacing ===== */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    /* ===== Border Radius ===== */
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 6px;
+    --radius-xl: 8px;
+
+    /* ===== Shadows ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.9);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.95);
+
+    --shadow-glow-gold: 0 0 20px rgba(212, 175, 55, 0.5);
+    --shadow-glow-gold-strong: 0 0 30px rgba(212, 175, 55, 0.7);
+    --shadow-glow-silver: 0 0 20px rgba(192, 192, 192, 0.3);
+
+    /* ===== Transitions ===== */
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+
+    /* Tailwind 相容性 */
+    --background: #000000;
+    --foreground: #f5f5f5;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --font-sans: var(--font-body);
+    --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: var(--color-background-main);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: 0.02em;
+}
+
+h1 {
+    font-size: var(--text-4xl);
+    color: var(--color-primary);
+}
+
+h2 {
+    font-size: var(--text-3xl);
+    color: var(--color-primary);
+}
+
+h3 {
+    font-size: var(--text-2xl);
+    color: var(--color-text-primary);
+}
+
+@keyframes elegant-glow {
+    0%, 100% {
+        box-shadow: var(--shadow-glow-gold);
+    }
+    50% {
+        box-shadow: var(--shadow-glow-gold-strong);
+    }
+}
+
+@keyframes subtle-shimmer {
+    0% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

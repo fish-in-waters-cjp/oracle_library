@@ -15,9 +15,10 @@ export interface ModalProps {
 }
 
 /**
- * Modal 元件
+ * Modal 元件 (Style 10 - 高端奢華)
  *
- * 對話框元件，支援 overlay 點擊關閉和 Escape 鍵關閉。
+ * 優雅的對話框元件，深色背景配合金色邊框。
+ * 支援 overlay 點擊關閉和 Escape 鍵關閉。
  */
 export default function Modal({
   open,
@@ -57,6 +58,7 @@ export default function Modal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ padding: 'var(--space-4)' }}
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? 'modal-title' : undefined}
@@ -64,35 +66,70 @@ export default function Modal({
       {/* Overlay */}
       <div
         data-testid="modal-overlay"
-        className="absolute inset-0 bg-black bg-opacity-50"
+        className="absolute inset-0"
+        style={{ background: 'var(--color-background-overlay)' }}
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Content */}
       <div
-        className={cn(
-          'relative z-10 w-full max-w-md',
-          'bg-white rounded-lg shadow-xl',
-          'mx-4',
-          className
-        )}
+        className={cn('relative z-10 w-full', className)}
+        style={{
+          maxWidth: '600px',
+          background: 'var(--color-background-surface)',
+          border: '1px solid var(--color-border-default)',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'var(--shadow-glow-gold)',
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: 'var(--space-8)',
+            borderBottom: '1px solid var(--color-border-default)',
+          }}
+        >
           {title && (
-            <h2 id="modal-title" className="text-xl font-semibold text-gray-900">
+            <h2
+              id="modal-title"
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'var(--text-xl)',
+                color: 'var(--color-primary)',
+                fontWeight: 'var(--font-weight-normal)',
+                letterSpacing: '0.02em',
+              }}
+            >
               {title}
             </h2>
           )}
           <button
             onClick={onClose}
-            className="ml-auto text-gray-400 hover:text-gray-600 transition-colors"
+            style={{
+              marginLeft: 'auto',
+              color: 'var(--color-text-muted)',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'color var(--transition-normal)',
+              padding: 'var(--space-2)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text-muted)';
+            }}
             aria-label="關閉對話框"
           >
             <svg
-              className="w-6 h-6"
+              width="24"
+              height="24"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -100,7 +137,7 @@ export default function Modal({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={1.5}
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
@@ -108,7 +145,7 @@ export default function Modal({
         </div>
 
         {/* Body */}
-        <div className="p-6">{children}</div>
+        <div style={{ padding: 'var(--space-8)' }}>{children}</div>
       </div>
     </div>
   );

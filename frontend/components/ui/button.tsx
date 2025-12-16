@@ -3,10 +3,11 @@ import { cn } from '@/lib/utils';
 
 /**
  * Button 元件的 Props
+ * Style 10 - 高端奢華設計系統
  */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** 按鈕變體 */
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'link';
   /** 按鈕尺寸 */
   size?: 'sm' | 'md' | 'lg';
   /** 載入狀態 */
@@ -16,17 +17,21 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /**
- * Button 元件
+ * Button 元件 (Style 10 - 高端奢華)
  *
- * 可重用的按鈕元件，支援多種變體、尺寸和狀態。
+ * 採用透明背景、金色邊框、優雅 hover 發光效果的奢華按鈕設計。
+ * 使用 Playfair Display 字體與緩慢過渡動畫展現高端質感。
  *
  * @example
  * ```tsx
  * // 基本使用
  * <Button onClick={handleClick}>點擊我</Button>
  *
- * // Primary 變體
+ * // Primary 變體（金色）
  * <Button variant="primary">確認</Button>
+ *
+ * // Secondary 變體（銀色）
+ * <Button variant="secondary">查看收藏</Button>
  *
  * // 載入狀態
  * <Button loading>提交中...</Button>
@@ -45,53 +50,128 @@ export default function Button({
   type = 'button',
   ...props
 }: ButtonProps) {
-  // 基礎樣式
+  // 基礎樣式 - 使用 Tailwind classes
   const baseStyles = cn(
-    // 通用樣式
     'relative inline-flex items-center justify-center',
-    'rounded-lg font-medium',
-    'transition-all duration-200',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+    'cursor-pointer transition-all',
+    'focus-visible:outline-none focus-visible:ring-1',
     // 禁用狀態
-    (disabled || loading) && 'opacity-50 cursor-not-allowed'
+    (disabled || loading) && 'cursor-not-allowed'
   );
 
-  // 變體樣式
-  const variantStyles = {
-    primary: cn(
-      'bg-blue-600 text-white',
-      'hover:bg-blue-700 active:bg-blue-800',
-      'focus-visible:ring-blue-500'
-    ),
-    secondary: cn(
-      'bg-gray-600 text-white',
-      'hover:bg-gray-700 active:bg-gray-800',
-      'focus-visible:ring-gray-500'
-    ),
-    outline: cn(
-      'bg-transparent border-2 border-gray-300 text-gray-700',
-      'hover:bg-gray-50 active:bg-gray-100',
-      'focus-visible:ring-gray-500'
-    ),
-  };
+  // 直接使用 CSS 變數的 inline styles
+  const getButtonStyles = () => {
+    const styles: React.CSSProperties = {
+      gap: 'var(--space-2)',
+      fontFamily: 'var(--font-heading)',
+      fontWeight: 'var(--font-weight-normal)',
+      textDecoration: 'none',
+      transition: 'all var(--transition-slow)',
+      borderRadius: 'var(--radius-sm)',
+      opacity: disabled || loading ? 0.4 : 1,
+    };
 
-  // 尺寸樣式
-  const sizeStyles = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
+    // 尺寸
+    if (variant === 'link') {
+      // link 變體的 padding
+      const linkPadding = {
+        sm: 'var(--space-2) var(--space-3)',
+        md: 'var(--space-2) var(--space-3)',
+        lg: 'var(--space-3) var(--space-4)',
+      };
+      styles.padding = linkPadding[size];
+    } else {
+      const padding = {
+        sm: 'var(--space-2) var(--space-5)',
+        md: 'var(--space-4) var(--space-8)',
+        lg: 'var(--space-5) var(--space-10)',
+      };
+      styles.padding = padding[size];
+    }
+
+    const fontSize = {
+      sm: 'var(--text-sm)',
+      md: 'var(--text-base)',
+      lg: 'var(--text-lg)',
+    };
+    styles.fontSize = fontSize[size];
+
+    // 變體樣式
+    switch (variant) {
+      case 'primary':
+        styles.background = 'transparent';
+        styles.color = 'var(--color-primary)';
+        styles.border = '1px solid var(--color-primary)';
+        break;
+      case 'secondary':
+        styles.background = 'transparent';
+        styles.color = 'var(--color-secondary)';
+        styles.border = '1px solid var(--color-secondary)';
+        break;
+      case 'ghost':
+        styles.background = 'transparent';
+        styles.color = 'var(--color-text-secondary)';
+        styles.border = '1px solid var(--color-border-default)';
+        break;
+      case 'link':
+        styles.background = 'transparent';
+        styles.color = 'var(--color-primary)';
+        styles.border = 'none';
+        styles.textDecoration = 'underline';
+        break;
+    }
+
+    return styles;
   };
 
   return (
     <button
       type={type}
       disabled={disabled || loading}
-      className={cn(
-        baseStyles,
-        variantStyles[variant],
-        sizeStyles[size],
-        className
-      )}
+      className={cn(baseStyles, className)}
+      style={getButtonStyles()}
+      onMouseEnter={(e) => {
+        if (disabled || loading) return;
+        const target = e.currentTarget;
+        switch (variant) {
+          case 'primary':
+            target.style.background = 'rgba(212, 175, 55, 0.1)';
+            target.style.boxShadow = 'var(--shadow-glow-gold)';
+            break;
+          case 'secondary':
+            target.style.background = 'rgba(192, 192, 192, 0.05)';
+            target.style.boxShadow = 'var(--shadow-glow-silver)';
+            break;
+          case 'ghost':
+            target.style.borderColor = 'var(--color-primary)';
+            target.style.color = 'var(--color-primary)';
+            break;
+          case 'link':
+            target.style.opacity = '0.8';
+            break;
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (disabled || loading) return;
+        const target = e.currentTarget;
+        switch (variant) {
+          case 'primary':
+            target.style.background = 'transparent';
+            target.style.boxShadow = 'none';
+            break;
+          case 'secondary':
+            target.style.background = 'transparent';
+            target.style.boxShadow = 'none';
+            break;
+          case 'ghost':
+            target.style.borderColor = 'var(--color-border-default)';
+            target.style.color = 'var(--color-text-secondary)';
+            break;
+          case 'link':
+            target.style.opacity = '1';
+            break;
+        }
+      }}
       {...props}
     >
       {/* 載入動畫 */}
