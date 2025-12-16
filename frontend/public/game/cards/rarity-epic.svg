@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="60" viewBox="0 0 300 60">
+  <defs>
+    <linearGradient id="epic" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9370DB" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#BA55D3" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#9370DB" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="60" fill="url(#epic)"/>
+  <g opacity="0.7">
+    <circle cx="120" cy="30" r="15" fill="#BA55D3">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="180" cy="30" r="15" fill="#BA55D3">
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="60" viewBox="0 0 300 60">
+  <defs>
+    <linearGradient id="legendary" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFD700" stop-opacity="0"/>
+      <stop offset="25%" stop-color="#FFA500" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#FFD700" stop-opacity="1"/>
+      <stop offset="75%" stop-color="#FFA500" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FFD700" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="shine">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FFD700" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="300" height="60" fill="url(#legendary)"/>
+  <circle cx="150" cy="30" r="25" fill="url(#shine)" opacity="0.6">
+    <animate attributeName="r" values="20;30;20" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <g transform="translate(150, 30)">
+    <path d="M0,-12 L3,-3 L12,-3 L5,3 L8,12 L0,6 L-8,12 L-5,3 L-12,-3 L-3,-3 Z" fill="#FFA500">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>

@@ -142,68 +142,68 @@ oracle_library/
 
 ### B 級：基礎 UI 元件（可平行完成）
 
-- [ ] T016 [P] [Phase0] 建立 Button 元件 `frontend/components/ui/button.tsx`
+- [x] T016 [P] [Phase0] 建立 Button 元件 `frontend/components/ui/button.tsx`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/pages/*.html` (所有頁面都會用到)
   - **功能**: 支援 variant (primary, secondary, outline), loading 狀態, disabled 狀態
 
-- [ ] T017 [P] [Phase0] 建立 Input 元件 `frontend/components/ui/input.tsx`
+- [x] T017 [P] [Phase0] 建立 Input 元件 `frontend/components/ui/input.tsx`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/pages/home.html` (問題輸入框)
   - **功能**: 支援 placeholder, error 狀態, disabled 狀態
 
-- [ ] T018 [P] [Phase0] 建立 Modal 元件 `frontend/components/ui/modal.tsx`
+- [x] T018 [P] [Phase0] 建立 Modal 元件 `frontend/components/ui/modal.tsx`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/pages/collection.html` (NFT 詳情)
   - **功能**: 支援 title, close 按鈕, overlay 點擊關閉
 
-- [ ] T019 [P] [Phase0] 建立 Skeleton 元件 `frontend/components/ui/skeleton.tsx`
+- [x] T019 [P] [Phase0] 建立 Skeleton 元件 `frontend/components/ui/skeleton.tsx`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/pages/collection.html` (載入骨架)
   - **功能**: 支援不同尺寸 (circle, rectangle), 動畫效果
 
-- [ ] T020 [P] [Phase0] 建立 Card 元件 `frontend/components/ui/card.tsx`
+- [x] T020 [P] [Phase0] 建立 Card 元件 `frontend/components/ui/card.tsx`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/pages/collection.html` (NFT 卡片)
   - **功能**: 支援 header, body, footer, hover 效果
 
 ### A 級：Framer Motion 基礎（可平行完成）
 
-- [ ] T021 [P] [Phase0] 建立 Toast 通知元件 `frontend/components/animated/toast.tsx`
+- [x] T021 [P] [Phase0] 建立 Toast 通知元件 `frontend/components/animated/toast.tsx`
   - **Prototype**: 參考 prototype 中的錯誤訊息樣式
   - **功能**: 支援 success/error/info, 自動消失, 堆疊顯示
 
-- [ ] T022 [P] [Phase0] 建立頁面轉場元件 `frontend/components/animated/page-transition.tsx`
+- [x] T022 [P] [Phase0] 建立頁面轉場元件 `frontend/components/animated/page-transition.tsx`
   - **Prototype**: 頁面切換動畫效果
   - **功能**: 淡入淡出, 滑動效果
 
 ### S 級：Phaser 基礎設施（必須按順序）
 
-- [ ] T023 [Phase0] 建立 EventBridge 通訊模組 `frontend/components/phaser/EventBridge.ts`
+- [x] T023 [Phase0] 建立 EventBridge 通訊模組 `frontend/components/phaser/EventBridge.ts`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/js/phaser/event-bridge.js`
   - **功能**: React ↔ Phaser 雙向通訊橋接
   - **關鍵**: 此模組是 Developer B 所有 Phaser 場景的依賴
 
-- [ ] T024 [P] [Phase0] 建立 PhaserGame 遊戲實例 `frontend/components/phaser/PhaserGame.tsx`
+- [x] T024 [P] [Phase0] 建立 PhaserGame 遊戲實例 `frontend/components/phaser/PhaserGame.tsx`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/js/phaser/game-config.js`
   - **依賴**: T023 EventBridge
   - **功能**: Phaser 3 遊戲實例管理,場景切換
 
-- [ ] T025 [Phase0] 建立 PhaserContainer 懶載入容器 `frontend/components/phaser/PhaserContainer.tsx`
+- [x] T025 [Phase0] 建立 PhaserContainer 懶載入容器 `frontend/components/phaser/PhaserContainer.tsx`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/js/phaser-loader.js`
   - **依賴**: T024 PhaserGame
   - **功能**: Phaser 懶載入封裝,減少首頁 bundle size
 
 ### 靜態資料與遊戲資源
 
-- [ ] T026 [Phase0] 建立 50 個答案資料 `frontend/public/data/answers.json`
+- [x] T026 [Phase0] 建立 50 個答案資料 `frontend/public/data/answers.json`
   - **Prototype**: 參考 prototype 中的答案展示效果
   - **內容**: 50 個中英文解答語錄 + 稀有度配置
   - **稀有度分布**: Common 70%, Rare 20%, Epic 8%, Legendary 2%
   - **工具**: 使用 Claude 或 nano banana 生成
   - **關鍵**: Developer B 的 DrawScene 需要此資料
 
-- [ ] T027 [P] [Phase0] 準備粒子特效素材 `frontend/public/game/particles/`
+- [x] T027 [P] [Phase0] 準備粒子特效素材 `frontend/public/game/particles/`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/pages/demo-phaser.html`
   - **內容**: 金幣、星星、光芒、煙火等粒子圖片
   - **格式**: PNG, 透明背景, 適合 Phaser Particle System
 
-- [ ] T028 [P] [Phase0] 準備卡牌圖片素材 `frontend/public/game/cards/`
+- [x] T028 [P] [Phase0] 準備卡牌圖片素材 `frontend/public/game/cards/`
   - **Prototype**: `specs/001-eternal-library-mvp/ui/prototype/pages/demo-phaser.html`
   - **內容**: 卡牌背面、卡牌框架、稀有度特效
   - **格式**: PNG, 高解析度 (適合 3D 翻轉效果)

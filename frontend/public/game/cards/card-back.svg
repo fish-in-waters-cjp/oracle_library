@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="420" viewBox="0 0 300 420">
+  <!-- 卡牌背景 -->
+  <rect width="300" height="420" rx="20" fill="#2C1810"/>
+  <rect x="10" y="10" width="280" height="400" rx="15" fill="#4A2C1A"/>
+
+  <!-- 裝飾圖案 -->
+  <circle cx="150" cy="210" r="80" fill="#6B4423" opacity="0.5"/>
+  <text x="150" y="220" font-size="48" text-anchor="middle" fill="#D4AF37" font-family="serif">?</text>
+
+  <!-- 邊框裝飾 -->
+  <rect x="15" y="15" width="270" height="390" rx="12" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.7"/>
+</svg>

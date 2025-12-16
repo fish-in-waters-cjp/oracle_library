@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="420" viewBox="0 0 300 420">
+  <!-- 外框 -->
+  <rect width="300" height="420" rx="20" fill="none" stroke="#D4AF37" stroke-width="4"/>
+
+  <!-- 內框 -->
+  <rect x="15" y="15" width="270" height="390" rx="15" fill="none" stroke="#D4AF37" stroke-width="2"/>
+
+  <!-- 裝飾角落 -->
+  <circle cx="30" cy="30" r="8" fill="#D4AF37"/>
+  <circle cx="270" cy="30" r="8" fill="#D4AF37"/>
+  <circle cx="30" cy="390" r="8" fill="#D4AF37"/>
+  <circle cx="270" cy="390" r="8" fill="#D4AF37"/>
+</svg>
