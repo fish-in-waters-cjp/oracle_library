@@ -48,12 +48,12 @@ oracle_library/
 
 **Purpose**: 建立專案基礎結構與開發環境
 
-- [ ] T001 建立 Move 合約專案結構 `contracts/Move.toml`
-- [ ] T002 建立 Next.js 前端專案結構 `frontend/package.json`
-- [ ] T003 [P] 設定 TypeScript 配置 `frontend/tsconfig.json`
-- [ ] T004 [P] 設定 Tailwind CSS 4 `frontend/app/globals.css`
-- [ ] T005 [P] 設定 ESLint 與 Prettier `frontend/.eslintrc.json`
-- [ ] T006 設定環境變數範本 `frontend/.env.example`
+- [x] T001 建立 Move 合約專案結構 `contracts/Move.toml`
+- [x] T002 建立 Next.js 前端專案結構 `frontend/package.json`
+- [x] T003 [P] 設定 TypeScript 配置 `frontend/tsconfig.json`
+- [x] T004 [P] 設定 Tailwind CSS 4 `frontend/app/globals.css`
+- [x] T005 [P] 設定 ESLint 與 Prettier `frontend/eslint.config.mjs`
+- [x] T006 設定環境變數範本 `frontend/.env.example`
 
 ---
 
@@ -65,18 +65,18 @@ oracle_library/
 
 ### Move 合約基礎
 
-- [ ] T007 [P] 撰寫 MGC Token 測試 `contracts/tests/mgc_tests.move`
-- [ ] T008 實作 MGC Token 模組 `contracts/sources/mgc.move`
+- [x] T007 [P] 撰寫 MGC Token 測試 `contracts/tests/mgc_tests.move`
+- [x] T008 實作 MGC Token 模組 `contracts/sources/mgc.move`
 
 ### 前端基礎
 
-- [ ] T009 [P] 建立 IOTA Provider 設定 `frontend/components/providers.tsx`
-- [ ] T010 [P] 建立常數定義 `frontend/consts.ts`
-- [ ] T011 [P] 建立錯誤處理類別 `frontend/lib/errors.ts`
-- [ ] T012 [P] 建立工具函數 `frontend/lib/utils.ts`
-- [ ] T013 [P] 建立時間計算函數 `frontend/lib/time.ts`
-- [ ] T014 [P] 建立 IPFS 工具函數 `frontend/lib/ipfs.ts`
-- [ ] T015 建立根佈局 `frontend/app/layout.tsx`
+- [x] T009 [P] 建立 IOTA Provider 設定 `frontend/components/providers.tsx`
+- [x] T010 [P] 建立常數定義 `frontend/consts.ts`
+- [x] T011 [P] 建立錯誤處理類別 `frontend/lib/errors.ts`
+- [x] T012 [P] 建立工具函數 `frontend/lib/utils.ts`
+- [x] T013 [P] 建立時間計算函數 `frontend/lib/time.ts`
+- [x] T014 [P] 建立 IPFS 工具函數 `frontend/lib/ipfs.ts`
+- [x] T015 建立根佈局 `frontend/app/layout.tsx`
 
 ### B 級：基礎 UI 元件
 
