@@ -1,20 +1,24 @@
-import { InputHTMLAttributes, forwardRef, useId } from 'react';
+import { InputHTMLAttributes, forwardRef, useId, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 /**
  * Input 元件的 Props
+ * Style 10 - 高端奢華設計系統
  */
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   /** 標籤文字 */
   label?: string;
   /** 錯誤訊息 */
   error?: string;
+  /** 輔助說明文字 */
+  helpText?: string;
 }
 
 /**
- * Input 元件
+ * Input 元件 (Style 10 - 高端奢華)
  *
- * 可重用的輸入框元件，支援標籤、錯誤狀態和完整的無障礙設計。
+ * 透明背景、金色邊框、focus 時金色發光效果的優雅輸入框設計。
+ * 使用 Inter 字體與細緻的過渡動畫。
  *
  * @example
  * ```tsx
@@ -24,49 +28,93 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
  * // 帶標籤
  * <Input label="電子郵件" type="email" />
  *
+ * // 帶輔助說明
+ * <Input label="密碼" type="password" helpText="至少 8 個字元" />
+ *
  * // 錯誤狀態
- * <Input error="此欄位為必填" />
+ * <Input label="用戶名" error="此欄位為必填" />
  *
  * // 受控元件
  * <Input value={value} onChange={(e) => setValue(e.target.value)} />
  * ```
  */
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className, id: providedId, ...props }, ref) => {
+  ({ label, error, helpText, className, id: providedId, style, ...props }, ref) => {
+    const [isFocused, setIsFocused] = useState(false);
+
     // 生成唯一 ID（用於 label 和 error 的關聯）
     const generatedId = useId();
     const id = providedId || generatedId;
     const errorId = error ? `${id}-error` : undefined;
+    const helpId = helpText ? `${id}-help` : undefined;
 
-    // 基礎樣式
-    const baseStyles = cn(
-      // 通用樣式
-      'w-full px-4 py-2 rounded-lg',
-      'border-2 border-gray-300',
-      'bg-white text-gray-900',
-      'placeholder:text-gray-400',
-      // Focus 狀態
-      'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-      // Transition
-      'transition-all duration-200',
-      // 禁用狀態
-      props.disabled && 'opacity-50 cursor-not-allowed bg-gray-50',
-      // 錯誤狀態
-      error && 'border-red-500 focus:ring-red-500',
-      // 自訂 className
+    // 基礎樣式類
+    const baseClasses = cn(
+      'w-full transition-all',
+      'focus:outline-none',
+      'placeholder:opacity-60',
+      props.disabled && 'cursor-not-allowed',
       className
     );
+
+    // Input inline styles - Style 10
+    const inputStyles: React.CSSProperties = {
+      maxWidth: '400px',
+      padding: 'var(--space-4)',
+      background: 'transparent',
+      border: error
+        ? '1px solid var(--color-error)'
+        : '1px solid var(--color-border-default)',
+      borderRadius: 'var(--radius-sm)',
+      color: 'var(--color-text-primary)',
+      fontFamily: 'var(--font-body)',
+      fontSize: 'var(--text-base)',
+      transition: 'all var(--transition-normal)',
+      opacity: props.disabled ? 0.4 : 1,
+      ...(isFocused && !error ? {
+        borderColor: 'var(--color-primary)',
+        boxShadow: 'var(--shadow-glow-gold)',
+      } : {}),
+      ...style,
+    };
+
+    // Label styles - Style 10
+    const labelStyles: React.CSSProperties = {
+      display: 'block',
+      fontSize: 'var(--text-sm)',
+      fontWeight: 'var(--font-weight-medium)',
+      color: 'var(--color-text-primary)',
+      marginBottom: 'var(--space-3)',
+      fontFamily: 'var(--font-body)',
+    };
+
+    // Help text styles - Style 10
+    const helpStyles: React.CSSProperties = {
+      fontSize: 'var(--text-sm)',
+      color: 'var(--color-text-muted)',
+      marginTop: 'var(--space-2)',
+      fontFamily: 'var(--font-body)',
+    };
+
+    // Error text styles - Style 10
+    const errorStyles: React.CSSProperties = {
+      fontSize: 'var(--text-sm)',
+      color: 'var(--color-error)',
+      marginTop: 'var(--space-2)',
+      fontFamily: 'var(--font-body)',
+    };
 
     return (
       <div className="w-full">
         {/* Label */}
         {label && (
-          <label
-            htmlFor={id}
-            className="block mb-2 text-sm font-medium text-gray-700"
-          >
+          <label htmlFor={id} style={labelStyles}>
             {label}
-            {props.required && <span className="text-red-500 ml-1">*</span>}
+            {props.required && (
+              <span style={{ color: 'var(--color-error)', marginLeft: 'var(--space-1)' }}>
+                *
+              </span>
+            )}
           </label>
         )}
 
@@ -74,19 +122,31 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={id}
-          className={baseStyles}
+          className={baseClasses}
+          style={inputStyles}
           aria-invalid={error ? 'true' : 'false'}
-          aria-describedby={errorId}
+          aria-describedby={cn(errorId, helpId)}
+          onFocus={(e) => {
+            setIsFocused(true);
+            props.onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            props.onBlur?.(e);
+          }}
           {...props}
         />
 
+        {/* Help Text */}
+        {helpText && !error && (
+          <p id={helpId} style={helpStyles}>
+            {helpText}
+          </p>
+        )}
+
         {/* Error Message */}
         {error && (
-          <p
-            id={errorId}
-            className="mt-2 text-sm text-red-600"
-            role="alert"
-          >
+          <p id={errorId} style={errorStyles} role="alert">
             {error}
           </p>
         )}
