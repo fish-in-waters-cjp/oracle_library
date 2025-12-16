@@ -6,6 +6,7 @@ import Input from '@/components/ui/input';
 import Card from '@/components/ui/card';
 import Alert from '@/components/ui/alert';
 import Spinner from '@/components/ui/spinner';
+import Badge from '@/components/ui/badge';
 
 const styles = {
   section: {
@@ -207,6 +208,53 @@ export default function DesignSystemPage() {
             <Spinner size={30} />
             <Spinner size={40} />
             <Spinner size={60} />
+          </div>
+        </section>
+
+        {/* 標籤元件 */}
+        <section style={styles.section}>
+          <h2 style={styles.sectionTitle}>稀有度標籤</h2>
+
+          <div style={{ marginBottom: 'var(--space-6)' }}>
+            <div style={styles.label}>稀有度標籤</div>
+            <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap' as const }}>
+              <Badge variant="legendary">Legendary</Badge>
+              <Badge variant="epic">Epic</Badge>
+              <Badge variant="rare">Rare</Badge>
+              <Badge variant="common">Common</Badge>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-6)' }}>
+            <div style={styles.label}>中文標籤</div>
+            <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap' as const }}>
+              <Badge variant="legendary">傳說</Badge>
+              <Badge variant="epic">史詩</Badge>
+              <Badge variant="rare">稀有</Badge>
+              <Badge variant="common">普通</Badge>
+            </div>
+          </div>
+
+          <div>
+            <div style={styles.label}>與 Card 組合使用</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)' }}>
+              <Card title="神諭 NFT #001" rarity="legendary">
+                <div style={{ marginBottom: 'var(--space-3)' }}>
+                  <Badge variant="legendary">Legendary</Badge>
+                </div>
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+                  最稀有的 NFT
+                </p>
+              </Card>
+              <Card title="神諭 NFT #042" rarity="epic">
+                <div style={{ marginBottom: 'var(--space-3)' }}>
+                  <Badge variant="epic">Epic</Badge>
+                </div>
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+                  史詩級稀有度
+                </p>
+              </Card>
+            </div>
           </div>
         </section>
 
