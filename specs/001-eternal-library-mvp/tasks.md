@@ -19,7 +19,7 @@
 | Phase 2: Foundational | ✅ 已完成 | 11/22 | 基礎架構（部分完成） |
 | **🔧 Phase 0** | ⏳ **待完成** | **0/13** | **共同前置作業（必須先完成）** |
 | 🅰️ Developer A | ⏸️ 待開始 | 0/30 | US1 + US2 + US4 (部分) |
-| 🅱️ Developer B | ⏸️ 待開始 | 0/30 | US3 + US5 + US4 (部分) |
+| 🅱️ Developer B | 🟡 進行中 | 13/30 | US3 + US5 + US4 (部分) |
 | Phase 8: Polish | ⏸️ 待開始 | 0/9 | 最終優化與測試 |
 
 ### Developer A 路線任務分布
@@ -508,37 +508,46 @@ oracle_library/
 
 ### Tests for User Story 5
 
-- [ ] T077 [P] [DevB] [US5] 撰寫 useOracleNFTs Hook 測試 `frontend/__tests__/hooks/use-oracle-nfts.test.ts`
-- [ ] T078 [P] [DevB] [US5] 撰寫 useNFTMetadata Hook 測試 `frontend/__tests__/hooks/use-nft-metadata.test.ts`
-- [ ] T079 [P] [DevB] [US5] 撰寫 NFTGrid 元件測試 `frontend/__tests__/components/nft-grid.test.tsx`
-- [ ] T080 [P] [DevB] [US5] 撰寫 NFTDetailModal 元件測試 `frontend/__tests__/components/nft-detail-modal.test.tsx`
+- [x] T077 [P] [DevB] [US5] 撰寫 useOracleNFTs Hook 測試 `frontend/__tests__/hooks/use-oracle-nfts.test.ts`
+- [x] T078 [P] [DevB] [US5] 撰寫 useNFTMetadata Hook 測試 `frontend/__tests__/hooks/use-nft-metadata.test.ts`
+- [x] T079 [P] [DevB] [US5] 撰寫 NFTGrid 元件測試 `frontend/__tests__/components/nft-grid.test.tsx`
+- [x] T080 [P] [DevB] [US5] 撰寫 NFTDetailModal 元件測試 `frontend/__tests__/components/nft-detail-modal.test.tsx`
 
 ### Implementation for User Story 5
 
-- [ ] T081 [DevB] [US5] 實作 useOracleNFTs Hook `frontend/hooks/use-oracle-nfts.ts`
+- [x] T081 [DevB] [US5] 實作 useOracleNFTs Hook `frontend/hooks/use-oracle-nfts.ts`
   - **Mock 策略**: 需要 Developer A 的 oracle_nft 合約 (T070),但可先用 mock 資料開發
-- [ ] T082 [DevB] [US5] 實作 useNFTMetadata Hook `frontend/hooks/use-nft-metadata.ts`
+- [x] T082 [DevB] [US5] 實作 useNFTMetadata Hook `frontend/hooks/use-nft-metadata.ts`
   - **相依**: Phase 0 的 IPFS 工具 (T014 已完成)
-- [ ] T083 [DevB] [US5] 實作 NFTCard 元件（A 級 hover scale）`frontend/components/nft-card.tsx`
+- [x] T083 [DevB] [US5] 實作 NFTCard 元件（A 級 hover scale）`frontend/components/nft-card.tsx`
   - **Prototype**: `collection.html` NFT 卡片設計
   - **相依**: Phase 0 的 Card、Badge、ScaleSpring (T017, T021, T026)
-- [ ] T084 [DevB] [US5] 實作 NFTGrid 元件（B 級響應式）`frontend/components/nft-grid.tsx`
+- [x] T084 [DevB] [US5] 實作 NFTGrid 元件（B 級響應式）`frontend/components/nft-grid.tsx`
   - **Prototype**: `collection.html` 網格佈局
-- [ ] T085 [DevB] [US5] 實作 NFTDetailModal 元件（A 級彈窗動畫）`frontend/components/nft-detail-modal.tsx`
+- [x] T085 [DevB] [US5] 實作 NFTDetailModal 元件（A 級彈窗動畫）`frontend/components/nft-detail-modal.tsx`
   - **Prototype**: `collection.html` NFT 詳情彈窗
   - **相依**: Phase 0 的 Modal、FadeIn (T019, T027)
-- [ ] T086 [DevB] [US5] 實作統計卡片元件（A 級數字動畫）`frontend/components/animated/collection-stats.tsx`
+- [x] T086 [DevB] [US5] 實作統計卡片元件（A 級數字動畫）`frontend/components/animated/collection-stats.tsx`
   - **Prototype**: `collection.html` 頂部統計卡片
   - **相依**: Phase 0 的 CountUp (T024)
-- [ ] T087 [DevB] [US5] 實作收藏頁面 `frontend/app/(app)/collection/page.tsx`
+- [x] T087 [DevB] [US5] 實作收藏頁面 `frontend/app/(app)/collection/page.tsx`
   - **Prototype**: `collection.html` 完整頁面結構
-- [ ] T088 [DevB] [US5] 實作骨架屏載入效果（B 級）
+- [x] T088 [DevB] [US5] 實作骨架屏載入效果（B 級）
   - **Prototype**: `collection.html` 載入狀態
   - **相依**: Phase 0 的 Skeleton (T020)
-- [ ] T089 [DevB] [US5] 實作響應式網格佈局（桌面 4 列、平板 3 列、手機 2 列）
+- [x] T089 [DevB] [US5] 實作響應式網格佈局（桌面 4 列、平板 3 列、手機 2 列）
   - **Prototype**: `collection.html` 響應式設計
 
-**Checkpoint**: User Story 5 完成 — 使用者可查看 NFT 收藏
+**Checkpoint**: ✅ User Story 5 完成 — 使用者可查看 NFT 收藏
+
+**學習報告**: `specs/001-eternal-library-mvp/learning/developer-b/US5-nft-collection-management.md`
+
+**完成內容**:
+- 2 個 Hooks (useOracleNFTs, useNFTMetadata)
+- 4 個元件 (NFTCard, NFTGrid, NFTDetailModal, CollectionStats)
+- 4 個測試檔案，共 37 個測試案例
+- Collection 頁面整合（含 Mock 資料）
+- Style 10 設計系統整合
 
 ---
 
