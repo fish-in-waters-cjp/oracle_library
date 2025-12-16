@@ -9,6 +9,7 @@ import Spinner from '@/components/ui/spinner';
 import Badge from '@/components/ui/badge';
 import FadeIn from '@/components/animation/fade-in';
 import ScaleSpring from '@/components/animation/scale-spring';
+import CountUp from '@/components/animation/count-up';
 
 const styles = {
   section: {
@@ -500,6 +501,119 @@ export default function DesignSystemPage() {
               <ScaleSpring scale={1.15}>
                 <Badge variant="common">Common</Badge>
               </ScaleSpring>
+            </div>
+          </div>
+        </section>
+
+        {/* 數字計數動畫 */}
+        <section style={styles.section}>
+          <h2 style={styles.sectionTitle}>數字計數動畫</h2>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>基本計數</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-4)' }}>
+              <Card title="簡單計數">
+                <div style={{ fontSize: 'var(--text-4xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-primary)' }}>
+                  <CountUp end={100} duration={2} />
+                </div>
+              </Card>
+              <Card title="快速計數">
+                <div style={{ fontSize: 'var(--text-4xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-primary)' }}>
+                  <CountUp end={500} duration={1} />
+                </div>
+              </Card>
+              <Card title="緩慢計數">
+                <div style={{ fontSize: 'var(--text-4xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-primary)' }}>
+                  <CountUp end={50} duration={3} />
+                </div>
+              </Card>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>貨幣格式</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--space-4)' }}>
+              <Card title="MGC 餘額" rarity="legendary">
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-rarity-legendary)' }}>
+                  <CountUp end={1234.56} decimals={2} separator="," prefix="$" duration={2} />
+                </div>
+              </Card>
+              <Card title="Token 數量" rarity="epic">
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-rarity-epic)' }}>
+                  <CountUp end={9876} separator="," duration={2} />
+                </div>
+              </Card>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>百分比與統計</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--space-4)' }}>
+              <Card title="完成率">
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-success)' }}>
+                  <CountUp end={85} suffix="%" duration={2} />
+                </div>
+              </Card>
+              <Card title="勝率">
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-warning)' }}>
+                  <CountUp end={67.5} decimals={1} suffix="%" duration={2} />
+                </div>
+              </Card>
+              <Card title="評分">
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-primary)' }}>
+                  <CountUp end={4.8} decimals={1} suffix="/5" duration={2} />
+                </div>
+              </Card>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <div style={styles.label}>交錯動畫（延遲啟動）</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 'var(--space-4)' }}>
+              <Card title="NFT #1">
+                <div style={{ fontSize: 'var(--text-2xl)', color: 'var(--color-rarity-legendary)' }}>
+                  <CountUp end={100} delay={0} duration={1.5} />
+                </div>
+              </Card>
+              <Card title="NFT #2">
+                <div style={{ fontSize: 'var(--text-2xl)', color: 'var(--color-rarity-epic)' }}>
+                  <CountUp end={200} delay={0.3} duration={1.5} />
+                </div>
+              </Card>
+              <Card title="NFT #3">
+                <div style={{ fontSize: 'var(--text-2xl)', color: 'var(--color-rarity-rare)' }}>
+                  <CountUp end={300} delay={0.6} duration={1.5} />
+                </div>
+              </Card>
+              <Card title="NFT #4">
+                <div style={{ fontSize: 'var(--text-2xl)', color: 'var(--color-rarity-common)' }}>
+                  <CountUp end={400} delay={0.9} duration={1.5} />
+                </div>
+              </Card>
+            </div>
+          </div>
+
+          <div>
+            <div style={styles.label}>緩動函數比較</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--space-4)' }}>
+              <Card title="Linear">
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-primary)' }}>
+                  <CountUp end={100} duration={2} easing="linear" />
+                </div>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>等速運動</p>
+              </Card>
+              <Card title="EaseOut">
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-primary)' }}>
+                  <CountUp end={100} duration={2} easing="easeOut" />
+                </div>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>快速開始，緩慢結束</p>
+              </Card>
+              <Card title="EaseInOut">
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--color-primary)' }}>
+                  <CountUp end={100} duration={2} easing="easeInOut" />
+                </div>
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>緩進緩出</p>
+              </Card>
             </div>
           </div>
         </section>
