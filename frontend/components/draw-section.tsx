@@ -32,6 +32,8 @@ interface DrawSectionProps {
   onDrawStart?: () => void;
   /** 抽取成功回調 */
   onDrawSuccess?: (result: DrawResult) => void;
+  /** 鑄造成功回調 */
+  onMintSuccess?: () => void;
 }
 
 /**
@@ -40,7 +42,7 @@ interface DrawSectionProps {
  * 整合 DrawForm、Phaser 動畫場景和抽取流程
  * 狀態流程：idle → drawing → revealing → result
  */
-export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess }: DrawSectionProps) {
+export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSuccess }: DrawSectionProps) {
   // 帳戶與餘額
   const currentAccount = useCurrentAccount();
   const { balance, displayBalance, refetch: refetchBalance } = useMGCBalance(
@@ -274,11 +276,15 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess }: DrawSecti
               const MINT_COST = 5_000_000_000n; // 5 MGC
               const mintCoinId = getCoinWithBalance(MINT_COST);
 
+              // 計算 MGC 餘額（轉換為顯示用的數字）
+              const mgcBalanceNumber = Number(balance) / 1_000_000_000; // 假設 decimals = 9
+
               return (
                 <DrawResultOverlay
                   answer={answer}
                   rarity={resultData.rarity as any}
                   recordId={lastResult.recordId}
+                  mgcBalance={mgcBalanceNumber}
                   onDrawAgain={handleReset}
                   onMintNFT={async () => {
                     if (!mintCoinId) {
@@ -297,6 +303,10 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess }: DrawSecti
                       // TODO: T075 整合慶祝動畫
                       // 重新查詢餘額
                       refetchBalance();
+                      // 觸發鑄造成功回調（顯示 -5 MGC 動畫）
+                      if (onMintSuccess) {
+                        onMintSuccess();
+                      }
                     } else {
                       console.error('NFT 鑄造失敗:', mintError);
                     }

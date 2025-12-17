@@ -446,18 +446,18 @@ oracle_library/
 
 #### 前端元件 (Developer A)
 
-- [ ] T073 [DevA] [US4] 實作鑄造按鈕功能（A 級 hover）`frontend/components/draw-result-overlay.tsx`
+- [x] T073 [DevA] [US4] 實作鑄造按鈕功能（A 級 hover）`frontend/components/draw-result-overlay.tsx`
   - **Prototype**: `home.html` Mint NFT 按鈕
   - 替換 T065 的佔位元件為完整功能按鈕
   - 加入 hover 動畫效果
   - 整合 useMintNFT Hook
   - **相依**: Phase 0 的 Button (T016), ScaleSpring (T026)
-- [ ] T074 [DevA] [US4] 實作鑄造確認對話框（A 級）`frontend/components/mint-confirm-modal.tsx`
+- [x] T074 [DevA] [US4] 實作鑄造確認對話框（A 級）`frontend/components/mint-confirm-modal.tsx`
   - **Prototype**: `home.html` 鑄造確認彈窗
   - **相依**: Phase 0 的 Modal、FadeIn (T019, T027)
 - [ ] T075 [DevA] [US4] 整合慶祝動畫與 Explorer 連結
   - **整合**: Developer B 的 CelebrationScene (T072)
-- [ ] T076 [DevA] [US4] 實作 -5 MGC 扣除動畫
+- [x] T076 [DevA] [US4] 實作 -5 MGC 扣除動畫
   - **相依**: Phase 0 的 FlyingNumber (T025)
 
 **Checkpoint**: User Story 4 完成 — 使用者可鑄造 NFT（含慶祝動畫）

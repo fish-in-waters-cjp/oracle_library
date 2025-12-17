@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Answer, Rarity, RARITY_COLORS } from '@/hooks/use-answers';
+import { MintConfirmModal } from './mint-confirm-modal';
 
 /**
  * DrawResultOverlay Props
@@ -19,6 +21,8 @@ interface DrawResultOverlayProps {
   onMintNFT: () => void;
   /** 是否正在鑄造 */
   isMinting?: boolean;
+  /** MGC 餘額（用於確認對話框）*/
+  mgcBalance?: number;
 }
 
 /**
@@ -63,11 +67,38 @@ export function DrawResultOverlay({
   onDrawAgain,
   onMintNFT,
   isMinting = false,
+  mgcBalance = 0,
 }: DrawResultOverlayProps) {
+  const [showMintModal, setShowMintModal] = useState(false);
+
   const rarityName = RARITY_NAMES[rarity];
   const rarityGradient = RARITY_GRADIENTS[rarity];
   const rarityTextColor = RARITY_TEXT_COLORS[rarity];
   const rarityColor = RARITY_COLORS[rarity];
+
+  const MINT_COST = 5;
+
+  /**
+   * 處理鑄造按鈕點擊
+   */
+  const handleMintClick = () => {
+    setShowMintModal(true);
+  };
+
+  /**
+   * 處理確認鑄造
+   */
+  const handleConfirmMint = () => {
+    setShowMintModal(false);
+    onMintNFT();
+  };
+
+  /**
+   * 處理取消鑄造
+   */
+  const handleCancelMint = () => {
+    setShowMintModal(false);
+  };
 
   return (
     <motion.div
@@ -165,11 +196,11 @@ export function DrawResultOverlay({
 
             {/* 鑄造 NFT 按鈕 */}
             <motion.button
-              onClick={onMintNFT}
+              onClick={handleMintClick}
               disabled={isMinting}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex-1 py-3 px-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg"
+              whileHover={!isMinting ? { scale: 1.05, y: -2 } : {}}
+              whileTap={!isMinting ? { scale: 0.95 } : {}}
+              className="flex-1 py-3 px-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl"
             >
               {isMinting ? (
                 <span className="flex items-center justify-center gap-2">
@@ -284,6 +315,18 @@ export function DrawResultOverlay({
           </motion.div>
         </>
       )}
+
+      {/* 鑄造確認對話框 */}
+      <MintConfirmModal
+        isOpen={showMintModal}
+        answer={answer}
+        rarity={rarity}
+        mintCost={MINT_COST}
+        mgcBalance={mgcBalance}
+        onConfirm={handleConfirmMint}
+        onCancel={handleCancelMint}
+        isMinting={isMinting}
+      />
     </motion.div>
   );
 }

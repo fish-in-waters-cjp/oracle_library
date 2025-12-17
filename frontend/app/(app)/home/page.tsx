@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PageTransition from '@/components/animated/page-transition';
+import { useFlyingNumbers } from '@/components/animated/flying-number';
 import { useWalletConnection } from '@/hooks/use-wallet-connection';
 import { useMGCBalance } from '@/hooks/use-mgc-balance';
 import { useMGCCoins } from '@/hooks/use-mgc-coins';
@@ -26,6 +27,12 @@ export default function HomePage() {
 
   // Optimistic UI 狀態
   const [optimisticBalance, setOptimisticBalance] = useState<bigint | null>(null);
+
+  // 飛行數字動畫
+  const { showFlyingNumber, flyingNumbers } = useFlyingNumbers();
+
+  // 餘額顯示區域的 ref（用於定位飛行數字）
+  const balanceRef = useRef<HTMLDivElement>(null);
 
   // 當真實餘額更新時，重置 optimistic balance
   useEffect(() => {
@@ -59,11 +66,28 @@ export default function HomePage() {
     refetchBalance();
   };
 
+  /**
+   * 鑄造成功回調
+   */
+  const handleMintSuccess = () => {
+    // 顯示 -5 MGC 飛行數字動畫
+    if (balanceRef.current) {
+      const rect = balanceRef.current.getBoundingClientRect();
+      showFlyingNumber(-5, rect.left + rect.width / 2, rect.top + rect.height / 2);
+    }
+
+    // 重新查詢真實餘額
+    refetchBalance();
+  };
+
   return (
     <PageTransition variant="fade">
       <div className="space-y-8">
         {/* MGC 餘額顯示 */}
-        <div className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white shadow-lg">
+        <div
+          ref={balanceRef}
+          className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white shadow-lg"
+        >
           <h1 className="text-xl font-bold">你的智慧碎片</h1>
           <div className="mt-2 flex items-baseline">
             {balanceLoading || coinsLoading ? (
@@ -93,6 +117,7 @@ export default function HomePage() {
               mgcCoinId={mgcCoinId}
               onDrawStart={handleDrawStart}
               onDrawSuccess={handleDrawSuccess}
+              onMintSuccess={handleMintSuccess}
             />
           </div>
         ) : (
@@ -107,6 +132,9 @@ export default function HomePage() {
           </div>
         )}
       </div>
+
+      {/* 飛行數字動畫 */}
+      {flyingNumbers}
     </PageTransition>
   );
 }
