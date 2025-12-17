@@ -1,141 +1,55 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useCurrentAccount } from '@iota/dapp-kit';
 import FadeIn from '@/components/animation/fade-in';
 import NFTGrid from '@/components/nft-grid';
 import NFTDetailModal from '@/components/nft-detail-modal';
 import CollectionStats from '@/components/animated/collection-stats';
+import { useOwnedOracleNFTs } from '@/hooks/use-owned-oracle-nfts';
+import { MOCK_NFTS } from '@/data/mock-nfts';
+import { MOCK_ENABLED } from '@/config/mock';
 import type { OracleNFT, NFTStats } from '@/hooks/use-oracle-nfts';
 
-// Mock NFT 資料（開發測試用）
-// answerId 0-49 對應 answers.json 和圖片 1-50
-const mockNFTs: OracleNFT[] = [
-  {
-    id: '1',
-    rarity: 'legendary',
-    question: '我該如何面對生活的挑戰？',
-    answerEn: 'The unexamined life is not worth living.',
-    answerZh: '答案會自己顯現',
-    answerId: 28, // Legendary: answers.json id=29
-    mintedAt: '2025-12-16T14:30:45Z',
-  },
-  {
-    id: '2',
-    rarity: 'epic',
-    question: '什麼是真正的智慧？',
-    answerEn: 'The mind is everything. What you think you become.',
-    answerZh: '讓時間來證明',
-    answerId: 25, // Epic: answers.json id=26
-    mintedAt: '2025-12-15T10:20:30Z',
-  },
-  {
-    id: '3',
-    rarity: 'rare',
-    question: '如何獲得成功？',
-    answerEn: 'The only true wisdom is in knowing you know nothing.',
-    answerZh: '這不是個好主意',
-    answerId: 15, // Rare: answers.json id=16
-    mintedAt: '2025-12-14T16:45:10Z',
-  },
-  {
-    id: '4',
-    rarity: 'common',
-    question: '如何保持耐心？',
-    answerEn: 'Patience is the companion of wisdom.',
-    answerZh: '是的',
-    answerId: 0, // Common: answers.json id=1
-    mintedAt: '2025-12-13T09:15:20Z',
-  },
-  {
-    id: '5',
-    rarity: 'legendary',
-    question: '生命的意義是什麼？',
-    answerEn:
-      'To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.',
-    answerZh: '你已經知道答案了',
-    answerId: 40, // Legendary: answers.json id=41
-    mintedAt: '2025-12-12T20:30:00Z',
-  },
-  {
-    id: '6',
-    rarity: 'epic',
-    question: '如何面對失敗？',
-    answerEn:
-      'Success is not final, failure is not fatal: it is the courage to continue that counts.',
-    answerZh: '不要急於決定',
-    answerId: 26, // Epic: answers.json id=27
-    mintedAt: '2025-12-11T11:20:15Z',
-  },
-  {
-    id: '7',
-    rarity: 'rare',
-    question: '如何培養創造力？',
-    answerEn: 'Creativity is intelligence having fun.',
-    answerZh: '再等等看',
-    answerId: 20, // Rare: answers.json id=21
-    mintedAt: '2025-12-10T15:40:30Z',
-  },
-  {
-    id: '8',
-    rarity: 'common',
-    question: '如何保持專注？',
-    answerEn: 'The secret of getting ahead is getting started.',
-    answerZh: '絕對可以',
-    answerId: 1, // Common: answers.json id=2
-    mintedAt: '2025-12-09T08:10:45Z',
-  },
-  {
-    id: '9',
-    rarity: 'legendary',
-    question: '什麼是幸福？',
-    answerEn:
-      'Happiness is not something ready made. It comes from your own actions.',
-    answerZh: '傾聽內心的聲音',
-    answerId: 47, // Legendary: answers.json id=48
-    mintedAt: '2025-12-08T19:25:10Z',
-  },
-  {
-    id: '10',
-    rarity: 'epic',
-    question: '如何找到平靜？',
-    answerEn: 'Peace comes from within. Do not seek it without.',
-    answerZh: '做出改變',
-    answerId: 34, // Epic: answers.json id=35
-    mintedAt: '2025-12-07T14:50:30Z',
-  },
-  {
-    id: '11',
-    rarity: 'rare',
-    question: '如何做決定？',
-    answerEn: 'In the middle of difficulty lies opportunity.',
-    answerZh: '採取行動',
-    answerId: 30, // Rare: answers.json id=31
-    mintedAt: '2025-12-06T07:35:15Z',
-  },
-  {
-    id: '12',
-    rarity: 'common',
-    question: '如何維持關係？',
-    answerEn:
-      'The best time to plant a tree was 20 years ago. The second best time is now.',
-    answerZh: '毫無疑問',
-    answerId: 2, // Common: answers.json id=3
-    mintedAt: '2025-12-05T12:15:30Z',
-  },
-];
-
-// 計算統計資料
-const mockStats: NFTStats = {
-  total: mockNFTs.length,
-  legendary: mockNFTs.filter((n) => n.rarity === 'legendary').length,
-  epic: mockNFTs.filter((n) => n.rarity === 'epic').length,
-  rare: mockNFTs.filter((n) => n.rarity === 'rare').length,
-  common: mockNFTs.filter((n) => n.rarity === 'common').length,
-};
+/**
+ * 計算 NFT 統計資料
+ */
+function calculateStats(nfts: OracleNFT[]): NFTStats {
+  return {
+    total: nfts.length,
+    legendary: nfts.filter((n) => n.rarity === 'legendary').length,
+    epic: nfts.filter((n) => n.rarity === 'epic').length,
+    rare: nfts.filter((n) => n.rarity === 'rare').length,
+    common: nfts.filter((n) => n.rarity === 'common').length,
+  };
+}
 
 export default function CollectionPage() {
   const [selectedNFT, setSelectedNFT] = useState<OracleNFT | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 取得當前帳戶
+  const currentAccount = useCurrentAccount();
+
+  // 從鏈上取得 NFT（只有在非 Mock 模式下才會實際查詢）
+  const {
+    nfts: onChainNFTs,
+    isLoading,
+    error,
+  } = useOwnedOracleNFTs(MOCK_ENABLED ? null : (currentAccount?.address ?? null));
+
+  // 根據 MOCK_ENABLED 設定選擇顯示的 NFT
+  const displayNFTs = useMemo(() => {
+    if (MOCK_ENABLED) {
+      return MOCK_NFTS;
+    }
+    return onChainNFTs;
+  }, [onChainNFTs]);
+
+  // 計算統計資料
+  const stats = useMemo(() => {
+    return calculateStats(displayNFTs);
+  }, [displayNFTs]);
 
   const handleNFTClick = (nft: OracleNFT) => {
     setSelectedNFT(nft);
@@ -144,7 +58,6 @@ export default function CollectionPage() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    // 延遲清除 selectedNFT，讓關閉動畫完成
     setTimeout(() => setSelectedNFT(null), 200);
   };
 
@@ -174,11 +87,91 @@ export default function CollectionPage() {
           </h1>
         </FadeIn>
 
+        {/* 錯誤訊息（僅在非 Mock 模式下顯示）*/}
+        {!MOCK_ENABLED && error && (
+          <FadeIn direction="up">
+            <div
+              style={{
+                padding: 'var(--space-4)',
+                marginBottom: 'var(--space-8)',
+                borderRadius: 'var(--radius-lg)',
+                background: 'rgba(220, 38, 38, 0.1)',
+                border: '1px solid var(--color-error)',
+                color: 'var(--color-error)',
+                textAlign: 'center',
+                fontSize: 'var(--text-sm)',
+              }}
+            >
+              {error}
+            </div>
+          </FadeIn>
+        )}
+
+        {/* 未連接錢包提示（僅在非 Mock 模式下顯示）*/}
+        {!MOCK_ENABLED && !currentAccount && (
+          <FadeIn direction="up">
+            <div
+              style={{
+                padding: 'var(--space-8)',
+                marginBottom: 'var(--space-8)',
+                borderRadius: 'var(--radius-lg)',
+                background: 'var(--color-background-elevated)',
+                border: '1px solid var(--color-border-default)',
+                textAlign: 'center',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 'var(--text-lg)',
+                  color: 'var(--color-text-secondary)',
+                  marginBottom: 'var(--space-2)',
+                }}
+              >
+                請先連接錢包以查看您的 NFT 收藏
+              </p>
+              <p
+                style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--color-text-muted)',
+                }}
+              >
+                連接後將自動載入您擁有的 Oracle NFT
+              </p>
+            </div>
+          </FadeIn>
+        )}
+
         {/* 統計卡片 */}
-        <CollectionStats stats={mockStats} style={{ marginBottom: 'var(--space-12)' }} />
+        <CollectionStats stats={stats} style={{ marginBottom: 'var(--space-12)' }} />
 
         {/* NFT 網格 */}
-        <NFTGrid nfts={mockNFTs} onNFTClick={handleNFTClick} />
+        {!MOCK_ENABLED && isLoading ? (
+          <FadeIn direction="up">
+            <div
+              style={{
+                padding: 'var(--space-16)',
+                textAlign: 'center',
+                color: 'var(--color-text-muted)',
+              }}
+            >
+              載入中...
+            </div>
+          </FadeIn>
+        ) : displayNFTs.length > 0 ? (
+          <NFTGrid nfts={displayNFTs} onNFTClick={handleNFTClick} />
+        ) : (
+          <FadeIn direction="up">
+            <div
+              style={{
+                padding: 'var(--space-16)',
+                textAlign: 'center',
+                color: 'var(--color-text-muted)',
+              }}
+            >
+              您還沒有任何 Oracle NFT
+            </div>
+          </FadeIn>
+        )}
 
         {/* NFT 詳情 Modal */}
         <NFTDetailModal
