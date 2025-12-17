@@ -1,5 +1,6 @@
 import { useIotaClientQuery } from '@iota/dapp-kit';
 import { MGC_COIN_TYPE } from '@/consts';
+import { MOCK_ENABLED, MOCK_DATA } from '@/config/mock';
 
 /**
  * MGC Coin 資訊
@@ -42,10 +43,26 @@ export function useMGCCoins(address: string | null): UseMGCCoinsReturn {
       coinType: MGC_COIN_TYPE,
     },
     {
-      enabled: !!address,
+      enabled: !!address && !MOCK_ENABLED,
     }
   );
 
+  // === MOCK 模式 ===
+  if (MOCK_ENABLED) {
+    const mockCoins: MGCCoin[] = [
+      { objectId: MOCK_DATA.coins.coinId, balance: MOCK_DATA.coins.balance },
+    ];
+
+    return {
+      coins: mockCoins,
+      isLoading: false,
+      refetch: () => console.log('[Mock] refetch coins'),
+      getCoinWithBalance: (minBalance: bigint) =>
+        MOCK_DATA.coins.balance >= minBalance ? MOCK_DATA.coins.coinId : null,
+    };
+  }
+
+  // === 真實模式 ===
   // 解析 coins
   const coins: MGCCoin[] =
     data?.data.map((coin) => ({

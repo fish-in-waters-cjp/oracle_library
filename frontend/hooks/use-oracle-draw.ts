@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
 import { PACKAGE_ID, MGC_TREASURY_ID } from '@/consts';
-import { generateRandomAnswerId } from '@/lib/random';
+import { generateRandomAnswerId, getRarityLabelFromAnswerId } from '@/lib/random';
+import { MOCK_ENABLED, MOCK_DATA } from '@/config/mock';
 
 /**
  * 抽取結果
@@ -12,6 +13,8 @@ export interface DrawResult {
   recordId: string;
   /** 答案 ID (0-49) */
   answerId: number;
+  /** 稀有度（Common, Rare, Epic, Legendary）*/
+  rarity: string;
   /** 交易摘要 */
   digest: string;
   /** 時間戳記 */
@@ -84,6 +87,38 @@ export function useOracleDraw(): UseOracleDrawReturn {
       // 1. 生成隨機答案 ID (0-49)
       const answerId = generateRandomAnswerId();
 
+      // 2. 根據 answerId 計算稀有度
+      const rarityLabel = getRarityLabelFromAnswerId(answerId);
+      // 轉換為 PascalCase（Common, Rare, Epic, Legendary）
+      const rarity = rarityLabel.charAt(0).toUpperCase() + rarityLabel.slice(1);
+
+      // === MOCK 模式：模擬交易流程 ===
+      if (MOCK_ENABLED) {
+        console.log('[useOracleDraw] Mock 模式：模擬抽取交易');
+        console.log('[useOracleDraw] 問題:', question);
+        console.log('[useOracleDraw] 答案 ID:', answerId, '稀有度:', rarity);
+
+        setStatus('drawing');
+
+        // 模擬交易延遲
+        await new Promise((resolve) => setTimeout(resolve, MOCK_DATA.draw.delayMs));
+
+        const drawResult: DrawResult = {
+          recordId: `mock-record-${Date.now()}`,
+          answerId,
+          rarity,
+          digest: `mock-digest-${Date.now()}`,
+          timestamp: Date.now(),
+        };
+
+        setLastResult(drawResult);
+        setStatus('success');
+
+        console.log('[useOracleDraw] Mock 抽取成功:', drawResult);
+        return drawResult;
+      }
+
+      // === 真實模式：執行鏈上交易 ===
       // 2. 計算問題 hash
       const questionHash = hashQuestion(question);
 
@@ -141,6 +176,7 @@ export function useOracleDraw(): UseOracleDrawReturn {
       const drawResult: DrawResult = {
         recordId: drawRecord.objectId,
         answerId,
+        rarity,
         digest: result.digest,
         timestamp: Date.now(),
       };

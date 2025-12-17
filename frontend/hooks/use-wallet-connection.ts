@@ -3,6 +3,7 @@ import {
   useCurrentWallet,
   useDisconnectWallet,
 } from '@iota/dapp-kit';
+import { MOCK_ENABLED, MOCK_DATA, getMockTruncatedAddress } from '@/config/mock';
 
 export interface UseWalletConnectionReturn {
   // 狀態
@@ -45,6 +46,19 @@ export function useWalletConnection(): UseWalletConnectionReturn {
   const { mutate: disconnect, isPending: isDisconnecting } =
     useDisconnectWallet();
 
+  // === MOCK 模式 ===
+  if (MOCK_ENABLED) {
+    return {
+      isConnected: true,
+      address: MOCK_DATA.wallet.address,
+      truncatedAddress: getMockTruncatedAddress(),
+      walletIcon: null,
+      disconnect: () => console.log('[Mock] disconnect called'),
+      isDisconnecting: false,
+    };
+  }
+
+  // === 真實模式 ===
   const address = currentAccount?.address ?? null;
   const isConnected = !!address;
 

@@ -1,5 +1,6 @@
 import { useIotaClientQuery } from '@iota/dapp-kit';
 import { MGC_COIN_TYPE } from '@/consts';
+import { MOCK_ENABLED, MOCK_DATA, getMockDisplayBalance } from '@/config/mock';
 
 export interface UseMGCBalanceReturn {
   /** MGC 餘額（bigint） */
@@ -37,11 +38,22 @@ export function useMGCBalance(address: string | null): UseMGCBalanceReturn {
       coinType: MGC_COIN_TYPE,
     },
     {
-      enabled: !!address,
+      enabled: !!address && !MOCK_ENABLED,
       refetchInterval: 10000, // 每 10 秒自動重新查詢
     }
   );
 
+  // === MOCK 模式 ===
+  if (MOCK_ENABLED) {
+    return {
+      balance: MOCK_DATA.balance.amount,
+      displayBalance: getMockDisplayBalance(),
+      isLoading: false,
+      refetch: () => console.log('[Mock] refetch balance'),
+    };
+  }
+
+  // === 真實模式 ===
   // 解析餘額
   const balance = data?.totalBalance ? BigInt(data.totalBalance) : BigInt(0);
   const displayBalance = balance.toString();
