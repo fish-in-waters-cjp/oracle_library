@@ -274,14 +274,6 @@ export function MintConfirmModal({
               <div style={styles.content}>
                 {/* 標題 */}
                 <div style={styles.titleSection}>
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
-                    style={styles.emoji}
-                  >
-                    🎨
-                  </motion.div>
                   <h2 style={styles.title}>
                     鑄造 NFT 確認
                   </h2>

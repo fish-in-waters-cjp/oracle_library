@@ -305,7 +305,7 @@ export class CelebrationScene extends Phaser.Scene {
    */
   private createSuccessText(x: number, y: number): void {
     // 主標題
-    const title = this.add.text(x, y - 100, '🎉 鑄造成功！', {
+    const title = this.add.text(x, y - 100, '鑄造成功！', {
       fontSize: '48px',
       fontFamily: 'Arial',
       color: '#d4af37',
