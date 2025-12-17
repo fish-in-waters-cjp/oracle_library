@@ -12,7 +12,9 @@ import { PreloadScene } from './phaser/scenes/PreloadScene';
 import { DrawScene } from './phaser/scenes/DrawScene';
 import { CardRevealScene } from './phaser/scenes/CardRevealScene';
 import { useOracleDraw, DrawResult } from '@/hooks/use-oracle-draw';
+import { useMintNFT } from '@/hooks/use-mint-nft';
 import { useMGCBalance } from '@/hooks/use-mgc-balance';
+import { useMGCCoins } from '@/hooks/use-mgc-coins';
 import { useAnswers } from '@/hooks/use-answers';
 
 /**
@@ -47,6 +49,12 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess }: DrawSecti
 
   // 抽取 Hook
   const { draw, isDrawing, error, lastResult, reset } = useOracleDraw();
+
+  // 鑄造 Hook
+  const { mint, isMinting, error: mintError } = useMintNFT();
+
+  // MGC Coins（用於鑄造支付）
+  const { getCoinWithBalance } = useMGCCoins(currentAccount?.address ?? null);
 
   // 答案資料
   const { getAnswerById } = useAnswers();
@@ -253,17 +261,47 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess }: DrawSecti
               const answer = getAnswerById(resultData.answerId);
               if (!answer) return null;
 
+              // 取得稀有度數字 (0-3)
+              const rarityMap: Record<string, number> = {
+                Common: 0,
+                Rare: 1,
+                Epic: 2,
+                Legendary: 3,
+              };
+              const rarityValue = rarityMap[resultData.rarity] ?? 0;
+
+              // 取得可用的 MGC Coin（5 MGC）
+              const MINT_COST = 5_000_000_000n; // 5 MGC
+              const mintCoinId = getCoinWithBalance(MINT_COST);
+
               return (
                 <DrawResultOverlay
                   answer={answer}
                   rarity={resultData.rarity as any}
                   recordId={lastResult.recordId}
                   onDrawAgain={handleReset}
-                  onMintNFT={() => {
-                    // TODO: T071 實作 useMintNFT Hook 後連接
-                    console.log('鑄造 NFT:', lastResult.recordId);
+                  onMintNFT={async () => {
+                    if (!mintCoinId) {
+                      alert('MGC 不足，無法鑄造 NFT');
+                      return;
+                    }
+
+                    const result = await mint(
+                      lastResult.recordId,
+                      rarityValue,
+                      mintCoinId
+                    );
+
+                    if (result) {
+                      console.log('NFT 鑄造成功:', result.nftId);
+                      // TODO: T075 整合慶祝動畫
+                      // 重新查詢餘額
+                      refetchBalance();
+                    } else {
+                      console.error('NFT 鑄造失敗:', mintError);
+                    }
                   }}
-                  isMinting={false}
+                  isMinting={isMinting}
                 />
               );
             })()}

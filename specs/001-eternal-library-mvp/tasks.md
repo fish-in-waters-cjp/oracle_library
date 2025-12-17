@@ -433,7 +433,7 @@ oracle_library/
 - [x] T070 [DevA] [US4] 實作 oracle_nft 合約模組 `contracts/sources/oracle_nft.move`
   - **相依**: MGC Token (T008 已完成)
   - **Mock 策略**: Developer B 需要此合約的 OracleNFT 結構,但 A 先實作完整合約
-- [ ] T071 [DevA] [US4] 實作 useMintNFT Hook `frontend/hooks/use-mint-nft.ts`
+- [x] T071 [DevA] [US4] 實作 useMintNFT Hook `frontend/hooks/use-mint-nft.ts`
 
 #### S 級：Phaser 慶祝場景 (Developer B)
 
