@@ -19,7 +19,7 @@
 | Phase 2: Foundational | ✅ 已完成 | 11/22 | 基礎架構（部分完成） |
 | **🔧 Phase 0** | ⏳ **待完成** | **0/13** | **共同前置作業（必須先完成）** |
 | 🅰️ Developer A | ⏸️ 待開始 | 0/30 | US1 + US2 + US4 (部分) |
-| 🅱️ Developer B | 🟡 進行中 | 21/30 | US3 + US5 + US4 (部分) |
+| 🅱️ Developer B | 🟡 進行中 | 26/30 | US3 + US5 + US4 (部分) |
 | Phase 8: Polish | ⏸️ 待開始 | 0/9 | 最終優化與測試 |
 
 ### Developer A 路線任務分布
@@ -397,19 +397,19 @@ oracle_library/
 
 #### S 級：Phaser 抽取動畫場景
 
-- [ ] T060 [DevB] [US3] 實作 DrawScene 抽取動畫場景 `frontend/components/phaser/scenes/DrawScene.ts`
+- [x] T060 [DevB] [US3] 實作 DrawScene 抽取動畫場景 `frontend/components/phaser/scenes/DrawScene.ts`
   - **Prototype**: `phaser/DrawScene.js` 完整參考
   - 卡牌飛入動畫
   - 能量粒子聚集效果
   - 等待交易確認狀態
   - **相依**: Phase 0 的 PhaserEventBridge (T022)
-- [ ] T061 [DevB] [US3] 實作 CardRevealScene 卡片揭示場景 `frontend/components/phaser/scenes/CardRevealScene.ts`
+- [x] T061 [DevB] [US3] 實作 CardRevealScene 卡片揭示場景 `frontend/components/phaser/scenes/CardRevealScene.ts`
   - **Prototype**: `phaser/CardRevealScene.js` 完整參考
   - 3D 卡牌翻轉動畫
   - 稀有度爆發特效（Common 灰光、Rare 藍光、Epic 紫光、Legendary 金光）
   - 持續光效/粒子環繞
   - **相依**: Phase 0 的 PhaserEventBridge (T022)
-- [ ] T062 [DevB] [US3] 實作 Phaser 場景資源載入器 `frontend/components/phaser/scenes/PreloadScene.ts`
+- [x] T062 [DevB] [US3] 實作 Phaser 場景資源載入器 `frontend/components/phaser/scenes/PreloadScene.ts`
   - **相依**: Phase 0 的 IPFS 工具 (T014 已完成)
 
 #### 前端元件整合
@@ -417,12 +417,12 @@ oracle_library/
 - [x] T063 [DevB] [US3] 實作 DrawForm 元件（B 級）`frontend/components/draw-form.tsx`
   - **Prototype**: `home.html` 抽取表單區塊
   - **相依**: Phase 0 的 Input、Button (T018, T016)
-- [ ] T064 [DevB] [US3] 實作 DrawSection 整合元件 `frontend/components/draw-section.tsx`
+- [x] T064 [DevB] [US3] 實作 DrawSection 整合元件 `frontend/components/draw/DrawSection.tsx`
   - **Prototype**: `home.html` 完整抽取區塊
   - 整合 React 表單與 Phaser 動畫
   - 管理抽取流程狀態（input → drawing → result）
   - **相依**: Phase 0 的 Card (T017)
-- [ ] T065 [DevB] [US3] 實作 DrawResultOverlay 結果覆蓋層 `frontend/components/draw-result-overlay.tsx`
+- [x] T065 [DevB] [US3] 實作 DrawResultOverlay 結果覆蓋層 `frontend/components/draw/DrawResultOverlay.tsx`
   - **Prototype**: `demo-phaser.html` 結果覆蓋層
   - 答案文字顯示（疊在 Phaser 上方）
   - 稀有度標籤
