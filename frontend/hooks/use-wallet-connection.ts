@@ -55,7 +55,10 @@ export function useWalletConnection(): UseWalletConnectionReturn {
       : `${address.slice(0, 6)}...${address.slice(-4)}`
     : null;
 
-  const walletIcon = currentWallet?.icon ?? null;
+  // 取得錢包圖示（只在連接時可用）
+  const walletIcon = currentWallet.isConnected
+    ? (currentWallet.currentWallet?.icon ?? null)
+    : null;
 
   return {
     isConnected,

@@ -62,8 +62,8 @@ export default function CountUp({
   easing = 'easeOut',
 }: CountUpProps) {
   const [count, setCount] = useState(start);
-  const frameRef = useRef<number>();
-  const startTimeRef = useRef<number>();
+  const frameRef = useRef<number | undefined>(undefined);
+  const startTimeRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const startAnimation = () => {

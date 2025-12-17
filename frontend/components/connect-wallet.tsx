@@ -52,7 +52,7 @@ export function ConnectWallet() {
     <div className="flex items-center gap-2">
       {/* 錢包地址按鈕 */}
       <Button
-        variant="outline"
+        variant="secondary"
         className={cn(
           'flex items-center gap-2',
           isDisconnecting && 'cursor-not-allowed'

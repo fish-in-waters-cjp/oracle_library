@@ -109,7 +109,7 @@ export function useOracleDraw(): UseOracleDrawReturn {
       // 4. 簽署並執行交易
       const result = await signAndExecute(
         {
-          transaction: tx,
+          transaction: tx as unknown as Parameters<typeof signAndExecute>[0]['transaction'],
         },
         {
           onSuccess: () => {

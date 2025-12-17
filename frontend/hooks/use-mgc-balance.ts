@@ -43,7 +43,7 @@ export function useMGCBalance(address: string | null): UseMGCBalanceReturn {
   );
 
   // 解析餘額
-  const balance = data?.totalBalance ? BigInt(data.totalBalance) : 0n;
+  const balance = data?.totalBalance ? BigInt(data.totalBalance) : BigInt(0);
   const displayBalance = balance.toString();
 
   return {

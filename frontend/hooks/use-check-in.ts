@@ -63,7 +63,7 @@ export function useCheckIn(): UseCheckInReturn {
     });
 
     await mutateAsync({
-      transaction: tx,
+      transaction: tx as unknown as Parameters<typeof mutateAsync>[0]['transaction'],
     });
   };
 
@@ -87,7 +87,7 @@ export function useCheckIn(): UseCheckInReturn {
     });
 
     await mutateAsync({
-      transaction: tx,
+      transaction: tx as unknown as Parameters<typeof mutateAsync>[0]['transaction'],
     });
   };
 

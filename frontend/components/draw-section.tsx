@@ -273,7 +273,7 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
               const rarityValue = rarityMap[resultData.rarity] ?? 0;
 
               // 取得可用的 MGC Coin（5 MGC）
-              const MINT_COST = 5_000_000_000n; // 5 MGC
+              const MINT_COST = BigInt(5_000_000_000); // 5 MGC
               const mintCoinId = getCoinWithBalance(MINT_COST);
 
               // 計算 MGC 餘額（轉換為顯示用的數字）

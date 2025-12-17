@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 import { EventBridge, EVENTS } from '../EventBridge';
 import { getRarityColor, getRarityName, RARITY_COLORS } from '../PhaserGame';
 

@@ -36,7 +36,7 @@ export interface UseMGCCoinsReturn {
  */
 export function useMGCCoins(address: string | null): UseMGCCoinsReturn {
   const { data, isLoading, refetch } = useIotaClientQuery(
-    'getAllCoins',
+    'getCoins',
     {
       owner: address!,
       coinType: MGC_COIN_TYPE,

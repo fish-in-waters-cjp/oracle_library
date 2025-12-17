@@ -36,7 +36,7 @@ export default function HomePage() {
 
   // 當真實餘額更新時，重置 optimistic balance
   useEffect(() => {
-    if (balance !== 0n) {
+    if (balance !== BigInt(0)) {
       setOptimisticBalance(null);
     }
   }, [balance]);
@@ -46,7 +46,7 @@ export default function HomePage() {
   const displayedBalanceString = (Number(displayedBalance) / 1_000_000_000).toString();
 
   // 取得可用的 MGC Coin ID
-  const DRAW_COST = 10_000_000_000n; // 10 MGC
+  const DRAW_COST = BigInt(10_000_000_000); // 10 MGC
   const mgcCoinId = getCoinWithBalance(DRAW_COST);
 
   /**

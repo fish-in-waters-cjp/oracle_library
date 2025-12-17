@@ -4,6 +4,15 @@ import { Transaction } from '@iota/iota-sdk/transactions';
 import { PACKAGE_ID, MGC_TREASURY_ID, NFT_CONFIG_ID, MINT_COST } from '@/consts';
 
 /**
+ * OracleNFT Move Object 的 fields 類型
+ */
+interface OracleNFTFields {
+  id: { id: string };
+  answer_id: string;
+  rarity: string;
+}
+
+/**
  * 鑄造結果
  */
 export interface MintResult {
@@ -113,7 +122,7 @@ export function useMintNFT(): UseMintNFTReturn {
       // 簽署並執行交易
       const result = await signAndExecute(
         {
-          transaction: tx,
+          transaction: tx as unknown as Parameters<typeof signAndExecute>[0]['transaction'],
         },
         {
           onSuccess: () => {
@@ -152,10 +161,12 @@ export function useMintNFT(): UseMintNFTReturn {
 
       // 解析 NFT 內容
       const content = nftDetails.data?.content;
-      const fields = content?.dataType === 'moveObject' ? content.fields : null;
+      const fields = content?.dataType === 'moveObject'
+        ? (content.fields as unknown as OracleNFTFields)
+        : null;
 
       const answerId = fields?.answer_id
-        ? parseInt(fields.answer_id as string, 10)
+        ? parseInt(fields.answer_id, 10)
         : 0;
 
       const mintResult: MintResult = {

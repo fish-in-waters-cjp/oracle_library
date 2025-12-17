@@ -6,6 +6,15 @@ import {
   getNextMidnight,
 } from '@/lib/time';
 
+/**
+ * CheckInRecord Move Object 的 fields 類型
+ */
+interface CheckInRecordFields {
+  id: { id: string };
+  last_check_in_day: string;
+  total_check_ins: string;
+}
+
 export interface UseCheckInStateReturn {
   /** 是否有簽到記錄 */
   hasRecord: boolean;
@@ -95,14 +104,16 @@ export function useCheckInState(
 
   // 解析記錄內容
   const content = record.data?.content;
-  const fields = content?.dataType === 'moveObject' ? content.fields : null;
+  const fields = content?.dataType === 'moveObject'
+    ? (content.fields as unknown as CheckInRecordFields)
+    : null;
 
   const lastCheckInDay = fields?.last_check_in_day
-    ? parseInt(fields.last_check_in_day as string, 10)
+    ? parseInt(fields.last_check_in_day, 10)
     : null;
 
   const totalCheckIns = fields?.total_check_ins
-    ? parseInt(fields.total_check_ins as string, 10)
+    ? parseInt(fields.total_check_ins, 10)
     : 0;
 
   // 判斷是否可以簽到
