@@ -15,9 +15,17 @@ export class PreloadScene extends Phaser.Scene {
   private loadingBar: Phaser.GameObjects.Graphics | null = null;
   private progressBox: Phaser.GameObjects.Graphics | null = null;
   private loadingText: Phaser.GameObjects.Text | null = null;
+  private initData: { answerId?: number; rarity?: string } = {};
 
   constructor() {
     super({ key: 'PreloadScene' });
+  }
+
+  init(data: { answerId?: number; rarity?: string }): void {
+    this.initData = data || {};
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[PreloadScene] 初始化，資料:', this.initData);
+    }
   }
 
   preload(): void {
@@ -47,7 +55,16 @@ export class PreloadScene extends Phaser.Scene {
       console.log('[PreloadScene] 資源載入完成，場景就緒');
     }
 
-    // 監聽 React 事件
+    // 如果有初始資料（answerId 和 rarity），直接啟動 DrawScene
+    if (this.initData.answerId !== undefined && this.initData.rarity) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[PreloadScene] 自動啟動 DrawScene', this.initData);
+      }
+      this.scene.start('DrawScene', this.initData);
+      return;
+    }
+
+    // 否則監聽 React 事件（向下相容）
     this.setupEventListeners();
   }
 

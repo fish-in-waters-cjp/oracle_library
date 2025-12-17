@@ -100,6 +100,25 @@
     --transition-normal: 300ms ease;
     --transition-slow: 500ms ease;
 
+    --duration-instant: 100ms;
+    --duration-fast: 200ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 800ms;
+
+    /* ===== Z-Index ===== */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-popover: 400;
+    --z-tooltip: 500;
+
+    /* ===== Layout ===== */
+    --container-max-width: 1280px;
+    --header-height: 80px;
+    --mobile-header-height: 64px;
+
     /* Tailwind 相容性 */
     --background: #000000;
     --foreground: #f5f5f5;

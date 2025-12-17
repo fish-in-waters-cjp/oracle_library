@@ -3,19 +3,36 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCurrentAccount } from '@iota/dapp-kit';
-import * as Phaser from 'phaser';
+import dynamic from 'next/dynamic';
 import { DrawForm } from './draw-form';
 import { DrawResultOverlay } from './draw-result-overlay';
-import PhaserGame from './phaser/PhaserGame';
 import { EventBridge, EVENTS } from './phaser/EventBridge';
-import { PreloadScene } from './phaser/scenes/PreloadScene';
-import { DrawScene } from './phaser/scenes/DrawScene';
-import { CardRevealScene } from './phaser/scenes/CardRevealScene';
 import { useOracleDraw, DrawResult } from '@/hooks/use-oracle-draw';
 import { useMintNFT } from '@/hooks/use-mint-nft';
 import { useMGCBalance } from '@/hooks/use-mgc-balance';
 import { useMGCCoins } from '@/hooks/use-mgc-coins';
 import { useAnswers } from '@/hooks/use-answers';
+
+// 動態載入 PhaserGame 元件（避免 SSR 問題）
+const PhaserGame = dynamic(() => import('./phaser/PhaserGame'), {
+  ssr: false,
+  loading: () => (
+    <div style={{
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'var(--color-text-muted)',
+    }}>
+      載入遊戲引擎中...
+    </div>
+  ),
+});
+
+// Phaser Game 類型（避免 SSR 問題，不直接引用 phaser）
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PhaserGameType = any;
 
 /**
  * 抽取流程狀態
@@ -71,14 +88,27 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
   } | null>(null);
 
   // Phaser 遊戲實例
-  const gameRef = useRef<Phaser.Game | null>(null);
+  const gameRef = useRef<PhaserGameType | null>(null);
   const eventBridge = useRef<EventBridge>(EventBridge.getInstance());
+  // 暫存抽取結果，用於 Phaser 場景啟動
+  const pendingDrawResult = useRef<{ answerId: number; rarity: string } | null>(null);
 
   /**
    * 初始化 Phaser 場景
    */
-  const handleGameReady = useCallback((game: Phaser.Game) => {
+  const handleGameReady = useCallback(async (game: PhaserGameType) => {
     gameRef.current = game;
+
+    // 動態載入場景模組（避免 SSR 問題）
+    const [
+      { PreloadScene },
+      { DrawScene },
+      { CardRevealScene },
+    ] = await Promise.all([
+      import('./phaser/scenes/PreloadScene'),
+      import('./phaser/scenes/DrawScene'),
+      import('./phaser/scenes/CardRevealScene'),
+    ]);
 
     // 動態添加場景
     game.scene.add('PreloadScene', PreloadScene, false);
@@ -87,6 +117,16 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
 
     if (process.env.NODE_ENV === 'development') {
       console.log('[DrawSection] Phaser 場景已註冊');
+    }
+
+    // 如果有待啟動的抽取結果，立即啟動場景
+    if (pendingDrawResult.current) {
+      const { answerId, rarity } = pendingDrawResult.current;
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DrawSection] 啟動 Phaser 場景', { answerId, rarity });
+      }
+      game.scene.start('PreloadScene', { answerId, rarity });
+      pendingDrawResult.current = null;
     }
   }, []);
 
@@ -161,15 +201,14 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
         console.log('[DrawSection] 抽取成功', result);
       }
 
-      // 切換到 drawing 階段
-      setPhase('drawing');
+      // 暫存結果，等 PhaserGame 準備好後啟動場景
+      pendingDrawResult.current = {
+        answerId: result.answerId,
+        rarity: result.rarity,
+      };
 
-      // 啟動 Phaser 場景
-      if (gameRef.current) {
-        // 啟動 PreloadScene，它會自動加載資源並啟動 DrawScene
-        // DrawScene 會自動開始抽取動畫
-        gameRef.current.scene.start('PreloadScene', { answerId: result.answerId });
-      }
+      // 切換到 drawing 階段（這會觸發 PhaserGame 渲染）
+      setPhase('drawing');
     } catch (err) {
       console.error('[DrawSection] 抽取錯誤', err);
       setPhase('idle');
@@ -222,62 +261,64 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
           </motion.div>
         )}
 
-        {/* 階段 2-3: 抽取動畫和卡牌揭示 */}
+        {/* 階段 2-3: 抽取動畫和卡牌揭示（全螢幕覆蓋，完全匹配 prototype） */}
         {(phase === 'drawing' || phase === 'revealing') && (
-          <motion.div
-            key="phaser-animation"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.4 }}
-            style={{ position: 'relative' }}
-          >
-            {/* Phaser 遊戲容器 */}
-            <div
-              style={{
-                position: 'relative',
-                background: 'var(--color-background-surface)',
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                border: '1px solid var(--color-border-default)',
-              }}
-            >
-              <PhaserGame
-                onGameReady={handleGameReady}
-                config={{
-                  backgroundColor: '#0f0f1e',
-                }}
-              />
-
-              {/* 狀態提示 */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 'var(--space-4)',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  zIndex: 10,
-                }}
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  style={{
-                    padding: 'var(--space-3) var(--space-6)',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    backdropFilter: 'blur(8px)',
-                    borderRadius: '9999px',
-                    color: 'var(--color-primary)',
-                    fontSize: 'var(--text-sm)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    border: '1px solid var(--color-border-default)',
+          <>
+            {/* 全螢幕 Phaser 容器樣式（來自 prototype/css/pages.css） */}
+            <style>{`
+              .phaser-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.98);
+                z-index: var(--z-modal);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fade-in 0.3s ease;
+              }
+              #phaser-game {
+                width: 100%;
+                max-width: 800px;
+                height: 600px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+              #phaser-game canvas {
+                border-radius: var(--radius-lg);
+                margin: 0 auto !important;
+              }
+              @media (max-width: 768px) {
+                #phaser-game {
+                  max-width: 100%;
+                  height: 400px;
+                }
+              }
+              @media (max-width: 480px) {
+                #phaser-game {
+                  height: 300px;
+                }
+              }
+              @keyframes fade-in {
+                from { opacity: 0; }
+                to { opacity: 1; }
+              }
+            `}</style>
+            <div className="phaser-container">
+              {/* Phaser 遊戲容器（ID 匹配 prototype） */}
+              <div id="phaser-game">
+                <PhaserGame
+                  onGameReady={handleGameReady}
+                  config={{
+                    backgroundColor: '#000000',
                   }}
-                >
-                  {phase === 'drawing' ? '🎴 抽取中...' : '✨ 揭示答案...'}
-                </motion.div>
+                />
               </div>
             </div>
-          </motion.div>
+          </>
         )}
 
         {/* 階段 4: 顯示結果 */}
