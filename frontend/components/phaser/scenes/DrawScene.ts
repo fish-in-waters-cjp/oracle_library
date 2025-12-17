@@ -1,224 +1,320 @@
-import * as Phaser from 'phaser';
+import Phaser from 'phaser';
 import { EventBridge, EVENTS } from '../EventBridge';
+import { getRarityColor, getRarityName, RARITY_COLORS } from '../PhaserGame';
+
+type RarityKey = keyof typeof RARITY_COLORS;
 
 /**
  * DrawScene - 抽取動畫場景
- * 顯示卡牌飛入、能量粒子聚集等抽取動畫
+ *
+ * 動畫流程：
+ * 1. 卡牌從上方飛入 (1s)
+ * 2. 能量粒子從四周聚集 (1.5s)
+ * 3. 3D 翻轉效果 (0.8s)
+ * 4. 稀有度爆發光效 (1s)
+ * 5. 淡出切換到 CardRevealScene
+ *
+ * 總持續時間：約 3.5 秒
  */
 export class DrawScene extends Phaser.Scene {
-  private eventBridge: EventBridge;
-  private cards: Phaser.GameObjects.Image[] = [];
-  private energyParticles?: Phaser.GameObjects.Particles.ParticleEmitter;
-  private isAnimating = false;
-  private answerId = 0;
+  private rarity: RarityKey = 'Common';
+  private answerId: number = 0;
+  private card: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({ key: 'DrawScene' });
-    this.eventBridge = EventBridge.getInstance();
   }
 
-  init(data: { answerId?: number }) {
-    this.answerId = data.answerId ?? 0;
-  }
+  init(data: { rarity?: RarityKey; answerId?: number }): void {
+    this.rarity = data.rarity || 'Common';
+    this.answerId = data.answerId || 0;
 
-  create() {
-    const { width, height } = this.cameras.main;
-
-    // 設定背景
-    this.cameras.main.setBackgroundColor('#1a1a2e');
-
-    // 建立卡牌堆疊
-    this.createCardDeck(width, height);
-
-    // 建立能量粒子系統
-    this.createEnergyParticles(width, height);
-
-    // 監聽 React 事件
-    this.setupEventListeners();
-
-    // 通知 React 場景已準備好
-    this.eventBridge.emit(EVENTS.SCENE_READY, { scene: 'DrawScene' });
-
-    // 自動開始抽取動畫
-    this.startDrawAnimation({ answerId: this.answerId });
-  }
-
-  /**
-   * 建立卡牌堆疊
-   */
-  private createCardDeck(width: number, height: number) {
-    const cardCount = 50;
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    for (let i = 0; i < cardCount; i++) {
-      const card = this.add.image(centerX, centerY + 200, 'card-back');
-      card.setScale(0.5);
-      card.setAlpha(0.8);
-      card.setDepth(i);
-
-      // 隨機散開效果
-      const offsetX = Phaser.Math.Between(-20, 20);
-      const offsetY = Phaser.Math.Between(-10, 10);
-      card.x += offsetX;
-      card.y += offsetY;
-
-      this.cards.push(card);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DrawScene] 初始化，稀有度:', this.rarity, '答案ID:', this.answerId);
     }
   }
 
-  /**
-   * 建立能量粒子系統
-   */
-  private createEnergyParticles(width: number, height: number) {
-    // 使用粒子發射器
-    this.energyParticles = this.add.particles(0, 0, 'particle-energy', {
-      x: { min: 0, max: width },
-      y: { min: 0, max: height },
-      speed: { min: 50, max: 150 },
-      scale: { start: 0.3, end: 0 },
-      alpha: { start: 0.8, end: 0 },
-      lifespan: 2000,
-      blendMode: 'ADD',
-      frequency: 50,
-      emitting: false,
-    });
-  }
+  create(): void {
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
+    const color = getRarityColor(this.rarity);
 
-  /**
-   * 設定事件監聽器
-   */
-  private setupEventListeners() {
-    // 監聽開始抽取事件
-    this.eventBridge.on(EVENTS.START_DRAW, (data) => {
-      this.startDrawAnimation(data as { answerId: number });
+    // 1. 建立背景光暈
+    this.createBackgroundGlow(centerX, centerY);
+
+    // 2. 建立卡牌
+    this.card = this.createCard(centerX, centerY, color);
+
+    // 3. 卡牌飛入動畫
+    this.animateCardEntry(this.card, centerX, centerY);
+
+    // 4. 能量粒子聚集
+    this.createEnergyParticles(centerX, centerY, color);
+
+    // 5. 3D 翻轉效果 (延遲 1.2 秒)
+    this.time.delayedCall(1200, () => {
+      this.animateCardFlip();
     });
 
-    // 監聽停止場景事件
-    this.eventBridge.on(EVENTS.STOP_SCENE, () => {
-      this.stopAnimation();
-    });
-  }
-
-  /**
-   * 開始抽取動畫
-   */
-  private startDrawAnimation(data: { answerId: number }) {
-    if (this.isAnimating) return;
-
-    this.isAnimating = true;
-    const { width, height } = this.cameras.main;
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    // 1. 卡牌飛入動畫
-    this.playCardFlyInAnimation(centerX, centerY);
-
-    // 2. 能量粒子聚集
-    this.playEnergyGatherAnimation(centerX, centerY);
-
-    // 3. 等待 2 秒後完成
+    // 6. 稀有度爆發 (延遲 2 秒)
     this.time.delayedCall(2000, () => {
-      this.completeDrawAnimation(data.answerId);
+      this.createRarityBurst(centerX, centerY, color);
     });
+
+    // 7. 完成動畫 (延遲 3.5 秒)
+    this.time.delayedCall(3500, () => {
+      this.completeAnimation();
+    });
+
+    // 監聽停止事件
+    this.events.on(EVENTS.STOP_SCENE, this.stopScene, this);
+  }
+
+  /**
+   * 建立背景光暈
+   */
+  private createBackgroundGlow(x: number, y: number): void {
+    const glow = this.add.circle(x, y, 200, 0x000000, 0);
+
+    this.tweens.add({
+      targets: glow,
+      alpha: { from: 0, to: 0.3 },
+      scale: { from: 0.5, to: 1.5 },
+      duration: 2000,
+      ease: 'Sine.easeInOut',
+      yoyo: true,
+      repeat: -1,
+    });
+  }
+
+  /**
+   * 建立卡牌容器
+   */
+  private createCard(x: number, y: number, color: number): Phaser.GameObjects.Container {
+    const card = this.add.container(x, -200);
+
+    // 卡牌背景
+    const bg = this.add.rectangle(0, 0, 200, 280, 0x1a1a1a);
+    bg.setStrokeStyle(2, color, 0.8);
+
+    // 卡牌邊框發光
+    const glow = this.add.rectangle(0, 0, 200, 280, color, 0);
+
+    // 卡牌圖示
+    const icon = this.add.text(0, 0, '📖', {
+      fontSize: '80px',
+    });
+    icon.setOrigin(0.5);
+
+    card.add([glow, bg, icon]);
+    card.setData('glow', glow);
+    card.setData('bg', bg);
+    card.setData('icon', icon);
+
+    return card;
   }
 
   /**
    * 卡牌飛入動畫
    */
-  private playCardFlyInAnimation(centerX: number, centerY: number) {
-    this.cards.forEach((card, index) => {
-      // 計算目標位置（螺旋排列）
-      const angle = (index / this.cards.length) * Math.PI * 4;
-      const radius = 100 + (index % 5) * 20;
-      const targetX = centerX + Math.cos(angle) * radius;
-      const targetY = centerY + Math.sin(angle) * radius;
+  private animateCardEntry(
+    card: Phaser.GameObjects.Container,
+    targetX: number,
+    targetY: number
+  ): void {
+    this.tweens.add({
+      targets: card,
+      y: targetY,
+      duration: 1000,
+      ease: 'Back.easeOut',
+      onComplete: () => {
+        // 落地後輕微震動
+        this.cameras.main.shake(200, 0.005);
+      },
+    });
 
-      // 飛入動畫
-      this.tweens.add({
-        targets: card,
-        x: targetX,
-        y: targetY,
-        scale: 0.3,
-        alpha: 0.6,
-        rotation: angle,
-        duration: 1000,
-        delay: index * 20,
-        ease: 'Cubic.easeOut',
-      });
+    // 邊框發光動畫
+    const glow = card.getData('glow') as Phaser.GameObjects.Rectangle;
+    this.tweens.add({
+      targets: glow,
+      alpha: { from: 0, to: 0.2 },
+      duration: 1000,
+      ease: 'Sine.easeInOut',
+      yoyo: true,
+      repeat: -1,
     });
   }
 
   /**
-   * 能量粒子聚集動畫
+   * 能量粒子聚集效果
    */
-  private playEnergyGatherAnimation(centerX: number, centerY: number) {
-    if (!this.energyParticles) return;
+  private createEnergyParticles(x: number, y: number, color: number): void {
+    const width = this.cameras.main.width;
+    const height = this.cameras.main.height;
 
-    // 開始發射粒子
-    this.energyParticles.start();
-
-    // 粒子向中心移動
-    this.energyParticles.setGravity(0, 0);
-    this.energyParticles.setEmitterOp('gravityX', (particle: any) => {
-      return (centerX - particle.x) * 2;
-    });
-    this.energyParticles.setEmitterOp('gravityY', (particle: any) => {
-      return (centerY - particle.y) * 2;
+    // 使用 Phaser 3.60+ 粒子 API
+    const emitter = this.add.particles(x, y, 'particle', {
+      x: { min: 0, max: width },
+      y: { min: 0, max: height },
+      speed: { min: 100, max: 200 },
+      scale: { start: 0.5, end: 0 },
+      alpha: { start: 0.8, end: 0 },
+      lifespan: 1500,
+      frequency: 30,
+      tint: color,
+      blendMode: Phaser.BlendModes.ADD,
+      emitZone: {
+        type: 'edge',
+        source: new Phaser.Geom.Rectangle(0, 0, width, height),
+        quantity: 2,
+      },
+      moveToX: x,
+      moveToY: y,
     });
 
     // 1.5 秒後停止發射
     this.time.delayedCall(1500, () => {
-      this.energyParticles?.stop();
+      emitter.stop();
+    });
+
+    // 3 秒後銷毀
+    this.time.delayedCall(3000, () => {
+      emitter.destroy();
     });
   }
 
   /**
-   * 完成抽取動畫
+   * 3D 翻轉效果（使用 scaleX 模擬）
    */
-  private completeDrawAnimation(answerId: number) {
-    // 卡牌消失動畫
-    this.cards.forEach((card, index) => {
-      this.tweens.add({
-        targets: card,
-        alpha: 0,
-        scale: 0,
-        duration: 500,
-        delay: index * 10,
-        ease: 'Back.easeIn',
+  private animateCardFlip(): void {
+    if (!this.card) return;
+
+    const icon = this.card.getData('icon') as Phaser.GameObjects.Text;
+
+    // 卡片翻轉
+    this.tweens.add({
+      targets: this.card,
+      scaleX: { from: 1, to: 0 },
+      duration: 400,
+      ease: 'Sine.easeInOut',
+      onComplete: () => {
+        // 翻轉回來
+        this.tweens.add({
+          targets: this.card,
+          scaleX: { from: 0, to: 1 },
+          duration: 400,
+          ease: 'Sine.easeInOut',
+        });
+      },
+    });
+
+    // 圖示同步翻轉
+    this.tweens.add({
+      targets: icon,
+      scaleX: { from: 1, to: 0 },
+      duration: 400,
+      ease: 'Sine.easeInOut',
+      onComplete: () => {
+        this.tweens.add({
+          targets: icon,
+          scaleX: { from: 0, to: 1 },
+          duration: 400,
+          ease: 'Sine.easeInOut',
+        });
+      },
+    });
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DrawScene] 翻轉動畫');
+    }
+  }
+
+  /**
+   * 稀有度爆發效果
+   */
+  private createRarityBurst(x: number, y: number, color: number): void {
+    // 光芒爆發
+    const flash = this.add.circle(x, y, 50, color, 0);
+
+    this.tweens.add({
+      targets: flash,
+      alpha: { from: 0.8, to: 0 },
+      scale: { from: 0, to: 8 },
+      duration: 1000,
+      ease: 'Cubic.easeOut',
+      onComplete: () => {
+        flash.destroy();
+      },
+    });
+
+    // 星星粒子爆發
+    const emitter = this.add.particles(x, y, 'star', {
+      speed: { min: 150, max: 300 },
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.6, end: 0 },
+      alpha: { start: 1, end: 0 },
+      lifespan: 1500,
+      quantity: 30,
+      tint: color,
+      blendMode: Phaser.BlendModes.ADD,
+    });
+
+    emitter.explode();
+
+    this.time.delayedCall(2000, () => {
+      emitter.destroy();
+    });
+
+    // 相機閃光
+    this.cameras.main.flash(500, 255, 255, 255);
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[DrawScene] ${getRarityName(this.rarity)} 爆發效果`);
+    }
+  }
+
+  /**
+   * 完成動畫，切換場景
+   */
+  private completeAnimation(): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DrawScene] 動畫完成');
+    }
+
+    // 通知 React
+    const bridge = EventBridge.getInstance();
+    bridge.trigger(EVENTS.DRAW_COMPLETE, {
+      rarity: this.rarity,
+      answerId: this.answerId,
+    });
+
+    // 淡出並切換到 CardRevealScene
+    this.cameras.main.fadeOut(500);
+
+    this.cameras.main.once('camerafadeoutcomplete', () => {
+      this.scene.start('CardRevealScene', {
+        rarity: this.rarity,
+        answerId: this.answerId,
       });
     });
-
-    // 發送完成事件給 React
-    this.time.delayedCall(800, () => {
-      this.eventBridge.emit(EVENTS.DRAW_COMPLETE, { answerId });
-      this.isAnimating = false;
-
-      // 啟動揭示場景
-      this.scene.start('CardRevealScene', { answerId });
-    });
   }
 
   /**
-   * 停止動畫
+   * 停止場景
    */
-  private stopAnimation() {
-    this.isAnimating = false;
-    this.tweens.killAll();
-    this.energyParticles?.stop();
-
-    // 重置卡牌
-    this.cards.forEach((card) => {
-      card.destroy();
-    });
-    this.cards = [];
+  private stopScene(): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DrawScene] 強制停止');
+    }
+    this.scene.stop();
   }
 
   /**
-   * 場景銷毀時清理
+   * 場景關閉時清理
    */
-  shutdown() {
-    this.eventBridge.off(EVENTS.START_DRAW);
-    this.eventBridge.off(EVENTS.STOP_SCENE);
+  shutdown(): void {
+    this.events.off(EVENTS.STOP_SCENE, this.stopScene, this);
   }
 }
+
+export default DrawScene;

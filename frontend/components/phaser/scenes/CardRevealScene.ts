@@ -1,269 +1,258 @@
-import * as Phaser from 'phaser';
+import Phaser from 'phaser';
 import { EventBridge, EVENTS } from '../EventBridge';
-import { Rarity, RARITY_COLORS } from '@/hooks/use-answers';
+import { getRarityColor, getRarityName, RARITY_COLORS } from '../PhaserGame';
+
+type RarityKey = keyof typeof RARITY_COLORS;
 
 /**
  * CardRevealScene - 卡片揭示場景
- * 顯示 3D 卡牌翻轉、稀有度爆發特效等動畫
+ *
+ * 持續的視覺效果：
+ * - 發光卡片浮動
+ * - 多層光環動畫
+ * - 環繞粒子效果
+ * - 稀有度特殊效果（傳說/史詩）
+ *
+ * 場景持續直到使用者點擊「鑄造 NFT」或關閉
  */
 export class CardRevealScene extends Phaser.Scene {
-  private eventBridge: EventBridge;
-  private card?: Phaser.GameObjects.Image;
-  private glow?: Phaser.GameObjects.Image;
-  private particles?: Phaser.GameObjects.Particles.ParticleEmitter;
-  private answerId = 0;
-  private rarity: Rarity = 'Common';
+  private rarity: RarityKey = 'Common';
+  private answerId: number = 0;
+  private card: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({ key: 'CardRevealScene' });
-    this.eventBridge = EventBridge.getInstance();
   }
 
-  init(data: { answerId: number }) {
-    this.answerId = data.answerId;
-    // 根據 answerId 計算稀有度（簡化版，實際應從 answers.json 讀取）
-    this.rarity = this.calculateRarity(data.answerId);
+  init(data: { rarity?: RarityKey; answerId?: number }): void {
+    this.rarity = data.rarity || 'Common';
+    this.answerId = data.answerId || 0;
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[CardRevealScene] 初始化，稀有度:', this.rarity);
+    }
   }
 
-  create() {
-    const { width, height } = this.cameras.main;
-    const centerX = width / 2;
-    const centerY = height / 2;
+  create(): void {
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
+    const color = getRarityColor(this.rarity);
 
-    // 設定背景
-    this.cameras.main.setBackgroundColor('#0f0f1e');
+    // 淡入效果
+    this.cameras.main.fadeIn(500);
 
-    // 建立卡牌
-    this.createCard(centerX, centerY);
+    // 1. 建立發光卡片
+    this.card = this.createRevealCard(centerX, centerY, color);
 
-    // 建立光效
-    this.createGlow(centerX, centerY);
+    // 2. 持續光環動畫
+    this.createAuraEffect(centerX, centerY, color);
 
-    // 建立粒子特效
-    this.createParticleEffect(centerX, centerY);
+    // 3. 環繞粒子
+    this.createOrbitParticles(centerX, centerY, color);
 
-    // 開始揭示動畫
-    this.startRevealAnimation();
+    // 4. 稀有度特殊效果
+    if (this.rarity === 'Legendary') {
+      this.createLegendaryEffect(centerX, centerY);
+    } else if (this.rarity === 'Epic') {
+      this.createEpicEffect(centerX, centerY);
+    }
 
-    // 監聽事件
-    this.setupEventListeners();
-  }
-
-  /**
-   * 計算稀有度（簡化版）
-   */
-  private calculateRarity(answerId: number): Rarity {
-    // 簡化的稀有度計算（實際應從 answers.json 讀取）
-    const rarityIndex = answerId % 50;
-
-    if (rarityIndex < 35) return 'Common';   // 0-34: Common (70%)
-    if (rarityIndex < 45) return 'Rare';     // 35-44: Rare (20%)
-    if (rarityIndex < 49) return 'Epic';     // 45-48: Epic (8%)
-    return 'Legendary';                       // 49: Legendary (2%)
-  }
-
-  /**
-   * 建立卡牌
-   */
-  private createCard(x: number, y: number) {
-    // 卡牌背面
-    this.card = this.add.image(x, y, 'card-back');
-    this.card.setScale(1.5);
-    this.card.setAlpha(0);
-  }
-
-  /**
-   * 建立光效
-   */
-  private createGlow(x: number, y: number) {
-    const glowKey = `glow-${this.rarity.toLowerCase()}`;
-    this.glow = this.add.image(x, y, glowKey);
-    this.glow.setScale(2);
-    this.glow.setAlpha(0);
-    this.glow.setBlendMode(Phaser.BlendModes.ADD);
-  }
-
-  /**
-   * 建立粒子特效
-   */
-  private createParticleEffect(x: number, y: number) {
-    const color = this.getRarityParticleColor();
-
-    this.particles = this.add.particles(x, y, 'particle-sparkle', {
-      speed: { min: 100, max: 200 },
-      scale: { start: 0.5, end: 0 },
-      alpha: { start: 1, end: 0 },
-      lifespan: 1500,
-      blendMode: 'ADD',
-      frequency: 30,
-      tint: color,
-      emitting: false,
-    });
-  }
-
-  /**
-   * 取得稀有度粒子顏色
-   */
-  private getRarityParticleColor(): number {
-    const colorHex = RARITY_COLORS[this.rarity].replace('#', '');
-    return parseInt(colorHex, 16);
-  }
-
-  /**
-   * 開始揭示動畫
-   */
-  private startRevealAnimation() {
-    if (!this.card || !this.glow || !this.particles) return;
-
-    // 1. 卡牌淡入
-    this.tweens.add({
-      targets: this.card,
-      alpha: 1,
-      duration: 300,
-      ease: 'Power2',
-    });
-
-    // 2. 3D 翻轉效果（0.5 秒後開始）
+    // 通知 React 卡片已揭示
     this.time.delayedCall(500, () => {
-      this.playCardFlipAnimation();
-    });
-
-    // 3. 稀有度爆發（1 秒後）
-    this.time.delayedCall(1000, () => {
-      this.playRarityBurstAnimation();
-    });
-
-    // 4. 持續光效和粒子（1.5 秒後）
-    this.time.delayedCall(1500, () => {
-      this.playIdleAnimation();
-    });
-
-    // 5. 通知 React 揭示完成（2 秒後）
-    this.time.delayedCall(2000, () => {
-      this.eventBridge.emit(EVENTS.CARD_REVEALED, {
-        answerId: this.answerId,
+      const bridge = EventBridge.getInstance();
+      bridge.trigger(EVENTS.CARD_REVEALED, {
         rarity: this.rarity,
+        answerId: this.answerId,
       });
     });
+
+    // 監聽停止事件
+    this.events.on(EVENTS.STOP_SCENE, this.stopScene, this);
   }
 
   /**
-   * 卡牌翻轉動畫
+   * 建立揭示卡片
    */
-  private playCardFlipAnimation() {
-    if (!this.card) return;
+  private createRevealCard(
+    x: number,
+    y: number,
+    color: number
+  ): Phaser.GameObjects.Container {
+    const card = this.add.container(x, y);
+    card.setScale(0.8);
 
-    // 3D 翻轉效果（使用 scaleX 模擬）
-    this.tweens.add({
-      targets: this.card,
-      scaleX: 0,
-      duration: 200,
-      ease: 'Power2',
-      yoyo: true,
-      onYoyo: () => {
-        // 翻轉到一半時切換到正面
-        const frameKey = `card-frame-${this.rarity.toLowerCase()}`;
-        this.card?.setTexture(frameKey);
-      },
-      onComplete: () => {
-        this.card?.setScaleX(1.5);
-      },
+    // 卡牌背景
+    const bg = this.add.rectangle(0, 0, 240, 320, 0x1a1a1a);
+    bg.setStrokeStyle(3, color, 1);
+
+    // 內發光
+    const innerGlow = this.add.rectangle(0, 0, 236, 316, color, 0.1);
+
+    // 卡牌圖示
+    const icon = this.add.text(0, -60, '📖', {
+      fontSize: '100px',
     });
+    icon.setOrigin(0.5);
 
-    // 翻轉時的高度變化
-    this.tweens.add({
-      targets: this.card,
-      y: '-=20',
-      duration: 200,
-      ease: 'Sine.easeOut',
-      yoyo: true,
+    // 稀有度標籤
+    const colorHex = '#' + color.toString(16).padStart(6, '0');
+    const rarityText = this.add.text(0, 80, getRarityName(this.rarity), {
+      fontSize: '24px',
+      fontFamily: 'Arial',
+      color: colorHex,
     });
-  }
+    rarityText.setOrigin(0.5);
 
-  /**
-   * 稀有度爆發動畫
-   */
-  private playRarityBurstAnimation() {
-    if (!this.glow || !this.particles) return;
+    card.add([innerGlow, bg, icon, rarityText]);
+    card.setData('innerGlow', innerGlow);
 
-    // 光效爆發
+    // 卡片輕微浮動
     this.tweens.add({
-      targets: this.glow,
-      alpha: 1,
-      scale: 3,
-      duration: 300,
-      ease: 'Power2',
-    });
-
-    // 粒子爆發
-    this.particles.start();
-    this.particles.explode(20);
-
-    // 0.5 秒後減弱
-    this.time.delayedCall(500, () => {
-      this.tweens.add({
-        targets: this.glow,
-        alpha: 0.3,
-        scale: 2,
-        duration: 500,
-        ease: 'Sine.easeOut',
-      });
-    });
-  }
-
-  /**
-   * 持續待機動畫
-   */
-  private playIdleAnimation() {
-    if (!this.glow || !this.particles || !this.card) return;
-
-    // 光效脈動
-    this.tweens.add({
-      targets: this.glow,
-      alpha: 0.5,
-      scale: 2.2,
-      duration: 1500,
-      ease: 'Sine.easeInOut',
-      yoyo: true,
-      repeat: -1,
-    });
-
-    // 粒子持續發射
-    this.particles.setFrequency(100);
-
-    // 卡牌輕微浮動
-    this.tweens.add({
-      targets: this.card,
-      y: '-=10',
+      targets: card,
+      y: y - 10,
       duration: 2000,
       ease: 'Sine.easeInOut',
       yoyo: true,
       repeat: -1,
     });
+
+    // 縮放進入動畫
+    this.tweens.add({
+      targets: card,
+      scale: { from: 0.5, to: 1 },
+      duration: 800,
+      ease: 'Back.easeOut',
+    });
+
+    return card;
   }
 
   /**
-   * 設定事件監聽器
+   * 持續光環效果
    */
-  private setupEventListeners() {
-    this.eventBridge.on(EVENTS.STOP_SCENE, () => {
-      this.stopAnimation();
+  private createAuraEffect(x: number, y: number, color: number): void {
+    // 多層光環
+    for (let i = 0; i < 3; i++) {
+      const radius = 150 + i * 30;
+      const glow = this.add.circle(x, y, radius, color, 0.1);
+      glow.setBlendMode(Phaser.BlendModes.ADD);
+
+      this.tweens.add({
+        targets: glow,
+        alpha: { from: 0.1, to: 0.3 },
+        scale: { from: 1, to: 1.1 },
+        duration: 2000 + i * 500,
+        ease: 'Sine.easeInOut',
+        yoyo: true,
+        repeat: -1,
+        delay: i * 300,
+      });
+    }
+  }
+
+  /**
+   * 環繞粒子效果
+   */
+  private createOrbitParticles(x: number, y: number, color: number): void {
+    // 根據稀有度調整粒子密度
+    const frequencyMap: Record<RarityKey, number> = {
+      Common: 150,
+      Rare: 100,
+      Epic: 80,
+      Legendary: 50,
+    };
+
+    // 環繞軌道粒子
+    this.add.particles(x, y, 'particle', {
+      speed: 50,
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.3, end: 0 },
+      alpha: { start: 0.6, end: 0 },
+      lifespan: 2000,
+      frequency: frequencyMap[this.rarity] || 100,
+      tint: color,
+      blendMode: Phaser.BlendModes.ADD,
+      radial: true,
     });
   }
 
   /**
-   * 停止動畫
+   * 傳說級特殊效果
    */
-  private stopAnimation() {
-    this.tweens.killAll();
-    this.particles?.stop();
+  private createLegendaryEffect(x: number, y: number): void {
+    // 旋轉光線
+    const rays = this.add.graphics();
+    rays.lineStyle(2, 0xd4af37, 0.3);
+
+    const rayCount = 12;
+    for (let i = 0; i < rayCount; i++) {
+      const angle = (Math.PI * 2 / rayCount) * i;
+      const x1 = x + Math.cos(angle) * 100;
+      const y1 = y + Math.sin(angle) * 100;
+      const x2 = x + Math.cos(angle) * 300;
+      const y2 = y + Math.sin(angle) * 300;
+
+      rays.lineBetween(x1, y1, x2, y2);
+    }
+
+    rays.setBlendMode(Phaser.BlendModes.ADD);
+
+    // 旋轉動畫
+    this.tweens.add({
+      targets: rays,
+      angle: 360,
+      duration: 8000,
+      ease: 'Linear',
+      repeat: -1,
+    });
+
+    // 星星粒子環繞
+    this.add.particles(x, y, 'star', {
+      speed: 30,
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.4, end: 0 },
+      alpha: { start: 0.8, end: 0 },
+      lifespan: 3000,
+      frequency: 200,
+      tint: 0xd4af37,
+      blendMode: Phaser.BlendModes.ADD,
+    });
+  }
+
+  /**
+   * 史詩級特殊效果
+   */
+  private createEpicEffect(x: number, y: number): void {
+    // 紫色能量波
+    const wave = this.add.circle(x, y, 100, 0xa78bfa, 0);
+    wave.setBlendMode(Phaser.BlendModes.ADD);
+
+    this.tweens.add({
+      targets: wave,
+      scale: { from: 1, to: 2.5 },
+      alpha: { from: 0.3, to: 0 },
+      duration: 2000,
+      ease: 'Cubic.easeOut',
+      repeat: -1,
+    });
+  }
+
+  /**
+   * 停止場景
+   */
+  private stopScene(): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[CardRevealScene] 停止場景');
+    }
     this.scene.stop();
   }
 
   /**
-   * 場景銷毀時清理
+   * 場景關閉時清理
    */
-  shutdown() {
-    this.eventBridge.off(EVENTS.STOP_SCENE);
+  shutdown(): void {
+    this.events.off(EVENTS.STOP_SCENE, this.stopScene, this);
   }
 }
+
+export default CardRevealScene;

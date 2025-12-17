@@ -19,7 +19,7 @@
 | Phase 2: Foundational | ✅ 已完成 | 11/22 | 基礎架構（部分完成） |
 | **🔧 Phase 0** | ⏳ **待完成** | **0/13** | **共同前置作業（必須先完成）** |
 | 🅰️ Developer A | ⏸️ 待開始 | 0/30 | US1 + US2 + US4 (部分) |
-| 🅱️ Developer B | 🟡 進行中 | 21/30 | US3 + US5 + US4 (部分) |
+| 🅱️ Developer B | 🟡 進行中 | 26/30 | US3 + US5 + US4 (部分) |
 | Phase 8: Polish | ⏸️ 待開始 | 0/9 | 最終優化與測試 |
 
 ### Developer A 路線任務分布
