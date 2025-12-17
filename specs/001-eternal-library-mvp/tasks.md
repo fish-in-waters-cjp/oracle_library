@@ -518,9 +518,9 @@ oracle_library/
 
 **Purpose**: 跨 User Story 的改進與優化
 
-- [ ] T090 [P] [DevA] 執行所有合約測試並確保通過 `iota move test`
-- [ ] T091 [P] [DevA] 執行前端型別檢查 `bun run type-check`
-- [ ] T092 [P] [DevA] 執行前端 lint 檢查 `bun run lint`
+- [x] T090 [P] [DevA] 執行所有合約測試並確保通過 `iota move test`
+- [x] T091 [P] [DevA] 執行前端型別檢查 `bun run type-check`
+- [x] T092 [P] [DevA] 執行前端 lint 檢查 `bun run lint`
 - [ ] T093 [DevB] 程式碼清理與重構
 - [ ] T094 [P] [DevA] 首頁 Bundle 優化（< 500KB gzipped,不含 Phaser）
 - [ ] T095 [P] [DevB] 完整 Bundle 優化（< 800KB gzipped,含 Phaser 懶載入）
