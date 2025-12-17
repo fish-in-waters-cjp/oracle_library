@@ -5,6 +5,7 @@ import {
   canCheckIn as canCheckInToday,
   getNextMidnight,
 } from '@/lib/time';
+import { MOCK_ENABLED, MOCK_DATA } from '@/config/mock';
 
 /**
  * CheckInRecord Move Object 的 fields 類型
@@ -64,6 +65,29 @@ export interface UseCheckInStateReturn {
 export function useCheckInState(
   address: string | null
 ): UseCheckInStateReturn {
+  // === MOCK 模式 ===
+  if (MOCK_ENABLED) {
+    // Mock 模式下返回模擬資料（已有簽到記錄，可以簽到）
+    const currentDay = getCurrentDayNumber();
+    const mockLastCheckInDay = currentDay - 1; // 昨天簽到過
+    const mockCanCheckIn = canCheckInToday(mockLastCheckInDay);
+
+    return {
+      hasRecord: true,
+      recordObjectId: MOCK_DATA.checkIn.recordId,
+      lastCheckInDay: mockLastCheckInDay,
+      totalCheckIns: MOCK_DATA.checkIn.totalCheckIns,
+      consecutiveDays: MOCK_DATA.checkIn.consecutiveDays,
+      canCheckIn: mockCanCheckIn,
+      nextCheckInTime: mockCanCheckIn ? null : getNextMidnight(),
+      isLoading: false,
+      refetch: () => {
+        console.log('[useCheckInState] Mock refetch called');
+      },
+    };
+  }
+
+  // === 真實模式 ===
   const { data, isLoading, refetch } = useIotaClientQuery(
     'getOwnedObjects',
     {

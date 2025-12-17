@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useSignAndExecuteTransaction } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
 import { PACKAGE_ID, MGC_TREASURY_ID } from '@/consts';
+import { MOCK_ENABLED, MOCK_DATA } from '@/config/mock';
 
 // Clock 物件的固定地址
 const CLOCK_ID = '0x6';
@@ -44,7 +46,11 @@ export interface UseCheckInReturn {
  * ```
  */
 export function useCheckIn(): UseCheckInReturn {
-  const { mutateAsync, isPending, error } = useSignAndExecuteTransaction();
+  const { mutateAsync, isPending: txPending, error: txError } = useSignAndExecuteTransaction();
+
+  // Mock 模式下的狀態
+  const [mockPending, setMockPending] = useState(false);
+  const [mockError, setMockError] = useState<Error | null>(null);
 
   /**
    * 首次簽到
@@ -52,6 +58,26 @@ export function useCheckIn(): UseCheckInReturn {
    * 創建 UserCheckInRecord 並獲得 5 MGC 獎勵
    */
   const firstCheckIn = async () => {
+    // === MOCK 模式 ===
+    if (MOCK_ENABLED) {
+      console.log('[useCheckIn] Mock 模式：模擬首次簽到');
+      setMockPending(true);
+      setMockError(null);
+
+      try {
+        // 模擬交易延遲
+        await new Promise((resolve) => setTimeout(resolve, MOCK_DATA.checkIn.delayMs));
+        console.log('[useCheckIn] Mock 首次簽到成功');
+      } catch (err) {
+        setMockError(err instanceof Error ? err : new Error('Mock check-in failed'));
+        throw err;
+      } finally {
+        setMockPending(false);
+      }
+      return;
+    }
+
+    // === 真實模式 ===
     const tx = new Transaction();
 
     tx.moveCall({
@@ -75,6 +101,26 @@ export function useCheckIn(): UseCheckInReturn {
    * @param recordId - 使用者的 UserCheckInRecord Object ID
    */
   const checkIn = async (recordId: string) => {
+    // === MOCK 模式 ===
+    if (MOCK_ENABLED) {
+      console.log('[useCheckIn] Mock 模式：模擬每日簽到', { recordId });
+      setMockPending(true);
+      setMockError(null);
+
+      try {
+        // 模擬交易延遲
+        await new Promise((resolve) => setTimeout(resolve, MOCK_DATA.checkIn.delayMs));
+        console.log('[useCheckIn] Mock 每日簽到成功');
+      } catch (err) {
+        setMockError(err instanceof Error ? err : new Error('Mock check-in failed'));
+        throw err;
+      } finally {
+        setMockPending(false);
+      }
+      return;
+    }
+
+    // === 真實模式 ===
     const tx = new Transaction();
 
     tx.moveCall({
@@ -94,7 +140,7 @@ export function useCheckIn(): UseCheckInReturn {
   return {
     firstCheckIn,
     checkIn,
-    isPending,
-    error: error as Error | null,
+    isPending: MOCK_ENABLED ? mockPending : txPending,
+    error: MOCK_ENABLED ? mockError : (txError as Error | null),
   };
 }

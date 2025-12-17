@@ -36,6 +36,14 @@ export const MOCK_DATA = {
   mint: {
     delayMs: 1200, // 模擬鑄造延遲
   },
+
+  // 簽到
+  checkIn: {
+    delayMs: 500, // 模擬簽到延遲
+    recordId: 'mock-check-in-record-0x1234567890',
+    totalCheckIns: 5, // 模擬累積簽到次數
+    consecutiveDays: 3, // 模擬連續簽到天數
+  },
 } as const;
 
 // ===== 工具函數 =====
