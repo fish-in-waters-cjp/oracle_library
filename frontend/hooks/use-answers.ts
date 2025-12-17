@@ -189,3 +189,22 @@ export function getRarityLabel(rarity: Rarity): string {
 export function getRarityColor(rarity: Rarity): string {
   return RARITY_COLORS[rarity];
 }
+
+/**
+ * 稀有度顯示資訊
+ */
+export const RARITY_INFO = {
+  0: { label: 'common', name: '普通', color: 'gray' },
+  1: { label: 'rare', name: '稀有', color: 'blue' },
+  2: { label: 'epic', name: '史詩', color: 'purple' },
+  3: { label: 'legendary', name: '傳說', color: 'gold' },
+} as const;
+
+export type RarityValue = 0 | 1 | 2 | 3;
+
+/**
+ * 取得稀有度的顯示資訊
+ */
+export function getRarityDisplayInfo(rarity: RarityValue) {
+  return RARITY_INFO[rarity];
+}

@@ -149,6 +149,16 @@ module oracle_library::oracle_draw {
         &record.question_hash
     }
 
+    /// 取得抽取成本常數
+    public fun draw_cost(): u64 {
+        DRAW_COST
+    }
+
+    /// 取得最大答案 ID 常數
+    public fun max_answer_id(): u8 {
+        MAX_ANSWER_ID
+    }
+
     // ====== Friend 函數 ======
 
     /// 銷毀 DrawRecord 並回傳資料
@@ -176,5 +186,37 @@ module oracle_library::oracle_draw {
     /// 測試專用：初始化 MGC
     public fun init_for_testing_mgc(ctx: &mut TxContext) {
         oracle_library::mgc::init_for_testing(ctx);
+    }
+
+    #[test_only]
+    /// 測試專用：建立 DrawRecord（跳過支付）
+    public fun create_for_testing(
+        answer_id: u8,
+        question_hash: vector<u8>,
+        ctx: &mut TxContext
+    ): DrawRecord {
+        let sender = ctx.sender();
+        let timestamp = ctx.epoch_timestamp_ms();
+
+        DrawRecord {
+            id: object::new(ctx),
+            owner: sender,
+            answer_id,
+            question_hash,
+            timestamp,
+        }
+    }
+
+    #[test_only]
+    /// 測試專用：銷毀 DrawRecord
+    public fun destroy_for_testing(record: DrawRecord) {
+        let DrawRecord {
+            id,
+            owner: _,
+            answer_id: _,
+            question_hash: _,
+            timestamp: _,
+        } = record;
+        object::delete(id);
     }
 }

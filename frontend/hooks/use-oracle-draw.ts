@@ -209,3 +209,10 @@ export async function hashQuestionAsync(question: string): Promise<Uint8Array> {
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   return new Uint8Array(hashBuffer);
 }
+
+/**
+ * 取得抽取成本常數
+ */
+export function getDrawCost(): number {
+  return 10;
+}

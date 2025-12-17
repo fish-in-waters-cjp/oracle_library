@@ -19,7 +19,7 @@
 | Phase 2: Foundational | ✅ 已完成 | 11/22 | 基礎架構（部分完成） |
 | **🔧 Phase 0** | ⏳ **待完成** | **0/13** | **共同前置作業（必須先完成）** |
 | 🅰️ Developer A | ⏸️ 待開始 | 0/30 | US1 + US2 + US4 (部分) |
-| 🅱️ Developer B | 🟡 進行中 | 13/30 | US3 + US5 + US4 (部分) |
+| 🅱️ Developer B | 🟡 進行中 | 21/30 | US3 + US5 + US4 (部分) |
 | Phase 8: Polish | ⏸️ 待開始 | 0/9 | 最終優化與測試 |
 
 ### Developer A 路線任務分布
@@ -376,8 +376,8 @@ oracle_library/
 ### Tests for User Story 3
 
 - [x] T052 [P] [DevB] [US3] 撰寫 oracle_draw 合約測試 `contracts/tests/oracle_draw_tests.move`
-- [ ] T053 [P] [DevB] [US3] 撰寫 useOracleDraw Hook 測試 `frontend/__tests__/hooks/use-oracle-draw.test.ts`
-- [ ] T054 [P] [DevB] [US3] 撰寫 useAnswers Hook 測試 `frontend/__tests__/hooks/use-answers.test.ts`
+- [x] T053 [P] [DevB] [US3] 撰寫 useOracleDraw Hook 測試 `frontend/__tests__/hooks/use-oracle-draw.test.ts`
+- [x] T054 [P] [DevB] [US3] 撰寫 useAnswers Hook 測試 `frontend/__tests__/hooks/use-answers.test.ts`
 - [x] T055 [P] [DevB] [US3] 撰寫 DrawForm 元件測試 `frontend/__tests__/components/draw-form.test.tsx`
 
 ### Implementation for User Story 3

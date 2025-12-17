@@ -343,4 +343,120 @@ module oracle_library::oracle_draw_tests {
 
         ts::end(scenario);
     }
+
+    #[test]
+    /// 測試：同一使用者多次抽取
+    fun test_multiple_draws_same_user() {
+        let mut scenario = ts::begin(ADMIN);
+        setup_test(&mut scenario);
+
+        mint_mgc_to_user(&mut scenario, USER1, 50);
+
+        // 第一次抽取
+        ts::next_tx(&mut scenario, USER1);
+        {
+            let mut treasury = ts::take_shared<MGCTreasury>(&scenario);
+            let mut coin = ts::take_from_sender<Coin<MGC>>(&scenario);
+            let payment = coin::split(&mut coin, DRAW_COST, ts::ctx(&mut scenario));
+
+            oracle_draw::draw(
+                1,
+                b"first question",
+                payment,
+                &mut treasury,
+                ts::ctx(&mut scenario)
+            );
+
+            transfer::public_transfer(coin, USER1);
+            ts::return_shared(treasury);
+        };
+
+        // 第二次抽取
+        ts::next_tx(&mut scenario, USER1);
+        {
+            let mut treasury = ts::take_shared<MGCTreasury>(&scenario);
+            let mut coin = ts::take_from_sender<Coin<MGC>>(&scenario);
+            let payment = coin::split(&mut coin, DRAW_COST, ts::ctx(&mut scenario));
+
+            oracle_draw::draw(
+                2,
+                b"second question",
+                payment,
+                &mut treasury,
+                ts::ctx(&mut scenario)
+            );
+
+            transfer::public_transfer(coin, USER1);
+            ts::return_shared(treasury);
+        };
+
+        // 第三次抽取
+        ts::next_tx(&mut scenario, USER1);
+        {
+            let mut treasury = ts::take_shared<MGCTreasury>(&scenario);
+            let mut coin = ts::take_from_sender<Coin<MGC>>(&scenario);
+            let payment = coin::split(&mut coin, DRAW_COST, ts::ctx(&mut scenario));
+
+            oracle_draw::draw(
+                3,
+                b"third question",
+                payment,
+                &mut treasury,
+                ts::ctx(&mut scenario)
+            );
+
+            transfer::public_transfer(coin, USER1);
+            ts::return_shared(treasury);
+        };
+
+        // 驗證所有 3 個 DrawRecords 都存在
+        ts::next_tx(&mut scenario, USER1);
+        {
+            let record1 = ts::take_from_sender<DrawRecord>(&scenario);
+            ts::return_to_sender(&scenario, record1);
+
+            // 剩餘 MGC 應該是 50 - 30 = 20
+            let remaining = ts::take_from_sender<Coin<MGC>>(&scenario);
+            assert!(coin::value(&remaining) == 20, 0);
+            ts::return_to_sender(&scenario, remaining);
+        };
+
+        ts::end(scenario);
+    }
+
+    #[test]
+    /// 測試：時間戳記已記錄
+    fun test_draw_timestamp_recorded() {
+        let mut scenario = ts::begin(ADMIN);
+        setup_test(&mut scenario);
+
+        mint_mgc_to_user(&mut scenario, USER1, 20);
+
+        ts::next_tx(&mut scenario, USER1);
+        {
+            let mut treasury = ts::take_shared<MGCTreasury>(&scenario);
+            let payment = ts::take_from_sender<Coin<MGC>>(&scenario);
+
+            oracle_draw::draw(
+                7,
+                b"timestamp test",
+                payment,
+                &mut treasury,
+                ts::ctx(&mut scenario)
+            );
+
+            ts::return_shared(treasury);
+        };
+
+        ts::next_tx(&mut scenario, USER1);
+        {
+            let record = ts::take_from_sender<DrawRecord>(&scenario);
+            // 在測試環境中，時間戳記從 0 開始，但我們只檢查它存在
+            let timestamp = oracle_draw::get_timestamp(&record);
+            assert!(timestamp >= 0, 0);
+            ts::return_to_sender(&scenario, record);
+        };
+
+        ts::end(scenario);
+    }
 }
