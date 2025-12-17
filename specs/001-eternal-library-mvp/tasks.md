@@ -384,23 +384,23 @@ oracle_library/
 
 #### 前端元件整合
 
-- [ ] T063 [DevB] [US3] 實作 DrawForm 元件（B 級）`frontend/components/draw-form.tsx`
+- [x] T063 [DevB] [US3] 實作 DrawForm 元件（B 級）`frontend/components/draw-form.tsx`
   - **Prototype**: `home.html` 抽取表單區塊
   - **相依**: Phase 0 的 Input、Button (T018, T016)
-- [ ] T064 [DevB] [US3] 實作 DrawSection 整合元件 `frontend/components/draw-section.tsx`
+- [x] T064 [DevB] [US3] 實作 DrawSection 整合元件 `frontend/components/draw-section.tsx`
   - **Prototype**: `home.html` 完整抽取區塊
   - 整合 React 表單與 Phaser 動畫
   - 管理抽取流程狀態（input → drawing → result）
   - **相依**: Phase 0 的 Card (T017)
-- [ ] T065 [DevB] [US3] 實作 DrawResultOverlay 結果覆蓋層 `frontend/components/draw-result-overlay.tsx`
+- [x] T065 [DevB] [US3] 實作 DrawResultOverlay 結果覆蓋層 `frontend/components/draw-result-overlay.tsx`
   - **Prototype**: `demo-phaser.html` 結果覆蓋層
   - 答案文字顯示（疊在 Phaser 上方）
   - 稀有度標籤
   - 預留鑄造按鈕位置（佔位元件,實際功能由 T073 實作）
   - **相依**: Phase 0 的 Badge (T021)
-- [ ] T066 [DevB] [US3] 整合抽取區塊至主頁面 `frontend/app/(app)/page.tsx`
+- [x] T066 [DevB] [US3] 整合抽取區塊至主頁面 `frontend/app/(app)/page.tsx`
   - **Prototype**: `home.html` 整合抽取與簽到兩區塊
-- [ ] T067 [DevB] [US3] 實作 Optimistic UI 餘額更新與回滾邏輯（-10 MGC）
+- [x] T067 [DevB] [US3] 實作 Optimistic UI 餘額更新與回滾邏輯（-10 MGC）
 
 **Checkpoint**: User Story 3 完成 — 使用者可抽取解答之書（含華麗動畫）
 

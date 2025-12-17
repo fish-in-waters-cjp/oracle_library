@@ -5,8 +5,14 @@ import Phaser from 'phaser';
  * 載入所有遊戲需要的圖片、音效等資源
  */
 export class PreloadScene extends Phaser.Scene {
+  private answerId = 0;
+
   constructor() {
     super({ key: 'PreloadScene' });
+  }
+
+  init(data: { answerId?: number }) {
+    this.answerId = data.answerId ?? 0;
   }
 
   preload() {
@@ -115,7 +121,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    // 資源載入完成，啟動 DrawScene
-    this.scene.start('DrawScene');
+    // 資源載入完成，啟動 DrawScene 並傳遞 answerId
+    this.scene.start('DrawScene', { answerId: this.answerId });
   }
 }

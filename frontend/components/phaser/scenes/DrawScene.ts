@@ -10,10 +10,15 @@ export class DrawScene extends Phaser.Scene {
   private cards: Phaser.GameObjects.Image[] = [];
   private energyParticles?: Phaser.GameObjects.Particles.ParticleEmitter;
   private isAnimating = false;
+  private answerId = 0;
 
   constructor() {
     super({ key: 'DrawScene' });
     this.eventBridge = EventBridge.getInstance();
+  }
+
+  init(data: { answerId?: number }) {
+    this.answerId = data.answerId ?? 0;
   }
 
   create() {
@@ -33,6 +38,9 @@ export class DrawScene extends Phaser.Scene {
 
     // 通知 React 場景已準備好
     this.eventBridge.emit(EVENTS.SCENE_READY, { scene: 'DrawScene' });
+
+    // 自動開始抽取動畫
+    this.startDrawAnimation({ answerId: this.answerId });
   }
 
   /**
