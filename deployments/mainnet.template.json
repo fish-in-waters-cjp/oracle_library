@@ -1,0 +1,79 @@
+{
+  "_comment": "IOTA Move 合約部署記錄模板 - 部署後請填寫實際值",
+  "_instructions": "部署完成後，從 CLI 輸出中複製對應的 Object ID 填入下方欄位",
+
+  "network": "mainnet",
+  "deployedAt": "",
+  "deployer": "",
+  "txDigest": "",
+
+  "package": {
+    "_description": "合約套件 ID，所有函數呼叫的前綴",
+    "packageId": ""
+  },
+
+  "sharedObjects": {
+    "_description": "共享物件，任何人都可以存取",
+
+    "mgcTreasury": {
+      "_description": "MGC 代幣 Treasury，用於 mint/burn 操作",
+      "_usage": "check_in, oracle_draw, oracle_nft 模組都需要",
+      "_envVar": "NEXT_PUBLIC_MGC_TREASURY_ID",
+      "objectId": ""
+    },
+
+    "nftConfig": {
+      "_description": "NFT 鑄造設定",
+      "_usage": "oracle_nft::mint 需要",
+      "_envVar": "NEXT_PUBLIC_NFT_CONFIG_ID",
+      "objectId": ""
+    },
+
+    "emergencyRecovery": {
+      "_description": "AdminCap 緊急恢復機制",
+      "_usage": "當 AdminCap 遺失時使用",
+      "objectId": ""
+    }
+  },
+
+  "adminObjects": {
+    "_description": "管理員擁有的物件，請安全保管",
+    "_warning": "這些物件只有部署者錢包可以使用",
+
+    "adminCap": {
+      "_description": "管理員權限憑證，可執行 admin_mint",
+      "_security": "重要！請使用硬體錢包或多簽保管",
+      "objectId": ""
+    },
+
+    "publisher": {
+      "_description": "套件發布者身份",
+      "_usage": "用於更新 Display 或建立新的 Display",
+      "objectId": ""
+    },
+
+    "display": {
+      "_description": "OracleNFT 的顯示模板",
+      "_usage": "定義 NFT 在錢包中的呈現方式",
+      "objectId": ""
+    }
+  },
+
+  "immutableObjects": {
+    "_description": "不可變物件，僅供參考",
+
+    "coinMetadata": {
+      "_description": "MGC 代幣元資料（已凍結）",
+      "objectId": ""
+    }
+  },
+
+  "frontendEnv": {
+    "_description": "複製到 frontend/.env.local 的值",
+    "NEXT_PUBLIC_NETWORK": "mainnet",
+    "NEXT_PUBLIC_PACKAGE_ID": "",
+    "NEXT_PUBLIC_MGC_TREASURY_ID": "",
+    "NEXT_PUBLIC_NFT_CONFIG_ID": "",
+    "NEXT_PUBLIC_IPFS_GATEWAY": "https://ipfs.io/ipfs/"
+  }
+}
