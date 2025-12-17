@@ -256,26 +256,26 @@ oracle_library/
 
 > **NOTE: 先寫測試,確保測試失敗後再實作**
 
-- [ ] T029 [P] [DevA] [US1] 撰寫 useWalletConnection Hook 測試 `frontend/__tests__/hooks/use-wallet-connection.test.ts`
-- [ ] T030 [P] [DevA] [US1] 撰寫 ConnectWallet 元件測試 `frontend/__tests__/components/connect-wallet.test.tsx`
+- [x] T029 [P] [DevA] [US1] 撰寫 useWalletConnection Hook 測試 `frontend/__tests__/hooks/use-wallet-connection.test.ts`
+- [x] T030 [P] [DevA] [US1] 撰寫 ConnectWallet 元件測試 `frontend/__tests__/components/connect-wallet.test.tsx`
 
 ### Implementation for User Story 1
 
-- [ ] T031 [DevA] [US1] 實作 useWalletConnection Hook `frontend/hooks/use-wallet-connection.ts`
+- [x] T031 [DevA] [US1] 實作 useWalletConnection Hook `frontend/hooks/use-wallet-connection.ts`
   - **Prototype**: `login.html` 中的錢包連接按鈕互動
-- [ ] T032 [DevA] [US1] 實作 ConnectWallet 元件（B 級）`frontend/components/connect-wallet.tsx`
+- [x] T032 [DevA] [US1] 實作 ConnectWallet 元件（B 級）`frontend/components/connect-wallet.tsx`
   - **Prototype**: `login.html` 中的 Connect Wallet 按鈕
   - **相依**: Phase 0 的 Button 元件 (T016)
-- [ ] T033 [DevA] [US1] 實作登入頁面（含入口視覺 A 級）`frontend/app/page.tsx`
+- [x] T033 [DevA] [US1] 實作登入頁面（含入口視覺 A 級）`frontend/app/page.tsx`
   - **Prototype**: `login.html` 完整頁面設計
   - **相依**: Phase 0 的 FadeIn 動畫 (T027)
-- [ ] T034 [DevA] [US1] 實作應用佈局（含導航列 B 級）`frontend/app/(app)/layout.tsx`
+- [x] T034 [DevA] [US1] 實作應用佈局（含導航列 B 級）`frontend/app/(app)/layout.tsx`
   - **Prototype**: `home.html` 頂部導航列
   - **相依**: Phase 0 的 Card、Badge 元件 (T017, T021)
-- [ ] T035 [DevA] [US1] 實作連接成功轉場動畫（A 級）
+- [x] T035 [DevA] [US1] 實作連接成功轉場動畫（A 級）
   - **Prototype**: `login.html` → `home.html` 轉場效果
   - **相依**: Phase 0 的 SlideIn 動畫 (T028)
-- [ ] T036 [DevA] [US1] 實作錢包斷線偵測與自動重連邏輯
+- [x] T036 [DevA] [US1] 實作錢包斷線偵測與自動重連邏輯
   - 靜默嘗試自動重連（重新進入網站時）
   - 重連失敗不顯示錯誤提示,停留在登入頁
   - 支援帳號切換偵測與自動更新狀態
