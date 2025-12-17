@@ -2,12 +2,17 @@
 module oracle_library::mgc_tests {
     use iota::test_scenario::{Self as ts, Scenario};
     use iota::coin::{Self, Coin};
-    use oracle_library::mgc::{Self, MGC, MGCTreasury, AdminCap};
+    use iota::clock::{Self, Clock};
+    use oracle_library::mgc::{Self, MGC, MGCTreasury, AdminCap, EmergencyRecovery};
 
     // Test addresses
     const ADMIN: address = @0xAD;
     const USER1: address = @0x1;
     const USER2: address = @0x2;
+    const RECOVERY: address = @0xBACE;
+
+    // Constants (must match mgc.move)
+    const RECOVERY_COOLDOWN_MS: u64 = 2592000000;  // 30 天
 
     // ===== Helper Functions =====
 
@@ -273,6 +278,224 @@ module oracle_library::mgc_tests {
 
             ts::return_to_sender(&scenario, admin_cap);
             ts::return_shared(treasury);
+        };
+
+        ts::end(scenario);
+    }
+
+    // ===== Emergency Recovery Tests =====
+
+    #[test]
+    fun test_init_creates_emergency_recovery() {
+        let mut scenario = setup_test();
+
+        // Check that EmergencyRecovery was created and shared
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            assert!(ts::has_most_recent_shared<EmergencyRecovery>(), 0);
+
+            let recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+            // Initial recovery_address should be ADMIN (the deployer)
+            assert!(mgc::get_recovery_address(&recovery) == ADMIN, 1);
+            // Initial cooldown should be 0
+            assert!(mgc::get_recovery_cooldown(&recovery) == 0, 2);
+
+            ts::return_shared(recovery);
+        };
+
+        ts::end(scenario);
+    }
+
+    #[test]
+    fun test_set_recovery_address_success() {
+        let mut scenario = setup_test();
+
+        // ADMIN sets recovery address to RECOVERY
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let admin_cap = ts::take_from_sender<AdminCap>(&scenario);
+            let mut recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+
+            mgc::set_recovery_address(&admin_cap, &mut recovery, RECOVERY);
+
+            // Verify the change
+            assert!(mgc::get_recovery_address(&recovery) == RECOVERY, 0);
+
+            ts::return_to_sender(&scenario, admin_cap);
+            ts::return_shared(recovery);
+        };
+
+        ts::end(scenario);
+    }
+
+    #[test]
+    fun test_emergency_create_admin_success() {
+        let mut scenario = setup_test();
+
+        // Create clock
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let clock = clock::create_for_testing(ts::ctx(&mut scenario));
+            clock::share_for_testing(clock);
+        };
+
+        // ADMIN sets recovery address to RECOVERY
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let admin_cap = ts::take_from_sender<AdminCap>(&scenario);
+            let mut recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+
+            mgc::set_recovery_address(&admin_cap, &mut recovery, RECOVERY);
+
+            ts::return_to_sender(&scenario, admin_cap);
+            ts::return_shared(recovery);
+        };
+
+        // RECOVERY creates new AdminCap
+        ts::next_tx(&mut scenario, RECOVERY);
+        {
+            let mut recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+            let clock = ts::take_shared<Clock>(&scenario);
+
+            mgc::emergency_create_admin(&mut recovery, USER1, &clock, ts::ctx(&mut scenario));
+
+            // Verify cooldown was updated
+            assert!(mgc::get_recovery_cooldown(&recovery) == RECOVERY_COOLDOWN_MS, 0);
+
+            ts::return_shared(clock);
+            ts::return_shared(recovery);
+        };
+
+        // Verify USER1 received AdminCap
+        ts::next_tx(&mut scenario, USER1);
+        {
+            let admin_cap = ts::take_from_sender<AdminCap>(&scenario);
+            // USER1 can use the AdminCap
+            let mut treasury = ts::take_shared<MGCTreasury>(&scenario);
+            mgc::admin_mint(&admin_cap, &mut treasury, USER1, 100, ts::ctx(&mut scenario));
+
+            ts::return_to_sender(&scenario, admin_cap);
+            ts::return_shared(treasury);
+        };
+
+        ts::end(scenario);
+    }
+
+    #[test]
+    #[expected_failure(abort_code = mgc::E_NOT_RECOVERY_ADDRESS)]
+    fun test_emergency_create_admin_wrong_sender_fails() {
+        let mut scenario = setup_test();
+
+        // Create clock
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let clock = clock::create_for_testing(ts::ctx(&mut scenario));
+            clock::share_for_testing(clock);
+        };
+
+        // USER1 (not recovery address) tries to create AdminCap
+        ts::next_tx(&mut scenario, USER1);
+        {
+            let mut recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+            let clock = ts::take_shared<Clock>(&scenario);
+
+            // This should fail because USER1 is not the recovery_address
+            mgc::emergency_create_admin(&mut recovery, USER1, &clock, ts::ctx(&mut scenario));
+
+            ts::return_shared(clock);
+            ts::return_shared(recovery);
+        };
+
+        ts::end(scenario);
+    }
+
+    #[test]
+    #[expected_failure(abort_code = mgc::E_COOLDOWN_NOT_PASSED)]
+    fun test_emergency_create_admin_cooldown_fails() {
+        let mut scenario = setup_test();
+
+        // Create clock
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let clock = clock::create_for_testing(ts::ctx(&mut scenario));
+            clock::share_for_testing(clock);
+        };
+
+        // First recovery (should succeed)
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let mut recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+            let clock = ts::take_shared<Clock>(&scenario);
+
+            mgc::emergency_create_admin(&mut recovery, USER1, &clock, ts::ctx(&mut scenario));
+
+            ts::return_shared(clock);
+            ts::return_shared(recovery);
+        };
+
+        // Second recovery immediately (should fail due to cooldown)
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let mut recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+            let clock = ts::take_shared<Clock>(&scenario);
+
+            // This should fail because cooldown hasn't passed
+            mgc::emergency_create_admin(&mut recovery, USER2, &clock, ts::ctx(&mut scenario));
+
+            ts::return_shared(clock);
+            ts::return_shared(recovery);
+        };
+
+        ts::end(scenario);
+    }
+
+    #[test]
+    fun test_emergency_create_admin_after_cooldown_success() {
+        let mut scenario = setup_test();
+
+        // Create clock
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let clock = clock::create_for_testing(ts::ctx(&mut scenario));
+            clock::share_for_testing(clock);
+        };
+
+        // First recovery
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let mut recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+            let clock = ts::take_shared<Clock>(&scenario);
+
+            mgc::emergency_create_admin(&mut recovery, USER1, &clock, ts::ctx(&mut scenario));
+
+            ts::return_shared(clock);
+            ts::return_shared(recovery);
+        };
+
+        // Advance clock past cooldown period (30 days + 1 second)
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let mut clock = ts::take_shared<Clock>(&scenario);
+            clock::increment_for_testing(&mut clock, RECOVERY_COOLDOWN_MS + 1000);
+            ts::return_shared(clock);
+        };
+
+        // Second recovery after cooldown (should succeed)
+        ts::next_tx(&mut scenario, ADMIN);
+        {
+            let mut recovery = ts::take_shared<EmergencyRecovery>(&scenario);
+            let clock = ts::take_shared<Clock>(&scenario);
+
+            mgc::emergency_create_admin(&mut recovery, USER2, &clock, ts::ctx(&mut scenario));
+
+            ts::return_shared(clock);
+            ts::return_shared(recovery);
+        };
+
+        // Verify USER2 received AdminCap
+        ts::next_tx(&mut scenario, USER2);
+        {
+            assert!(ts::has_most_recent_for_sender<AdminCap>(&scenario), 0);
         };
 
         ts::end(scenario);
