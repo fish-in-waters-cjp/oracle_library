@@ -17,10 +17,10 @@
 |-------|------|--------|------|
 | Phase 1: Setup | ✅ 已完成 | 6/6 | 專案初始化 |
 | Phase 2: Foundational | ✅ 已完成 | 11/22 | 基礎架構（部分完成） |
-| **🔧 Phase 0** | ⏳ **待完成** | **0/13** | **共同前置作業（必須先完成）** |
-| 🅰️ Developer A | ⏸️ 待開始 | 0/30 | US1 + US2 + US4 (部分) |
-| 🅱️ Developer B | 🟡 進行中 | 26/30 | US3 + US5 + US4 (部分) |
-| Phase 8: Polish | ⏸️ 待開始 | 0/9 | 最終優化與測試 |
+| **🔧 Phase 0** | ✅ **已完成** | **13/13** | **共同前置作業** |
+| 🅰️ Developer A | ✅ 已完成 | 30/30 | US1 + US2 + US4 (部分) |
+| 🅱️ Developer B | ✅ 已完成 | 30/30 | US3 + US5 + US4 (部分) |
+| Phase 8: Polish | ⏸️ 待開始 | 3/9 | 最終優化與測試 |
 
 ### Developer A 路線任務分布
 
@@ -451,7 +451,7 @@ oracle_library/
 ### Tests for User Story 4
 
 - [x] T068 [P] [DevA] [US4] 撰寫 oracle_nft 合約測試 `contracts/tests/oracle_nft_tests.move`
-- [ ] T069 [P] [DevA] [US4] 撰寫 useMintNFT Hook 測試 `frontend/__tests__/hooks/use-mint-nft.test.ts`
+- [x] T069 [P] [DevA] [US4] 撰寫 useMintNFT Hook 測試 `frontend/__tests__/hooks/use-mint-nft.test.ts`
 
 ### Implementation for User Story 4
 
@@ -464,7 +464,7 @@ oracle_library/
 
 #### S 級：Phaser 慶祝場景 (Developer B)
 
-- [ ] T072 [DevB] [US4] 實作 CelebrationScene 慶祝場景 `frontend/components/phaser/scenes/CelebrationScene.ts`
+- [x] T072 [DevB] [US4] 實作 CelebrationScene 慶祝場景 `frontend/components/phaser/scenes/CelebrationScene.ts`
   - **Prototype**: `phaser/CelebrationScene.js` 完整參考
   - 煙火爆發效果
   - 金幣/星星飛散
