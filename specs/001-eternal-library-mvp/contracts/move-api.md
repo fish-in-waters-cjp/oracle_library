@@ -93,7 +93,7 @@ public entry fun first_check_in(
 
 **後置條件**：
 - 建立 UserCheckInRecord 並轉移給使用者
-- 鑄造 5 MGC 給使用者
+- 鑄造 100 MGC 給使用者（新用戶禮包）
 - 發出 CheckInEvent
 
 **錯誤碼**：
@@ -125,7 +125,7 @@ public entry fun check_in(
 **後置條件**：
 - 更新 last_check_in_day
 - 增加 total_check_ins
-- 鑄造 5 MGC 給使用者
+- 鑄造 20 MGC 給使用者
 - 發出 CheckInEvent
 
 **錯誤碼**：

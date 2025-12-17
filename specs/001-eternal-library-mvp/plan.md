@@ -9,7 +9,7 @@
 
 **核心功能**：
 1. 錢包連接（IOTA Wallet）
-2. 每日簽到（獲得 5 MGC）
+2. 每日簽到（首次 100 MGC，後續 20 MGC）
 3. 抽取解答（消耗 10 MGC）
 4. NFT 鑄造（消耗 5 MGC + Gas）
 5. 收藏展示
@@ -119,7 +119,7 @@
 |------|------|------|------|
 | 導航列 | B | React + Tailwind | 純 UI |
 | MGC 餘額顯示 | A | Framer Motion | 數字跳動動畫 |
-| +5/-10 MGC 動畫 | A | Framer Motion | 獲得/消耗動畫 |
+| +100/+20/-10 MGC 動畫 | A | Framer Motion | 獲得/消耗動畫 |
 | 簽到訪客簿 | A | Framer Motion | 書本翻頁效果 |
 | 簽名動畫 | A | Framer Motion | 手寫效果 |
 | 倒計時 | B | React | 純文字 |

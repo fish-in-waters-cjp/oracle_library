@@ -315,7 +315,7 @@ oracle_library/
 
 **🅰️ Developer A 負責**
 
-**Goal**: 使用者每天簽到可獲得 5 MGC
+**Goal**: 使用者每天簽到可獲得 MGC（首次 100 MGC，後續 20 MGC）
 
 **Independent Test**: 完成簽到動作並看到 MGC 餘額增加
 
@@ -348,8 +348,8 @@ oracle_library/
   - **相依**: Phase 0 的 Card、Button (T017, T016)
 - [x] T049 [DevA] [US2] 實作主頁面（簽到區塊）`frontend/app/(app)/home/page.tsx`
   - **Prototype**: `home.html` 完整簽到區塊整合
-- [x] T050 [DevA] [US2] 實作 +5 MGC 獲得動畫（功能完成，動畫可優化）
-  - **完成方式**: 簽到成功後餘額自動更新
+- [x] T050 [DevA] [US2] 實作 +100/+20 MGC 獲得動畫（功能完成，動畫可優化）
+  - **完成方式**: 簽到成功後餘額自動更新（首次 100 MGC，後續 20 MGC）
 - [x] T051 [DevA] [US2] 實作倒計時顯示（距離 UTC+8 午夜）
   - **相依**: Phase 0 的 time.ts (T013 已完成)
 
