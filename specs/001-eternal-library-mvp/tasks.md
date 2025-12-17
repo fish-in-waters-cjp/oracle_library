@@ -19,7 +19,7 @@
 | Phase 2: Foundational | ✅ 已完成 | 11/22 | 基礎架構（部分完成） |
 | **🔧 Phase 0** | ⏳ **待完成** | **0/13** | **共同前置作業（必須先完成）** |
 | 🅰️ Developer A | ⏸️ 待開始 | 0/30 | US1 + US2 + US4 (部分) |
-| 🅱️ Developer B | 🟡 進行中 | 13/30 | US3 + US5 + US4 (部分) |
+| 🅱️ Developer B | 🟡 進行中 | 21/30 | US3 + US5 + US4 (部分) |
 | Phase 8: Polish | ⏸️ 待開始 | 0/9 | 最終優化與測試 |
 
 ### Developer A 路線任務分布
@@ -378,22 +378,22 @@ oracle_library/
 
 ### Tests for User Story 3
 
-- [ ] T052 [P] [DevB] [US3] 撰寫 oracle_draw 合約測試 `contracts/tests/oracle_draw_tests.move`
-- [ ] T053 [P] [DevB] [US3] 撰寫 useOracleDraw Hook 測試 `frontend/__tests__/hooks/use-oracle-draw.test.ts`
-- [ ] T054 [P] [DevB] [US3] 撰寫 useAnswers Hook 測試 `frontend/__tests__/hooks/use-answers.test.ts`
+- [x] T052 [P] [DevB] [US3] 撰寫 oracle_draw 合約測試 `contracts/tests/oracle_draw_tests.move`
+- [x] T053 [P] [DevB] [US3] 撰寫 useOracleDraw Hook 測試 `frontend/__tests__/hooks/use-oracle-draw.test.ts`
+- [x] T054 [P] [DevB] [US3] 撰寫 useAnswers Hook 測試 `frontend/__tests__/hooks/use-answers.test.ts`
 - [x] T055 [P] [DevB] [US3] 撰寫 DrawForm 元件測試 `frontend/__tests__/components/draw-form.test.tsx`
 
 ### Implementation for User Story 3
 
 #### 合約與 Hooks
 
-- [ ] T056 [P] [DevB] [US3] 建立隨機函數 `frontend/lib/random.ts`
-- [ ] T057 [DevB] [US3] 實作 oracle_draw 合約模組 `contracts/sources/oracle_draw.move`
+- [x] T056 [P] [DevB] [US3] 建立隨機函數 `frontend/lib/random.ts`
+- [x] T057 [DevB] [US3] 實作 oracle_draw 合約模組 `contracts/sources/oracle_draw.move`
   - **相依**: MGC Token (T008 已完成)
   - **Mock 策略**: Developer A 需要此合約的 DrawRecord 結構,但 B 先實作完整合約
-- [ ] T058 [DevB] [US3] 實作 useAnswers Hook `frontend/hooks/use-answers.ts`
+- [x] T058 [DevB] [US3] 實作 useAnswers Hook `frontend/hooks/use-answers.ts`
   - **相依**: Phase 0 的 answers.json (T023)
-- [ ] T059 [DevB] [US3] 實作 useOracleDraw Hook `frontend/hooks/use-oracle-draw.ts`
+- [x] T059 [DevB] [US3] 實作 useOracleDraw Hook `frontend/hooks/use-oracle-draw.ts`
 
 #### S 級：Phaser 抽取動畫場景
 
