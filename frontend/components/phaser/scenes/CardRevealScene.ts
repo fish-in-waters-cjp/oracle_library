@@ -60,7 +60,7 @@ export class CardRevealScene extends Phaser.Scene {
 
     // 5. 建立確認按鈕（延遲顯示，讓使用者先看卡片）
     this.time.delayedCall(1000, () => {
-      this.confirmButton = this.createConfirmButton(centerX, centerY + 260, color);
+      this.confirmButton = this.createConfirmButton(centerX, centerY + 280, color);
     });
 
     // 監聯停止事件
@@ -78,9 +78,9 @@ export class CardRevealScene extends Phaser.Scene {
     const card = this.add.container(x, y);
     card.setScale(0.8);
 
-    // 卡片尺寸（基於原始圖片比例 896x1200，放大顯示）
-    const cardWidth = 280;
-    const cardHeight = 375;
+    // 卡片尺寸（放大版）
+    const cardWidth = 320;
+    const cardHeight = 428;
 
     // 卡牌背景
     const bg = this.add.rectangle(0, 0, cardWidth, cardHeight, 0x1a1a1a);

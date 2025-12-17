@@ -91,10 +91,14 @@ export class DrawScene extends Phaser.Scene {
    * 建立卡牌容器
    */
   private createCard(x: number, y: number, color: number): Phaser.GameObjects.Container {
-    const card = this.add.container(x, -200);
+    const card = this.add.container(x, -300);
+
+    // 卡牌尺寸（放大版）
+    const cardWidth = 280;
+    const cardHeight = 392;
 
     // 卡牌邊框發光（底層）
-    const glow = this.add.rectangle(0, 0, 200, 280, color, 0);
+    const glow = this.add.rectangle(0, 0, cardWidth, cardHeight, color, 0);
 
     // 卡牌圖片或 fallback 背景
     let cardImage: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
@@ -106,11 +110,11 @@ export class DrawScene extends Phaser.Scene {
       // 縮放圖片以適應卡片尺寸
       const texture = this.textures.get('card-back');
       const frame = texture.getSourceImage();
-      const scale = Math.min(200 / frame.width, 280 / frame.height);
+      const scale = Math.min(cardWidth / frame.width, cardHeight / frame.height);
       cardImage.setScale(scale);
       // 添加稀有度邊框
-      const border = this.add.rectangle(0, 0, 200, 280);
-      border.setStrokeStyle(3, color, 0.9);
+      const border = this.add.rectangle(0, 0, cardWidth, cardHeight);
+      border.setStrokeStyle(4, color, 0.9);
       border.setFillStyle(0x000000, 0);
       card.add([glow, cardImage, border]);
 
@@ -119,12 +123,12 @@ export class DrawScene extends Phaser.Scene {
       }
     } else {
       // Fallback: 使用矩形背景 + emoji
-      const bg = this.add.rectangle(0, 0, 200, 280, 0x1a1a1a);
-      bg.setStrokeStyle(2, color, 0.8);
+      const bg = this.add.rectangle(0, 0, cardWidth, cardHeight, 0x1a1a1a);
+      bg.setStrokeStyle(3, color, 0.8);
       cardImage = bg;
 
       icon = this.add.text(0, 0, '📖', {
-        fontSize: '80px',
+        fontSize: '100px',
       });
       icon.setOrigin(0.5);
       card.add([glow, bg, icon]);
