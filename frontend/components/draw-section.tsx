@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCurrentAccount } from '@iota/dapp-kit';
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 import { DrawForm } from './draw-form';
 import { DrawResultOverlay } from './draw-result-overlay';
 import PhaserGame from './phaser/PhaserGame';

@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 import { EventBridge, EVENTS } from '../EventBridge';
 import { Rarity, RARITY_COLORS } from '@/hooks/use-answers';
 
