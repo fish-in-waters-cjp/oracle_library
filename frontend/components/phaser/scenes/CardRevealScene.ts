@@ -19,6 +19,7 @@ export class CardRevealScene extends Phaser.Scene {
   private rarity: RarityKey = 'Common';
   private answerId: number = 0;
   private card: Phaser.GameObjects.Container | null = null;
+  private confirmButton: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({ key: 'CardRevealScene' });
@@ -57,16 +58,12 @@ export class CardRevealScene extends Phaser.Scene {
       this.createEpicEffect(centerX, centerY);
     }
 
-    // 通知 React 卡片已揭示
-    this.time.delayedCall(500, () => {
-      const bridge = EventBridge.getInstance();
-      bridge.trigger(EVENTS.CARD_REVEALED, {
-        rarity: this.rarity,
-        answerId: this.answerId,
-      });
+    // 5. 建立確認按鈕（延遲顯示，讓使用者先看卡片）
+    this.time.delayedCall(1000, () => {
+      this.confirmButton = this.createConfirmButton(centerX, centerY + 260, color);
     });
 
-    // 監聽停止事件
+    // 監聯停止事件
     this.events.on(EVENTS.STOP_SCENE, this.stopScene, this);
   }
 
@@ -81,29 +78,60 @@ export class CardRevealScene extends Phaser.Scene {
     const card = this.add.container(x, y);
     card.setScale(0.8);
 
+    // 卡片尺寸（基於原始圖片比例 896x1200，放大顯示）
+    const cardWidth = 280;
+    const cardHeight = 375;
+
     // 卡牌背景
-    const bg = this.add.rectangle(0, 0, 240, 320, 0x1a1a1a);
+    const bg = this.add.rectangle(0, 0, cardWidth, cardHeight, 0x1a1a1a);
     bg.setStrokeStyle(3, color, 1);
 
     // 內發光
-    const innerGlow = this.add.rectangle(0, 0, 236, 316, color, 0.1);
+    const innerGlow = this.add.rectangle(0, 0, cardWidth - 4, cardHeight - 4, color, 0.1);
 
-    // 卡牌圖示
-    const icon = this.add.text(0, -60, '📖', {
-      fontSize: '100px',
-    });
-    icon.setOrigin(0.5);
+    // 嘗試載入卡片圖片
+    const textureKey = `card-${this.answerId}`;
+    let cardContent: Phaser.GameObjects.Image | Phaser.GameObjects.Text;
 
-    // 稀有度標籤
+    if (this.textures.exists(textureKey)) {
+      // 使用真實卡片圖片
+      cardContent = this.add.image(0, 0, textureKey);
+      // 調整圖片大小以適應卡片框
+      const texture = this.textures.get(textureKey);
+      const frame = texture.getSourceImage();
+      const scale = Math.min(
+        (cardWidth - 16) / frame.width,
+        (cardHeight - 16) / frame.height
+      );
+      cardContent.setScale(scale);
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[CardRevealScene] 使用真實卡片圖片:', textureKey);
+      }
+    } else {
+      // 回退到 emoji 圖示
+      cardContent = this.add.text(0, -30, '📖', {
+        fontSize: '80px',
+      });
+      cardContent.setOrigin(0.5);
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[CardRevealScene] 卡片圖片未載入，使用 emoji fallback');
+      }
+    }
+
+    // 稀有度標籤（只在沒有圖片時顯示）
     const colorHex = '#' + color.toString(16).padStart(6, '0');
-    const rarityText = this.add.text(0, 80, getRarityName(this.rarity), {
-      fontSize: '24px',
+    const rarityText = this.add.text(0, cardHeight / 2 + 20, getRarityName(this.rarity), {
+      fontSize: '20px',
       fontFamily: 'Arial',
       color: colorHex,
+      stroke: '#000000',
+      strokeThickness: 2,
     });
     rarityText.setOrigin(0.5);
 
-    card.add([innerGlow, bg, icon, rarityText]);
+    card.add([innerGlow, bg, cardContent, rarityText]);
     card.setData('innerGlow', innerGlow);
 
     // 卡片輕微浮動
@@ -235,6 +263,108 @@ export class CardRevealScene extends Phaser.Scene {
       ease: 'Cubic.easeOut',
       repeat: -1,
     });
+  }
+
+  /**
+   * 建立確認按鈕
+   * 讓使用者確認後才進入結果頁面
+   */
+  private createConfirmButton(
+    x: number,
+    y: number,
+    color: number
+  ): Phaser.GameObjects.Container {
+    const button = this.add.container(x, y);
+    button.setAlpha(0);
+
+    // 按鈕背景
+    const buttonWidth = 180;
+    const buttonHeight = 50;
+    const bg = this.add.rectangle(0, 0, buttonWidth, buttonHeight, 0x1a1a1a, 0.9);
+    bg.setStrokeStyle(2, color, 1);
+
+    // 內發光效果
+    const innerGlow = this.add.rectangle(0, 0, buttonWidth - 4, buttonHeight - 4, color, 0.1);
+
+    // 按鈕文字
+    const text = this.add.text(0, 0, '確認', {
+      fontSize: '24px',
+      fontFamily: 'Arial, sans-serif',
+      color: '#ffffff',
+      fontStyle: 'bold',
+    });
+    text.setOrigin(0.5);
+
+    button.add([bg, innerGlow, text]);
+
+    // 設定互動
+    bg.setInteractive({ useHandCursor: true });
+
+    // hover 效果
+    bg.on('pointerover', () => {
+      this.tweens.add({
+        targets: button,
+        scale: 1.05,
+        duration: 150,
+        ease: 'Sine.easeOut',
+      });
+      innerGlow.setFillStyle(color, 0.2);
+    });
+
+    bg.on('pointerout', () => {
+      this.tweens.add({
+        targets: button,
+        scale: 1,
+        duration: 150,
+        ease: 'Sine.easeOut',
+      });
+      innerGlow.setFillStyle(color, 0.1);
+    });
+
+    // 點擊事件 - 觸發 CARD_REVEALED 進入結果頁面
+    bg.on('pointerdown', () => {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[CardRevealScene] 使用者確認，進入結果頁面');
+      }
+
+      // 點擊縮放動畫
+      this.tweens.add({
+        targets: button,
+        scale: 0.95,
+        duration: 100,
+        yoyo: true,
+        onComplete: () => {
+          // 通知 React 卡片已確認揭示
+          const bridge = EventBridge.getInstance();
+          bridge.trigger(EVENTS.CARD_REVEALED, {
+            rarity: this.rarity,
+            answerId: this.answerId,
+          });
+        },
+      });
+    });
+
+    // 淡入動畫
+    this.tweens.add({
+      targets: button,
+      alpha: 1,
+      y: y - 10,
+      duration: 500,
+      ease: 'Back.easeOut',
+    });
+
+    // 呼吸動畫（輕微縮放）
+    this.tweens.add({
+      targets: button,
+      scale: { from: 1, to: 1.03 },
+      duration: 1500,
+      ease: 'Sine.easeInOut',
+      yoyo: true,
+      repeat: -1,
+      delay: 500,
+    });
+
+    return button;
   }
 
   /**

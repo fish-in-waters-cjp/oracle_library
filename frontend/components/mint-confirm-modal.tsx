@@ -1,8 +1,31 @@
 'use client';
 
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Answer, Rarity, RARITY_COLORS } from '@/hooks/use-answers';
 import Button from '@/components/ui/button';
+
+/**
+ * 根據 answerId 取得卡片圖片 URL
+ * 注意：answerId 是 0-49，圖片檔名是 1-50，所以需要 +1
+ */
+function getCardImageUrl(answerId: number): string | null {
+  const imageId = answerId + 1;
+  if (imageId >= 1 && imageId <= 50) {
+    return `/game/cards/faces/${imageId}.png`;
+  }
+  return null;
+}
+
+/**
+ * 稀有度文字色
+ */
+const RARITY_TEXT_COLORS: Record<Rarity, string> = {
+  Common: '#9ca3af',
+  Rare: '#60a5fa',
+  Epic: '#a78bfa',
+  Legendary: '#d4af37',
+};
 
 /**
  * MintConfirmModal Props
@@ -103,42 +126,12 @@ const styles = {
     color: 'var(--color-text-muted)',
   },
 
-  previewCard: {
-    background: 'var(--color-background-elevated)',
-    borderRadius: 'var(--radius-xl)',
-    padding: 'var(--space-4)',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: 'var(--space-3)',
-    border: '1px solid var(--color-border-default)',
-  },
-
-  rarityBadgeWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 'var(--space-2)',
-  },
-
   rarityBadge: {
     padding: 'var(--space-1) var(--space-3)',
     borderRadius: '9999px',
-    fontSize: 'var(--text-xs)',
+    fontSize: 'var(--text-sm)',
     fontWeight: 'var(--font-weight-semibold)',
     color: '#ffffff',
-  },
-
-  answerPreview: {
-    fontSize: 'var(--text-sm)',
-    color: 'var(--color-text-secondary)',
-    textAlign: 'center' as const,
-    lineHeight: 1.6,
-  },
-
-  answerId: {
-    fontSize: 'var(--text-xs)',
-    color: 'var(--color-text-muted)',
-    textAlign: 'center' as const,
   },
 
   costBox: {
@@ -243,6 +236,7 @@ export function MintConfirmModal({
 }: MintConfirmModalProps) {
   const rarityName = RARITY_NAMES[rarity];
   const rarityColor = RARITY_COLORS[rarity];
+  const rarityTextColor = RARITY_TEXT_COLORS[rarity];
   const hasEnoughMGC = mgcBalance >= mintCost;
 
   return (
@@ -296,29 +290,46 @@ export function MintConfirmModal({
                   </p>
                 </div>
 
-                {/* 答案預覽 */}
-                <div style={styles.previewCard}>
-                  {/* 稀有度標籤 */}
-                  <div style={styles.rarityBadgeWrapper}>
-                    <span
+                {/* 卡片預覽 */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 'var(--space-3)',
+                }}>
+                  {/* 卡片圖片 */}
+                  {getCardImageUrl(answer.id - 1) && (
+                    <div
                       style={{
-                        ...styles.rarityBadge,
-                        backgroundColor: rarityColor,
+                        position: 'relative',
+                        width: '160px',
+                        height: '213px',
+                        borderRadius: 'var(--radius-lg)',
+                        overflow: 'hidden',
+                        boxShadow: `0 0 30px ${rarityColor}40`,
+                        border: `2px solid ${rarityTextColor}`,
                       }}
                     >
-                      {rarityName}
-                    </span>
-                  </div>
+                      <Image
+                        src={getCardImageUrl(answer.id - 1)!}
+                        alt={`Oracle Card #${answer.id}`}
+                        fill
+                        className="object-cover"
+                        sizes="160px"
+                        priority
+                      />
+                    </div>
+                  )}
 
-                  {/* 答案內容 */}
-                  <p style={styles.answerPreview}>
-                    {answer.text_zh}
-                  </p>
-
-                  {/* 答案編號 */}
-                  <p style={styles.answerId}>
-                    答案編號 #{answer.id.toString().padStart(2, '0')}
-                  </p>
+                  {/* 稀有度標籤 */}
+                  <span
+                    style={{
+                      ...styles.rarityBadge,
+                      backgroundColor: rarityColor,
+                    }}
+                  >
+                    {rarityName}
+                  </span>
                 </div>
 
                 {/* 成本資訊 */}

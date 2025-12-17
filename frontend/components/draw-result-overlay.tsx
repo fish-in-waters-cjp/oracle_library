@@ -1,10 +1,24 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Answer, Rarity, RARITY_COLORS } from '@/hooks/use-answers';
 import { MintConfirmModal } from './mint-confirm-modal';
 import Button from '@/components/ui/button';
+
+/**
+ * 根據 answerId 取得卡片圖片 URL
+ * 注意：answerId 是 0-49，圖片檔名是 1-50，所以需要 +1
+ */
+function getCardImageUrl(answerId: number): string | null {
+  // answerId 0-49 對應圖片 1.png - 50.png
+  const imageId = answerId + 1;
+  if (imageId >= 1 && imageId <= 50) {
+    return `/game/cards/faces/${imageId}.png`;
+  }
+  return null;
+}
 
 /**
  * IOTA Explorer Base URL
@@ -44,17 +58,7 @@ const RARITY_NAMES: Record<Rarity, string> = {
 };
 
 /**
- * Style 10 稀有度背景色
- */
-const RARITY_BG_COLORS: Record<Rarity, string> = {
-  Common: 'rgba(156, 163, 175, 0.1)',
-  Rare: 'rgba(96, 165, 250, 0.1)',
-  Epic: 'rgba(167, 139, 250, 0.1)',
-  Legendary: 'rgba(212, 175, 55, 0.15)',
-};
-
-/**
- * Style 10 稀有度文字色
+ * 稀有度文字色
  */
 const RARITY_TEXT_COLORS: Record<Rarity, string> = {
   Common: '#9ca3af',
@@ -64,12 +68,12 @@ const RARITY_TEXT_COLORS: Record<Rarity, string> = {
 };
 
 /**
- * Style 10 樣式定義
+ * 樣式定義
  */
 const styles = {
   container: {
     position: 'relative' as const,
-    maxWidth: '42rem',
+    maxWidth: '32rem',
     margin: '0 auto',
   },
 
@@ -92,21 +96,6 @@ const styles = {
     gap: 'var(--space-6)',
   },
 
-  titleSection: {
-    textAlign: 'center' as const,
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: 'var(--space-2)',
-  },
-
-  title: {
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--text-3xl)',
-    fontWeight: 'var(--font-weight-bold)',
-    color: 'var(--color-primary)',
-    letterSpacing: '0.02em',
-  },
-
   rarityBadge: {
     display: 'inline-flex',
     alignItems: 'center',
@@ -115,42 +104,6 @@ const styles = {
     background: 'var(--color-background-elevated)',
     borderRadius: '9999px',
     border: '1px solid var(--color-border-default)',
-  },
-
-  rarityLabel: {
-    fontSize: 'var(--text-xs)',
-    color: 'var(--color-text-muted)',
-  },
-
-  answerCard: {
-    position: 'relative' as const,
-    borderRadius: 'var(--radius-xl)',
-    padding: 'var(--space-8)',
-    border: '1px solid var(--color-border-default)',
-  },
-
-  quoteDecor: {
-    position: 'absolute' as const,
-    fontSize: 'var(--text-4xl)',
-    opacity: 0.2,
-    color: 'var(--color-primary)',
-  },
-
-  answerText: {
-    position: 'relative' as const,
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--text-xl)',
-    color: 'var(--color-text-primary)',
-    textAlign: 'center' as const,
-    lineHeight: 1.8,
-    fontWeight: 'var(--font-weight-medium)',
-    padding: '0 var(--space-8)',
-  },
-
-  answerId: {
-    textAlign: 'center' as const,
-    fontSize: 'var(--text-sm)',
-    color: 'var(--color-text-muted)',
   },
 
   buttonGroup: {
@@ -169,25 +122,6 @@ const styles = {
     fontWeight: 'var(--font-weight-semibold)',
     cursor: 'pointer',
     transition: 'var(--transition-fast)',
-  },
-
-  hints: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: 'var(--space-1)',
-  },
-
-  hint: {
-    textAlign: 'center' as const,
-    fontSize: 'var(--text-xs)',
-    color: 'var(--color-text-muted)',
-  },
-
-  recordId: {
-    textAlign: 'center' as const,
-    fontSize: 'var(--text-xs)',
-    color: 'var(--color-text-muted)',
-    fontFamily: 'monospace',
   },
 
   glowEffect: {
@@ -234,7 +168,6 @@ export function DrawResultOverlay({
 
   const rarityName = RARITY_NAMES[rarity];
   const rarityColor = RARITY_COLORS[rarity];
-  const rarityBgColor = RARITY_BG_COLORS[rarity];
   const rarityTextColor = RARITY_TEXT_COLORS[rarity];
 
   const MINT_COST = 5;
@@ -280,65 +213,71 @@ export function DrawResultOverlay({
 
         {/* 內容區域 */}
         <div style={styles.content}>
-          {/* 標題與稀有度 */}
-          <div style={styles.titleSection}>
-            <motion.h2
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              style={styles.title}
-            >
-              解答之書
-            </motion.h2>
-
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <span style={styles.rarityBadge}>
-                <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-weight-semibold)', color: rarityTextColor }}>
-                  {rarityName}
-                </span>
-                <span style={styles.rarityLabel}>稀有度</span>
-              </span>
-            </motion.div>
-          </div>
-
-          {/* 答案內容卡片 */}
+          {/* 卡片圖片與稀有度 */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.2 }}
             style={{
-              ...styles.answerCard,
-              background: rarityBgColor,
-              borderColor: rarityTextColor,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 'var(--space-4)',
             }}
           >
-            {/* 裝飾性引號 */}
-            <div style={{ ...styles.quoteDecor, top: 'var(--space-4)', left: 'var(--space-4)' }}>
-              「
-            </div>
-            <div style={{ ...styles.quoteDecor, bottom: 'var(--space-4)', right: 'var(--space-4)' }}>
-              」
-            </div>
+            {/* 卡片圖片 */}
+            {getCardImageUrl(answer.id - 1) && (
+              <motion.div
+                initial={{ scale: 0.8, rotateY: 180 }}
+                animate={{ scale: 1, rotateY: 0 }}
+                transition={{ delay: 0.2, duration: 0.6, type: 'spring' }}
+                style={{
+                  position: 'relative',
+                  width: '240px',
+                  height: '320px',
+                  borderRadius: 'var(--radius-lg)',
+                  overflow: 'hidden',
+                  boxShadow: `0 0 40px ${rarityColor}50`,
+                  border: `3px solid ${rarityTextColor}`,
+                }}
+              >
+                <Image
+                  src={getCardImageUrl(answer.id - 1)!}
+                  alt={`Oracle Card #${answer.id}`}
+                  fill
+                  className="object-cover"
+                  sizes="240px"
+                  priority
+                />
+                {/* 稀有度光暈 */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: `radial-gradient(circle at 50% 50%, ${rarityColor}20, transparent 70%)`,
+                    pointerEvents: 'none',
+                  }}
+                />
+              </motion.div>
+            )}
 
-            {/* 答案文字 */}
-            <p style={styles.answerText}>
-              {answer.text_zh}
-            </p>
-          </motion.div>
-
-          {/* 答案編號 */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            style={styles.answerId}
-          >
-            答案編號 #{answer.id.toString().padStart(2, '0')}
+            {/* 稀有度標籤 */}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
+              <span style={{
+                ...styles.rarityBadge,
+                padding: 'var(--space-2) var(--space-6)',
+                border: `1px solid ${rarityTextColor}`,
+              }}>
+                <span style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-weight-bold)', color: rarityTextColor }}>
+                  {rarityName}
+                </span>
+              </span>
+            </motion.div>
           </motion.div>
 
           {/* 操作按鈕 */}
@@ -397,7 +336,7 @@ export function DrawResultOverlay({
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                🔗 在 Explorer 查看 NFT
+                查看 NFT
               </motion.a>
             ) : (
               /* 未鑄造：顯示鑄造按鈕 */
@@ -407,36 +346,8 @@ export function DrawResultOverlay({
                 loading={isMinting}
                 style={{ flex: 1 }}
               >
-                {isMinting ? '鑄造中...' : '🎨 鑄造 NFT (5 MGC)'}
+                {isMinting ? '鑄造中...' : '鑄造 NFT'}
               </Button>
-            )}
-          </motion.div>
-
-          {/* 提示文字 */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            style={styles.hints}
-          >
-            {hasMintedNFT ? (
-              <>
-                <p style={{ ...styles.hint, color: 'var(--color-success)' }}>
-                  🎉 NFT 鑄造成功！已永久保存至區塊鏈
-                </p>
-                <p style={styles.recordId}>
-                  NFT ID: {mintedNftId?.substring(0, 12)}...
-                </p>
-              </>
-            ) : (
-              <>
-                <p style={styles.hint}>
-                  鑄造 NFT 後，此解答將永久保存至區塊鏈
-                </p>
-                <p style={styles.recordId}>
-                  DrawRecord ID: {recordId.substring(0, 12)}...
-                </p>
-              </>
             )}
           </motion.div>
         </div>

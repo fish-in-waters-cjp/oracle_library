@@ -6,6 +6,7 @@ import { EventBridge, EVENTS } from '../EventBridge';
  *
  * 負責載入所有 Phaser 場景所需的資源：
  * - 粒子材質（圓形、星形）
+ * - 卡片圖片（根據 answerId 載入對應圖片）
  * - 音效（未來擴展）
  * - 其他圖形資源
  *
@@ -41,6 +42,32 @@ export class PreloadScene extends Phaser.Scene {
 
     // 生成粒子材質（使用 Canvas 繪製）
     this.createParticleTextures();
+
+    // 載入卡片圖片（根據 answerId）
+    this.loadCardImage();
+  }
+
+  /**
+   * 載入卡片圖片
+   * 根據 answerId 載入對應的卡片圖片
+   * 注意：answerId 是 0-49，圖片檔名是 1-50，所以需要 +1
+   */
+  private loadCardImage(): void {
+    const answerId = this.initData.answerId;
+    if (answerId !== undefined && answerId >= 0 && answerId <= 49) {
+      // answerId 0-49 對應圖片 1.png - 50.png
+      const imageId = answerId + 1;
+      const imageUrl = `/game/cards/faces/${imageId}.png`;
+      const textureKey = `card-${answerId}`;
+
+      // 避免重複載入
+      if (!this.textures.exists(textureKey)) {
+        this.load.image(textureKey, imageUrl);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[PreloadScene] 載入卡片圖片:', textureKey, imageUrl);
+        }
+      }
+    }
   }
 
   create(): void {

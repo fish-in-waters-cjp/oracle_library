@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import Badge from './ui/badge';
 import type { Rarity } from '@/hooks/use-oracle-nfts';
@@ -9,12 +10,13 @@ export interface NFTCardProps {
   rarity: Rarity;
   question: string;
   answerZh: string;
+  answerId: number;
   mintedAt: string;
   onClick?: () => void;
   className?: string;
 }
 
-// NFT 圖標映射 (根據稀有度)
+// NFT 圖標映射 (根據稀有度) - 用於 fallback
 const RARITY_ICONS: Record<Rarity, string> = {
   legendary: '🌟',
   epic: '💪',
@@ -22,15 +24,30 @@ const RARITY_ICONS: Record<Rarity, string> = {
   common: '📖',
 };
 
+/**
+ * 根據 answerId 取得卡片圖片 URL
+ * 注意：answerId 是 0-49，圖片檔名是 1-50，所以需要 +1
+ */
+function getCardImageUrl(answerId: number): string | null {
+  // answerId 0-49 對應圖片 1.png - 50.png
+  const imageId = answerId + 1;
+  if (imageId >= 1 && imageId <= 50) {
+    return `/game/cards/faces/${imageId}.png`;
+  }
+  return null;
+}
+
 export default function NFTCard({
   id,
   rarity,
   question,
   answerZh,
+  answerId,
   mintedAt,
   onClick,
   className,
 }: NFTCardProps) {
+  const cardImageUrl = getCardImageUrl(answerId);
   // 格式化日期 (只顯示日期部分)
   const formattedDate = new Date(mintedAt).toLocaleDateString('zh-TW', {
     year: 'numeric',
@@ -83,7 +100,7 @@ export default function NFTCard({
     >
       {/* NFT 圖像區域 - 正方形 */}
       <div
-        className="relative flex items-center justify-center aspect-square"
+        className="relative flex items-center justify-center aspect-square overflow-hidden"
         style={{ background: 'var(--color-background-elevated)' }}
       >
         {/* 稀有度光暈效果 */}
@@ -93,15 +110,26 @@ export default function NFTCard({
           aria-hidden="true"
         />
 
-        {/* NFT 圖標 */}
-        <span
-          className="relative z-10 select-none"
-          style={{ fontSize: 'var(--text-5xl)' }}
-          role="img"
-          aria-label={`${rarity} NFT icon`}
-        >
-          {RARITY_ICONS[rarity]}
-        </span>
+        {/* NFT 圖片或 Fallback 圖標 */}
+        {cardImageUrl ? (
+          <Image
+            src={cardImageUrl}
+            alt={`NFT Card #${answerId}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 50vw, 25vw"
+            priority={false}
+          />
+        ) : (
+          <span
+            className="relative z-10 select-none"
+            style={{ fontSize: 'var(--text-5xl)' }}
+            role="img"
+            aria-label={`${rarity} NFT icon`}
+          >
+            {RARITY_ICONS[rarity]}
+          </span>
+        )}
       </div>
 
       {/* NFT 內容區域 */}

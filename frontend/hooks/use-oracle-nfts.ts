@@ -8,6 +8,7 @@ export interface OracleNFT {
   question: string;
   answerEn: string;
   answerZh: string;
+  answerId: number;
   mintedAt: string;
 }
 

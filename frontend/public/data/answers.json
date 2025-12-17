@@ -3,300 +3,350 @@
     "id": 1,
     "text_zh": "是的",
     "text_en": "Yes",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/1.png"
   },
   {
     "id": 2,
     "text_zh": "絕對可以",
     "text_en": "Absolutely",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/2.png"
   },
   {
     "id": 3,
     "text_zh": "毫無疑問",
     "text_en": "Without a doubt",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/3.png"
   },
   {
     "id": 4,
     "text_zh": "當然",
     "text_en": "Of course",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/4.png"
   },
   {
     "id": 5,
     "text_zh": "你可以依靠它",
     "text_en": "You can count on it",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/5.png"
   },
   {
     "id": 6,
     "text_zh": "這是確定的",
     "text_en": "It is certain",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/6.png"
   },
   {
     "id": 7,
     "text_zh": "前景看好",
     "text_en": "Outlook is good",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/7.png"
   },
   {
     "id": 8,
     "text_zh": "跡象指向是",
     "text_en": "Signs point to yes",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/8.png"
   },
   {
     "id": 9,
     "text_zh": "放手去做吧",
     "text_en": "Go for it",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/9.png"
   },
   {
     "id": 10,
     "text_zh": "現在正是時候",
     "text_en": "Now is the time",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/10.png"
   },
   {
     "id": 11,
     "text_zh": "不",
     "text_en": "No",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/11.png"
   },
   {
     "id": 12,
     "text_zh": "不要指望它",
     "text_en": "Don't count on it",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/12.png"
   },
   {
     "id": 13,
     "text_zh": "我的回答是否定的",
     "text_en": "My answer is no",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/13.png"
   },
   {
     "id": 14,
     "text_zh": "前景不太好",
     "text_en": "Outlook not so good",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/14.png"
   },
   {
     "id": 15,
     "text_zh": "非常懷疑",
     "text_en": "Very doubtful",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/15.png"
   },
   {
     "id": 16,
     "text_zh": "這不是個好主意",
     "text_en": "Not a good idea",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/16.png"
   },
   {
     "id": 17,
     "text_zh": "你可能會後悔",
     "text_en": "You might regret it",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/17.png"
   },
   {
     "id": 18,
     "text_zh": "別冒這個險",
     "text_en": "Don't risk it",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/18.png"
   },
   {
     "id": 19,
     "text_zh": "不值得",
     "text_en": "Not worth it",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/19.png"
   },
   {
     "id": 20,
     "text_zh": "放棄這個念頭",
     "text_en": "Abandon this thought",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/20.png"
   },
   {
     "id": 21,
     "text_zh": "再等等看",
     "text_en": "Wait and see",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/21.png"
   },
   {
     "id": 22,
     "text_zh": "現在還不是時候",
     "text_en": "Not the right time yet",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/22.png"
   },
   {
     "id": 23,
     "text_zh": "時機未到",
     "text_en": "Timing isn't right",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/23.png"
   },
   {
     "id": 24,
     "text_zh": "稍後再問",
     "text_en": "Ask again later",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/24.png"
   },
   {
     "id": 25,
     "text_zh": "耐心一點",
     "text_en": "Be patient",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/25.png"
   },
   {
     "id": 26,
     "text_zh": "讓時間來證明",
     "text_en": "Let time tell",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/26.png"
   },
   {
     "id": 27,
     "text_zh": "不要急於決定",
     "text_en": "Don't rush to decide",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/27.png"
   },
   {
     "id": 28,
     "text_zh": "給它更多時間",
     "text_en": "Give it more time",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/28.png"
   },
   {
     "id": 29,
     "text_zh": "答案會自己顯現",
     "text_en": "The answer will reveal itself",
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "/game/cards/faces/29.png"
   },
   {
     "id": 30,
     "text_zh": "保持觀望",
     "text_en": "Keep watching",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/30.png"
   },
   {
     "id": 31,
     "text_zh": "採取行動",
     "text_en": "Take action",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/31.png"
   },
   {
     "id": 32,
     "text_zh": "相信你的直覺",
     "text_en": "Trust your instinct",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/32.png"
   },
   {
     "id": 33,
     "text_zh": "聽從你的內心",
     "text_en": "Follow your heart",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/33.png"
   },
   {
     "id": 34,
     "text_zh": "專注於你想要的",
     "text_en": "Focus on what you want",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/34.png"
   },
   {
     "id": 35,
     "text_zh": "做出改變",
     "text_en": "Make a change",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/35.png"
   },
   {
     "id": 36,
     "text_zh": "承擔風險",
     "text_en": "Take the risk",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/36.png"
   },
   {
     "id": 37,
     "text_zh": "堅持下去",
     "text_en": "Keep going",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/37.png"
   },
   {
     "id": 38,
     "text_zh": "重新考慮你的方向",
     "text_en": "Reconsider your direction",
-    "rarity": "Epic"
+    "rarity": "Epic",
+    "imageUrl": "/game/cards/faces/38.png"
   },
   {
     "id": 39,
     "text_zh": "尋求他人的建議",
     "text_en": "Seek advice from others",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/39.png"
   },
   {
     "id": 40,
     "text_zh": "從不同角度思考",
     "text_en": "Think from different angles",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/40.png"
   },
   {
     "id": 41,
     "text_zh": "你已經知道答案了",
     "text_en": "You already know the answer",
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "/game/cards/faces/41.png"
   },
   {
     "id": 42,
     "text_zh": "問問你自己真正想要什麼",
     "text_en": "Ask yourself what you truly want",
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "/game/cards/faces/42.png"
   },
   {
     "id": 43,
     "text_zh": "答案就在你心中",
     "text_en": "The answer is in your heart",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/43.png"
   },
   {
     "id": 44,
     "text_zh": "仔細想想你的動機",
     "text_en": "Think carefully about your motive",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/44.png"
   },
   {
     "id": 45,
     "text_zh": "這取決於你",
     "text_en": "It depends on you",
-    "rarity": "Rare"
+    "rarity": "Rare",
+    "imageUrl": "/game/cards/faces/45.png"
   },
   {
     "id": 46,
     "text_zh": "你比你想像的更清楚",
     "text_en": "You know better than you think",
-    "rarity": "Common"
+    "rarity": "Common",
+    "imageUrl": "/game/cards/faces/46.png"
   },
   {
     "id": 47,
     "text_zh": "回顧過去的經驗",
     "text_en": "Review past experiences",
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "/game/cards/faces/47.png"
   },
   {
     "id": 48,
     "text_zh": "傾聽內心的聲音",
     "text_en": "Listen to your inner voice",
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "/game/cards/faces/48.png"
   },
   {
     "id": 49,
     "text_zh": "真相終將浮現",
     "text_en": "The truth will surface",
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "/game/cards/faces/49.png"
   },
   {
     "id": 50,
     "text_zh": "相信這個過程",
     "text_en": "Trust the process",
-    "rarity": "Legendary"
+    "rarity": "Legendary",
+    "imageUrl": "/game/cards/faces/50.png"
   }
 ]

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Badge from './ui/badge';
@@ -13,13 +14,26 @@ export interface NFTDetailModalProps {
   className?: string;
 }
 
-// NFT 圖標映射 (根據稀有度)
+// NFT 圖標映射 (根據稀有度) - 用於 fallback
 const RARITY_ICONS: Record<Rarity, string> = {
   legendary: '🌟',
   epic: '💪',
   rare: '📚',
   common: '📖',
 };
+
+/**
+ * 根據 answerId 取得卡片圖片 URL
+ * 注意：answerId 是 0-49，圖片檔名是 1-50，所以需要 +1
+ */
+function getCardImageUrl(answerId: number): string | null {
+  // answerId 0-49 對應圖片 1.png - 50.png
+  const imageId = answerId + 1;
+  if (imageId >= 1 && imageId <= 50) {
+    return `/game/cards/faces/${imageId}.png`;
+  }
+  return null;
+}
 
 const RARITY_LABELS: Record<Rarity, string> = {
   legendary: '傳說',
@@ -136,7 +150,7 @@ export default function NFTDetailModal({
               {/* Content */}
               <div className="grid md:grid-cols-2 gap-6 p-6">
                 {/* NFT 圖像 */}
-                <div className="relative flex items-center justify-center h-64 bg-gradient-to-br from-background to-background-secondary rounded-lg overflow-hidden">
+                <div className="relative flex items-center justify-center h-80 bg-gradient-to-br from-background to-background-secondary rounded-lg overflow-hidden">
                   {/* 稀有度光暈 */}
                   <div
                     className={cn(
@@ -147,9 +161,21 @@ export default function NFTDetailModal({
                       nft.rarity === 'common' && 'bg-rarity-common'
                     )}
                   />
-                  <span className="relative z-10 text-8xl select-none">
-                    {RARITY_ICONS[nft.rarity]}
-                  </span>
+                  {/* 顯示卡片圖片或 fallback 圖標 */}
+                  {getCardImageUrl(nft.answerId) ? (
+                    <Image
+                      src={getCardImageUrl(nft.answerId)!}
+                      alt={`NFT Card #${nft.answerId}`}
+                      fill
+                      className="object-contain relative z-10"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
+                    />
+                  ) : (
+                    <span className="relative z-10 text-8xl select-none">
+                      {RARITY_ICONS[nft.rarity]}
+                    </span>
+                  )}
                 </div>
 
                 {/* NFT 資訊 */}
