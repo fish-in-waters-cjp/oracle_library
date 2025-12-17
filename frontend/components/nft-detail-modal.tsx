@@ -3,37 +3,43 @@
 import { useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import Badge from './ui/badge';
 import type { OracleNFT, Rarity } from '@/hooks/use-oracle-nfts';
 
-export interface NFTDetailModalProps {
+interface NFTDetailModalProps {
   open: boolean;
   nft: OracleNFT | null;
   onClose: () => void;
-  className?: string;
 }
-
-// NFT 圖標映射 (根據稀有度) - 用於 fallback
-const RARITY_ICONS: Record<Rarity, string> = {
-  legendary: '🌟',
-  epic: '💪',
-  rare: '📚',
-  common: '📖',
-};
 
 /**
- * 根據 answerId 取得卡片圖片 URL
- * 注意：answerId 是 0-49，圖片檔名是 1-50，所以需要 +1
+ * 稀有度顏色配置
  */
-function getCardImageUrl(answerId: number): string | null {
-  // answerId 0-49 對應圖片 1.png - 50.png
-  const imageId = answerId + 1;
-  if (imageId >= 1 && imageId <= 50) {
-    return `/game/cards/faces/${imageId}.png`;
-  }
-  return null;
-}
+const RARITY_COLORS: Record<Rarity, { bg: string; text: string; glow: string; border: string }> = {
+  legendary: {
+    bg: 'rgba(212, 175, 55, 0.15)',
+    text: '#d4af37',
+    glow: 'rgba(212, 175, 55, 0.4)',
+    border: '#d4af37',
+  },
+  epic: {
+    bg: 'rgba(167, 139, 250, 0.15)',
+    text: '#a78bfa',
+    glow: 'rgba(167, 139, 250, 0.4)',
+    border: '#a78bfa',
+  },
+  rare: {
+    bg: 'rgba(96, 165, 250, 0.15)',
+    text: '#60a5fa',
+    glow: 'rgba(96, 165, 250, 0.4)',
+    border: '#60a5fa',
+  },
+  common: {
+    bg: 'rgba(156, 163, 175, 0.15)',
+    text: '#9ca3af',
+    glow: 'rgba(156, 163, 175, 0.3)',
+    border: '#9ca3af',
+  },
+};
 
 const RARITY_LABELS: Record<Rarity, string> = {
   legendary: '傳說',
@@ -42,11 +48,112 @@ const RARITY_LABELS: Record<Rarity, string> = {
   common: '普通',
 };
 
+/**
+ * 根據 answerId 取得卡片圖片 URL
+ */
+function getCardImageUrl(answerId: number): string | null {
+  const imageId = answerId + 1;
+  if (imageId >= 1 && imageId <= 50) {
+    return `/game/cards/faces/${imageId}.png`;
+  }
+  return null;
+}
+
+/**
+ * 簡潔樣式定義 - 以卡片為主體
+ */
+const styles = {
+  overlay: {
+    position: 'fixed' as const,
+    inset: 0,
+    zIndex: 50,
+    background: 'rgba(0, 0, 0, 0.9)',
+    backdropFilter: 'blur(12px)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '24px',
+  },
+
+  modal: {
+    position: 'relative' as const,
+    width: '100%',
+    maxWidth: '320px',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    gap: '20px',
+  },
+
+  closeButton: {
+    position: 'absolute' as const,
+    top: '-48px',
+    right: '0',
+    width: '36px',
+    height: '36px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    background: 'rgba(255, 255, 255, 0.1)',
+    border: 'none',
+    color: 'rgba(255, 255, 255, 0.7)',
+    cursor: 'pointer',
+    transition: 'var(--transition-fast)',
+  },
+
+  cardWrapper: {
+    position: 'relative' as const,
+    width: '100%',
+    aspectRatio: '2.5/3.5',
+    borderRadius: '12px',
+    overflow: 'hidden',
+  },
+
+  infoBar: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '12px',
+  },
+
+  rarityBadge: {
+    padding: '6px 14px',
+    borderRadius: '9999px',
+    fontSize: '12px',
+    fontWeight: 600,
+    letterSpacing: '0.05em',
+  },
+
+  cardNumber: {
+    fontSize: '14px',
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontFamily: 'var(--font-mono)',
+  },
+
+  viewButton: {
+    width: '100%',
+    padding: '14px',
+    background: 'transparent',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    borderRadius: '10px',
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: '13px',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'var(--transition-fast)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+  },
+};
+
 export default function NFTDetailModal({
   open,
   nft,
   onClose,
-  className,
 }: NFTDetailModalProps) {
   // ESC 鍵關閉
   const handleKeyDown = useCallback(
@@ -61,7 +168,6 @@ export default function NFTDetailModal({
   useEffect(() => {
     if (open) {
       document.addEventListener('keydown', handleKeyDown);
-      // 防止背景滾動
       document.body.style.overflow = 'hidden';
     }
 
@@ -71,18 +177,10 @@ export default function NFTDetailModal({
     };
   }, [open, handleKeyDown]);
 
-  // 格式化日期
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('zh-TW', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
-  };
+  if (!nft) return null;
+
+  const rarityColors = RARITY_COLORS[nft.rarity];
+  const cardImageUrl = getCardImageUrl(nft.answerId);
 
   return (
     <AnimatePresence>
@@ -93,176 +191,100 @@ export default function NFTDetailModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className={cn(
-            'fixed inset-0 z-50',
-            'bg-black/60 backdrop-blur-sm',
-            'flex items-center justify-center p-4',
-            className
-          )}
+          style={styles.overlay}
           onClick={onClose}
         >
-          {nft && (
-            <motion.div
-              data-testid="modal-content"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              onClick={(e) => e.stopPropagation()}
-              className={cn(
-                'relative w-full max-w-2xl',
-                'bg-background',
-                'border border-border',
-                'rounded-xl shadow-2xl',
-                'overflow-hidden'
-              )}
+          <motion.div
+            data-testid="modal-content"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            onClick={(e) => e.stopPropagation()}
+            style={styles.modal}
+          >
+            {/* 關閉按鈕 */}
+            <motion.button
+              onClick={onClose}
+              aria-label="關閉"
+              style={styles.closeButton}
+              whileHover={{ background: 'rgba(255, 255, 255, 0.2)' }}
+              whileTap={{ scale: 0.95 }}
             >
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-border">
-                <h3 className="text-xl font-heading font-semibold">NFT 詳情</h3>
-                <button
-                  onClick={onClose}
-                  aria-label="關閉"
-                  className={cn(
-                    'p-2 rounded-lg',
-                    'text-foreground-secondary hover:text-foreground',
-                    'hover:bg-background-secondary',
-                    'transition-colors'
-                  )}
-                >
-                  <svg
-                    width="24"
-                    height="24"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </motion.button>
 
-              {/* Content */}
-              <div className="grid md:grid-cols-2 gap-6 p-6">
-                {/* NFT 圖像 */}
-                <div className="relative flex items-center justify-center h-80 bg-gradient-to-br from-background to-background-secondary rounded-lg overflow-hidden">
-                  {/* 稀有度光暈 */}
-                  <div
-                    className={cn(
-                      'absolute inset-0 opacity-30 blur-3xl',
-                      nft.rarity === 'legendary' && 'bg-rarity-legendary',
-                      nft.rarity === 'epic' && 'bg-rarity-epic',
-                      nft.rarity === 'rare' && 'bg-rarity-rare',
-                      nft.rarity === 'common' && 'bg-rarity-common'
-                    )}
-                  />
-                  {/* 顯示卡片圖片或 fallback 圖標 */}
-                  {getCardImageUrl(nft.answerId) ? (
-                    <Image
-                      src={getCardImageUrl(nft.answerId)!}
-                      alt={`NFT Card #${nft.answerId}`}
-                      fill
-                      className="object-contain relative z-10"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      priority
-                    />
-                  ) : (
-                    <span className="relative z-10 text-8xl select-none">
-                      {RARITY_ICONS[nft.rarity]}
-                    </span>
-                  )}
+            {/* 卡片主體 */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.3 }}
+              style={{
+                ...styles.cardWrapper,
+                boxShadow: `0 20px 60px ${rarityColors.glow}`,
+              }}
+            >
+              {cardImageUrl ? (
+                <Image
+                  src={cardImageUrl}
+                  alt={`Oracle NFT #${nft.answerId + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="320px"
+                  priority
+                />
+              ) : (
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--color-background-elevated)',
+                }}>
+                  <span style={{ fontSize: '4rem', opacity: 0.5 }}>📖</span>
                 </div>
-
-                {/* NFT 資訊 */}
-                <div className="space-y-4">
-                  {/* 稀有度 */}
-                  <div>
-                    <div className="text-sm text-foreground-tertiary mb-1">
-                      稀有度
-                    </div>
-                    <Badge variant={nft.rarity}>
-                      {RARITY_LABELS[nft.rarity]}
-                    </Badge>
-                  </div>
-
-                  {/* 問題 */}
-                  <div>
-                    <div className="text-sm text-foreground-tertiary mb-1">
-                      問題
-                    </div>
-                    <div className="text-foreground">{nft.question}</div>
-                  </div>
-
-                  {/* 解答（英文） */}
-                  <div>
-                    <div className="text-sm text-foreground-tertiary mb-1">
-                      解答（英文）
-                    </div>
-                    <div className="text-foreground italic">{nft.answerEn}</div>
-                  </div>
-
-                  {/* 解答（中文） */}
-                  <div>
-                    <div className="text-sm text-foreground-tertiary mb-1">
-                      解答（中文）
-                    </div>
-                    <div className="text-foreground">{nft.answerZh}</div>
-                  </div>
-
-                  {/* 鑄造時間 */}
-                  <div>
-                    <div className="text-sm text-foreground-tertiary mb-1">
-                      鑄造時間
-                    </div>
-                    <div className="text-foreground">
-                      {formatDate(nft.mintedAt)}
-                    </div>
-                  </div>
-
-                  {/* NFT ID */}
-                  <div>
-                    <div className="text-sm text-foreground-tertiary mb-1">
-                      NFT ID
-                    </div>
-                    <div className="font-mono text-sm text-foreground-secondary">
-                      #{nft.id}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="flex justify-end gap-3 p-6 border-t border-border">
-                <button
-                  onClick={onClose}
-                  className={cn(
-                    'px-4 py-2 rounded-lg',
-                    'bg-background-secondary',
-                    'text-foreground',
-                    'hover:bg-border',
-                    'transition-colors'
-                  )}
-                >
-                  關閉
-                </button>
-                <button
-                  className={cn(
-                    'px-4 py-2 rounded-lg',
-                    'bg-primary text-primary-foreground',
-                    'hover:bg-primary/90',
-                    'transition-colors'
-                  )}
-                >
-                  查看鏈上資訊
-                </button>
-              </div>
+              )}
             </motion.div>
-          )}
+
+            {/* 簡潔資訊列 */}
+            <div style={styles.infoBar}>
+              <span
+                style={{
+                  ...styles.rarityBadge,
+                  background: rarityColors.bg,
+                  color: rarityColors.text,
+                  border: `1px solid ${rarityColors.border}60`,
+                }}
+              >
+                {RARITY_LABELS[nft.rarity]}
+              </span>
+              <span style={styles.cardNumber}>#{nft.answerId + 1}</span>
+            </div>
+
+            {/* Explorer 按鈕 */}
+            <motion.button
+              style={{
+                ...styles.viewButton,
+                borderColor: `${rarityColors.border}40`,
+              }}
+              whileHover={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderColor: rarityColors.border,
+              }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                window.open(`https://explorer.iota.org/iota/object/${nft.id}`, '_blank');
+              }}
+            >
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              在 Explorer 查看
+            </motion.button>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
