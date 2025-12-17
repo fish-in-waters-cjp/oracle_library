@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSignAndExecuteTransaction, useSuiClient } from '@iota/dapp-kit';
+import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
 import { PACKAGE_ID, MGC_TREASURY_ID, NFT_CONFIG_ID, MINT_COST } from '@/consts';
 
@@ -65,7 +65,7 @@ export function useMintNFT(): UseMintNFTReturn {
   const [lastResult, setLastResult] = useState<MintResult | null>(null);
 
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
-  const suiClient = useSuiClient();
+  const iotaClient = useIotaClient();
 
   /**
    * 執行鑄造
@@ -123,7 +123,7 @@ export function useMintNFT(): UseMintNFTReturn {
       );
 
       // 等待交易確認並取得 NFT
-      const txResult = await suiClient.waitForTransaction({
+      const txResult = await iotaClient.waitForTransaction({
         digest: result.digest,
         options: {
           showEffects: true,
@@ -143,7 +143,7 @@ export function useMintNFT(): UseMintNFTReturn {
       }
 
       // 取得 NFT 詳細資料
-      const nftDetails = await suiClient.getObject({
+      const nftDetails = await iotaClient.getObject({
         id: nftObject.objectId,
         options: {
           showContent: true,

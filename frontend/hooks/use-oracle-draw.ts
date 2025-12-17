@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSignAndExecuteTransaction, useSuiClient } from '@iota/dapp-kit';
+import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
 import { PACKAGE_ID, MGC_TREASURY_ID } from '@/consts';
 import { generateRandomAnswerId } from '@/lib/random';
@@ -64,7 +64,7 @@ export function useOracleDraw(): UseOracleDrawReturn {
   const [lastResult, setLastResult] = useState<DrawResult | null>(null);
 
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
-  const suiClient = useSuiClient();
+  const iotaClient = useIotaClient();
 
   /**
    * 執行抽取
@@ -119,7 +119,7 @@ export function useOracleDraw(): UseOracleDrawReturn {
       );
 
       // 5. 等待交易確認並取得 DrawRecord
-      const txResult = await suiClient.waitForTransaction({
+      const txResult = await iotaClient.waitForTransaction({
         digest: result.digest,
         options: {
           showEffects: true,
