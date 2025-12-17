@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
 import { PACKAGE_ID, MGC_TREASURY_ID } from '@/consts';
-import { generateRandomAnswerId, getRarityLabelFromAnswerId } from '@/lib/random';
+import { generateRandomAnswerId } from '@/lib/random';
 import { MOCK_ENABLED, MOCK_DATA } from '@/config/mock';
+import type { Rarity } from './use-answers';
 
 /**
  * 抽取結果
@@ -45,6 +46,14 @@ interface UseOracleDrawReturn {
 }
 
 /**
+ * 答案資料結構（從 answers.json 載入）
+ */
+interface AnswerData {
+  id: number;
+  rarity: Rarity;
+}
+
+/**
  * useOracleDraw Hook
  *
  * 執行抽取解答交易
@@ -65,6 +74,35 @@ export function useOracleDraw(): UseOracleDrawReturn {
   const [status, setStatus] = useState<DrawStatus>('idle');
   const [error, setError] = useState<string | null>(null);
   const [lastResult, setLastResult] = useState<DrawResult | null>(null);
+
+  // 載入 answers.json 以取得正確的稀有度
+  const answersRef = useRef<AnswerData[]>([]);
+  const answersLoadedRef = useRef(false);
+
+  useEffect(() => {
+    if (answersLoadedRef.current) return;
+
+    const loadAnswers = async () => {
+      try {
+        const response = await fetch('/data/answers.json');
+        if (response.ok) {
+          const data = await response.json();
+          answersRef.current = data.map((a: { id: number; rarity: Rarity }) => ({
+            id: a.id,
+            rarity: a.rarity,
+          }));
+          answersLoadedRef.current = true;
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[useOracleDraw] 載入 answers.json 成功，共', answersRef.current.length, '筆');
+          }
+        }
+      } catch (err) {
+        console.error('[useOracleDraw] 載入 answers.json 失敗:', err);
+      }
+    };
+
+    loadAnswers();
+  }, []);
 
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
   const iotaClient = useIotaClient();
@@ -87,10 +125,18 @@ export function useOracleDraw(): UseOracleDrawReturn {
       // 1. 生成隨機答案 ID (0-49)
       const answerId = generateRandomAnswerId();
 
-      // 2. 根據 answerId 計算稀有度
-      const rarityLabel = getRarityLabelFromAnswerId(answerId);
-      // 轉換為 PascalCase（Common, Rare, Epic, Legendary）
-      const rarity = rarityLabel.charAt(0).toUpperCase() + rarityLabel.slice(1);
+      // 2. 從 answers.json 取得正確的稀有度
+      // answerId 是 0-based index，對應 answers.json 的 id-1
+      const answerData = answersRef.current[answerId];
+      const rarity = answerData?.rarity || 'Common';
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[useOracleDraw] 抽中答案:', {
+          answerId,
+          jsonId: answerId + 1,
+          rarity,
+        });
+      }
 
       // === MOCK 模式：模擬交易流程 ===
       if (MOCK_ENABLED) {

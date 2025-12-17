@@ -260,12 +260,22 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
     setMintedNftId(null);
     reset();
 
-    // 停止所有 Phaser 場景
-    if (gameRef.current) {
-      gameRef.current.scene.stop('PreloadScene');
-      gameRef.current.scene.stop('DrawScene');
-      gameRef.current.scene.stop('CardRevealScene');
-      gameRef.current.scene.stop('CelebrationScene');
+    // 安全地停止所有 Phaser 場景
+    if (gameRef.current?.scene) {
+      const sceneManager = gameRef.current.scene;
+      const scenesToStop = ['PreloadScene', 'DrawScene', 'CardRevealScene', 'CelebrationScene'];
+
+      scenesToStop.forEach((sceneName) => {
+        try {
+          // 檢查場景是否存在且正在運行
+          const scene = sceneManager.getScene(sceneName);
+          if (scene && sceneManager.isActive(sceneName)) {
+            sceneManager.stop(sceneName);
+          }
+        } catch {
+          // 忽略場景停止錯誤
+        }
+      });
     }
   };
 

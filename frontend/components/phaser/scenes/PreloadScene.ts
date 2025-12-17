@@ -53,6 +53,14 @@ export class PreloadScene extends Phaser.Scene {
    * 注意：answerId 是 0-49，圖片檔名是 1-50，所以需要 +1
    */
   private loadCardImage(): void {
+    // 載入卡片背面圖片（用於抽卡動畫）
+    if (!this.textures.exists('card-back')) {
+      this.load.image('card-back', '/game/cards/card-back.png');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[PreloadScene] 載入卡片背面圖片');
+      }
+    }
+
     const answerId = this.initData.answerId;
     if (answerId !== undefined && answerId >= 0 && answerId <= 49) {
       // answerId 0-49 對應圖片 1.png - 50.png

@@ -141,6 +141,10 @@ export function createGameConfig(
         debug: false,
       },
     },
+    audio: {
+      disableWebAudio: true, // 禁用 WebAudio 避免 AudioContext 錯誤
+      noAudio: true, // 完全禁用音訊（目前不需要音效）
+    },
     scene: [], // 場景將動態加入
     ...customConfig,
   };

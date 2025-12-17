@@ -93,23 +93,52 @@ export class DrawScene extends Phaser.Scene {
   private createCard(x: number, y: number, color: number): Phaser.GameObjects.Container {
     const card = this.add.container(x, -200);
 
-    // 卡牌背景
-    const bg = this.add.rectangle(0, 0, 200, 280, 0x1a1a1a);
-    bg.setStrokeStyle(2, color, 0.8);
-
-    // 卡牌邊框發光
+    // 卡牌邊框發光（底層）
     const glow = this.add.rectangle(0, 0, 200, 280, color, 0);
 
-    // 卡牌圖示
-    const icon = this.add.text(0, 0, '📖', {
-      fontSize: '80px',
-    });
-    icon.setOrigin(0.5);
+    // 卡牌圖片或 fallback 背景
+    let cardImage: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
+    let icon: Phaser.GameObjects.Text | null = null;
 
-    card.add([glow, bg, icon]);
+    if (this.textures.exists('card-back')) {
+      // 使用卡片背面圖片
+      cardImage = this.add.image(0, 0, 'card-back');
+      // 縮放圖片以適應卡片尺寸
+      const texture = this.textures.get('card-back');
+      const frame = texture.getSourceImage();
+      const scale = Math.min(200 / frame.width, 280 / frame.height);
+      cardImage.setScale(scale);
+      // 添加稀有度邊框
+      const border = this.add.rectangle(0, 0, 200, 280);
+      border.setStrokeStyle(3, color, 0.9);
+      border.setFillStyle(0x000000, 0);
+      card.add([glow, cardImage, border]);
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DrawScene] 使用卡片背面圖片');
+      }
+    } else {
+      // Fallback: 使用矩形背景 + emoji
+      const bg = this.add.rectangle(0, 0, 200, 280, 0x1a1a1a);
+      bg.setStrokeStyle(2, color, 0.8);
+      cardImage = bg;
+
+      icon = this.add.text(0, 0, '📖', {
+        fontSize: '80px',
+      });
+      icon.setOrigin(0.5);
+      card.add([glow, bg, icon]);
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DrawScene] 卡片背面圖片未載入，使用 fallback');
+      }
+    }
+
     card.setData('glow', glow);
-    card.setData('bg', bg);
-    card.setData('icon', icon);
+    card.setData('cardImage', cardImage);
+    if (icon) {
+      card.setData('icon', icon);
+    }
 
     return card;
   }
@@ -189,8 +218,6 @@ export class DrawScene extends Phaser.Scene {
   private animateCardFlip(): void {
     if (!this.card) return;
 
-    const icon = this.card.getData('icon') as Phaser.GameObjects.Text;
-
     // 卡片翻轉
     this.tweens.add({
       targets: this.card,
@@ -208,21 +235,24 @@ export class DrawScene extends Phaser.Scene {
       },
     });
 
-    // 圖示同步翻轉
-    this.tweens.add({
-      targets: icon,
-      scaleX: { from: 1, to: 0 },
-      duration: 400,
-      ease: 'Sine.easeInOut',
-      onComplete: () => {
-        this.tweens.add({
-          targets: icon,
-          scaleX: { from: 0, to: 1 },
-          duration: 400,
-          ease: 'Sine.easeInOut',
-        });
-      },
-    });
+    // 如果有 emoji icon（fallback 模式），同步翻轉
+    const icon = this.card.getData('icon') as Phaser.GameObjects.Text | undefined;
+    if (icon) {
+      this.tweens.add({
+        targets: icon,
+        scaleX: { from: 1, to: 0 },
+        duration: 400,
+        ease: 'Sine.easeInOut',
+        onComplete: () => {
+          this.tweens.add({
+            targets: icon,
+            scaleX: { from: 0, to: 1 },
+            duration: 400,
+            ease: 'Sine.easeInOut',
+          });
+        },
+      });
+    }
 
     if (process.env.NODE_ENV === 'development') {
       console.log('[DrawScene] 翻轉動畫');
