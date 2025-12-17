@@ -22,9 +22,11 @@ learning/
 
 ## 學習報告列表
 
-| Session | 日期 | 狀態 | 學習概念數 |
-|---------|------|------|------------|
-| *尚無報告* | - | - | - |
+| Session | 日期 | 狀態 | 學習概念數 | 完成任務 |
+|---------|------|------|------------|----------|
+| [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md) | 2025-12-17 | ✅ 完成 | 15+ | US3 & US4 前端整合 |
+| [Developer A Session](developer-a-session-20251217.md) | 2025-12-17 | ✅ 完成 | 10 | 4 個合約任務 |
+| [Phase 0 Session](phase0-session-20251216.md) | 2025-12-16 | ⏳ 進行中 | 5+ | 前端基礎設施 |
 
 ## 概念庫
 
@@ -38,12 +40,21 @@ learning/
 
 ## 模組學習進度
 
-| 模組 | 學習狀態 | 核心概念 |
-|------|----------|----------|
-| mgc.move | 待學習 | Coin Standard, TreasuryCap, OTW |
-| check_in.move | 待學習 | Entry Functions, Events, Time |
-| oracle_draw.move | 待學習 | Object Ownership, Coin Transfer |
-| oracle_nft.move | 待學習 | Display Standard, Destruction |
+| 模組 | 學習狀態 | 核心概念 | 學習報告 |
+|------|----------|----------|----------|
+| mgc.move | ✅ 已完成 | Coin Standard, TreasuryCap, OTW | [Developer A Session](developer-a-session-20251217.md#t007t008---mgc-token-模組) |
+| check_in.move | ✅ 已完成 | Entry Functions, Events, Time | [Developer A Session](developer-a-session-20251217.md#t037t042---check_in-模組) |
+| oracle_draw.move | ✅ 已整合 | Object Ownership, Coin Transfer | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#四區塊鏈整合) |
+| oracle_nft.move | ✅ 已整合 | Display Standard, Destruction | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#41-usemintnft-hook) |
+
+## 前端整合學習進度
+
+| 功能模組 | 學習狀態 | 核心概念 | 學習報告 |
+|---------|----------|----------|----------|
+| React + Phaser 整合 | ✅ 已完成 | EventBridge, Scene Lifecycle | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#21-react--phaser-整合架構) |
+| Optimistic UI | ✅ 已完成 | State Management, UX Design | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#23-optimistic-ui-模式) |
+| Transaction Building | ✅ 已完成 | Coin Splitting, Object Parsing | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#41-usemintnft-hook) |
+| Animation Systems | ✅ 已完成 | Framer Motion, Flying Numbers | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#34-flyingnumber---飛行數字動畫) |
 
 ## 使用方式
 
