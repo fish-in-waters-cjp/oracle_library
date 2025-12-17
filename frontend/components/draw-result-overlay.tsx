@@ -7,6 +7,11 @@ import { MintConfirmModal } from './mint-confirm-modal';
 import Button from '@/components/ui/button';
 
 /**
+ * IOTA Explorer Base URL
+ */
+const EXPLORER_BASE_URL = process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://explorer.rebased.iota.org';
+
+/**
  * DrawResultOverlay Props
  */
 interface DrawResultOverlayProps {
@@ -24,6 +29,8 @@ interface DrawResultOverlayProps {
   isMinting?: boolean;
   /** MGC 餘額（用於確認對話框）*/
   mgcBalance?: number;
+  /** 已鑄造的 NFT ID（可選，用於顯示 Explorer 連結） */
+  mintedNftId?: string | null;
 }
 
 /**
@@ -213,8 +220,17 @@ export function DrawResultOverlay({
   onMintNFT,
   isMinting = false,
   mgcBalance = 0,
+  mintedNftId = null,
 }: DrawResultOverlayProps) {
   const [showMintModal, setShowMintModal] = useState(false);
+
+  // NFT 是否已鑄造
+  const hasMintedNFT = !!mintedNftId;
+
+  // Explorer 連結
+  const explorerUrl = mintedNftId
+    ? `${EXPLORER_BASE_URL}/object/${mintedNftId}`
+    : null;
 
   const rarityName = RARITY_NAMES[rarity];
   const rarityColor = RARITY_COLORS[rarity];
@@ -347,15 +363,53 @@ export function DrawResultOverlay({
               再抽一次
             </motion.button>
 
-            {/* 鑄造 NFT 按鈕 */}
-            <Button
-              onClick={handleMintClick}
-              disabled={isMinting}
-              loading={isMinting}
-              style={{ flex: 1 }}
-            >
-              {isMinting ? '鑄造中...' : '🎨 鑄造 NFT (5 MGC)'}
-            </Button>
+            {/* 根據是否已鑄造顯示不同按鈕 */}
+            {hasMintedNFT ? (
+              /* 已鑄造：顯示 Explorer 連結 */
+              <motion.a
+                href={explorerUrl || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                style={{
+                  flex: 1,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 'var(--space-4) var(--space-8)',
+                  background: 'transparent',
+                  color: 'var(--color-primary)',
+                  border: '1px solid var(--color-primary)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'var(--text-base)',
+                  textDecoration: 'none',
+                  transition: 'all var(--transition-slow)',
+                  cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(212, 175, 55, 0.1)';
+                  e.currentTarget.style.boxShadow = 'var(--shadow-glow-gold)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                🔗 在 Explorer 查看 NFT
+              </motion.a>
+            ) : (
+              /* 未鑄造：顯示鑄造按鈕 */
+              <Button
+                onClick={handleMintClick}
+                disabled={isMinting}
+                loading={isMinting}
+                style={{ flex: 1 }}
+              >
+                {isMinting ? '鑄造中...' : '🎨 鑄造 NFT (5 MGC)'}
+              </Button>
+            )}
           </motion.div>
 
           {/* 提示文字 */}
@@ -365,12 +419,25 @@ export function DrawResultOverlay({
             transition={{ delay: 0.6 }}
             style={styles.hints}
           >
-            <p style={styles.hint}>
-              鑄造 NFT 後，此解答將永久保存至區塊鏈
-            </p>
-            <p style={styles.recordId}>
-              DrawRecord ID: {recordId.substring(0, 12)}...
-            </p>
+            {hasMintedNFT ? (
+              <>
+                <p style={{ ...styles.hint, color: 'var(--color-success)' }}>
+                  🎉 NFT 鑄造成功！已永久保存至區塊鏈
+                </p>
+                <p style={styles.recordId}>
+                  NFT ID: {mintedNftId?.substring(0, 12)}...
+                </p>
+              </>
+            ) : (
+              <>
+                <p style={styles.hint}>
+                  鑄造 NFT 後，此解答將永久保存至區塊鏈
+                </p>
+                <p style={styles.recordId}>
+                  DrawRecord ID: {recordId.substring(0, 12)}...
+                </p>
+              </>
+            )}
           </motion.div>
         </div>
 

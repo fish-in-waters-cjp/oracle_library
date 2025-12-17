@@ -290,7 +290,7 @@ export class CelebrationScene extends Phaser.Scene {
         emitZone: {
           type: 'random',
           source: new Phaser.Geom.Rectangle(-400, 0, 800, 10),
-        },
+        } as Phaser.Types.GameObjects.Particles.EmitZoneData,
       });
 
       // 3 秒後停止

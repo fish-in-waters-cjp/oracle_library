@@ -37,7 +37,7 @@ type PhaserGameType = any;
 /**
  * 抽取流程狀態
  */
-type DrawPhase = 'idle' | 'drawing' | 'revealing' | 'result';
+type DrawPhase = 'idle' | 'drawing' | 'revealing' | 'result' | 'celebrating';
 
 /**
  * DrawSection Props
@@ -87,11 +87,17 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
     rarity: string;
   } | null>(null);
 
+  // 鑄造成功後的 NFT ID（用於 Explorer 連結和慶祝動畫）
+  const [mintedNftId, setMintedNftId] = useState<string | null>(null);
+
   // Phaser 遊戲實例
   const gameRef = useRef<PhaserGameType | null>(null);
   const eventBridge = useRef<EventBridge>(EventBridge.getInstance());
   // 暫存抽取結果，用於 Phaser 場景啟動
   const pendingDrawResult = useRef<{ answerId: number; rarity: string } | null>(null);
+
+  // 暫存慶祝動畫資料
+  const pendingCelebration = useRef<{ rarity: string; nftId: string } | null>(null);
 
   /**
    * 初始化 Phaser 場景
@@ -104,29 +110,42 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
       { PreloadScene },
       { DrawScene },
       { CardRevealScene },
+      { CelebrationScene },
     ] = await Promise.all([
       import('./phaser/scenes/PreloadScene'),
       import('./phaser/scenes/DrawScene'),
       import('./phaser/scenes/CardRevealScene'),
+      import('./phaser/scenes/CelebrationScene'),
     ]);
 
     // 動態添加場景
     game.scene.add('PreloadScene', PreloadScene, false);
     game.scene.add('DrawScene', DrawScene, false);
     game.scene.add('CardRevealScene', CardRevealScene, false);
+    game.scene.add('CelebrationScene', CelebrationScene, false);
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('[DrawSection] Phaser 場景已註冊');
+      console.log('[DrawSection] Phaser 場景已註冊（含 CelebrationScene）');
     }
 
     // 如果有待啟動的抽取結果，立即啟動場景
     if (pendingDrawResult.current) {
       const { answerId, rarity } = pendingDrawResult.current;
       if (process.env.NODE_ENV === 'development') {
-        console.log('[DrawSection] 啟動 Phaser 場景', { answerId, rarity });
+        console.log('[DrawSection] 啟動 Phaser 抽取場景', { answerId, rarity });
       }
       game.scene.start('PreloadScene', { answerId, rarity });
       pendingDrawResult.current = null;
+    }
+
+    // 如果有待啟動的慶祝動畫，立即啟動
+    if (pendingCelebration.current) {
+      const { rarity, nftId } = pendingCelebration.current;
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DrawSection] 啟動 Phaser 慶祝場景', { rarity, nftId });
+      }
+      game.scene.start('CelebrationScene', { rarity, nftId });
+      pendingCelebration.current = null;
     }
   }, []);
 
@@ -168,14 +187,31 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
       refetchBalance();
     };
 
+    // CelebrationScene 完成 → 返回結果頁面（顯示 Explorer 連結）
+    const handleCelebrationDone = (data: unknown) => {
+      const { nftId } = data as { rarity: string; nftId: string };
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DrawSection] 慶祝動畫完成', { nftId });
+      }
+
+      // 停止 Phaser 場景
+      bridge.emit(EVENTS.STOP_SCENE);
+
+      // 返回結果頁面
+      setPhase('result');
+    };
+
     // 註冊事件監聽器
     bridge.on(EVENTS.DRAW_COMPLETE, handleDrawComplete);
     bridge.on(EVENTS.CARD_REVEALED, handleCardRevealed);
+    bridge.on(EVENTS.CELEBRATION_DONE, handleCelebrationDone);
 
     // Cleanup
     return () => {
       bridge.off(EVENTS.DRAW_COMPLETE, handleDrawComplete);
       bridge.off(EVENTS.CARD_REVEALED, handleCardRevealed);
+      bridge.off(EVENTS.CELEBRATION_DONE, handleCelebrationDone);
     };
   }, [lastResult, onDrawSuccess, refetchBalance]);
 
@@ -221,6 +257,7 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
   const handleReset = () => {
     setPhase('idle');
     setResultData(null);
+    setMintedNftId(null);
     reset();
 
     // 停止所有 Phaser 場景
@@ -228,7 +265,23 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
       gameRef.current.scene.stop('PreloadScene');
       gameRef.current.scene.stop('DrawScene');
       gameRef.current.scene.stop('CardRevealScene');
+      gameRef.current.scene.stop('CelebrationScene');
     }
+  };
+
+  /**
+   * 啟動慶祝動畫
+   */
+  const startCelebration = (rarity: string, nftId: string) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DrawSection] 啟動慶祝動畫', { rarity, nftId });
+    }
+
+    setMintedNftId(nftId);
+    setPhase('celebrating');
+
+    // 暫存慶祝資料，等 PhaserGame 準備好後啟動
+    pendingCelebration.current = { rarity, nftId };
   };
 
   // 計算 MGC 餘額（轉換為顯示用的數字）
@@ -261,8 +314,8 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
           </motion.div>
         )}
 
-        {/* 階段 2-3: 抽取動畫和卡牌揭示（全螢幕覆蓋，完全匹配 prototype） */}
-        {(phase === 'drawing' || phase === 'revealing') && (
+        {/* 階段 2-3: 抽取動畫/卡牌揭示/慶祝動畫（全螢幕覆蓋，完全匹配 prototype） */}
+        {(phase === 'drawing' || phase === 'revealing' || phase === 'celebrating') && (
           <>
             {/* 全螢幕 Phaser 容器樣式（來自 prototype/css/pages.css） */}
             <style>{`
@@ -356,6 +409,7 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
                   rarity={resultData.rarity as any}
                   recordId={lastResult.recordId}
                   mgcBalance={mgcBalanceNumber}
+                  mintedNftId={mintedNftId}
                   onDrawAgain={handleReset}
                   onMintNFT={async () => {
                     if (!mintCoinId) {
@@ -371,7 +425,8 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
 
                     if (result) {
                       console.log('NFT 鑄造成功:', result.nftId);
-                      // TODO: T075 整合慶祝動畫
+                      // T075: 啟動慶祝動畫
+                      startCelebration(resultData.rarity, result.nftId);
                       // 重新查詢餘額
                       refetchBalance();
                       // 觸發鑄造成功回調（顯示 -5 MGC 動畫）

@@ -31,6 +31,11 @@ export const MOCK_DATA = {
   draw: {
     delayMs: 800, // 模擬交易延遲
   },
+
+  // NFT 鑄造
+  mint: {
+    delayMs: 1200, // 模擬鑄造延遲
+  },
 } as const;
 
 // ===== 工具函數 =====

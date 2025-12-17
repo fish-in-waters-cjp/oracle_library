@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSignAndExecuteTransaction, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
 import { PACKAGE_ID, MGC_TREASURY_ID, NFT_CONFIG_ID, MINT_COST } from '@/consts';
+import { MOCK_ENABLED, MOCK_DATA } from '@/config/mock';
 
 /**
  * OracleNFT Move Object 的 fields 類型
@@ -96,6 +97,32 @@ export function useMintNFT(): UseMintNFTReturn {
       // 驗證稀有度
       if (rarity < 0 || rarity > 3) {
         throw new Error('Invalid rarity: must be 0-3');
+      }
+
+      // === MOCK 模式：模擬鑄造流程 ===
+      if (MOCK_ENABLED) {
+        console.log('[useMintNFT] Mock 模式：模擬鑄造交易');
+        console.log('[useMintNFT] recordId:', recordId);
+        console.log('[useMintNFT] rarity:', rarity);
+
+        setStatus('minting');
+
+        // 模擬交易延遲
+        await new Promise((resolve) => setTimeout(resolve, MOCK_DATA.mint.delayMs));
+
+        const mintResult: MintResult = {
+          nftId: `mock-nft-${Date.now()}`,
+          answerId: 0, // Mock 模式下使用預設值
+          rarity,
+          digest: `mock-mint-digest-${Date.now()}`,
+          timestamp: Date.now(),
+        };
+
+        setLastResult(mintResult);
+        setStatus('success');
+
+        console.log('[useMintNFT] Mock 鑄造成功:', mintResult);
+        return mintResult;
       }
 
       // 建立交易

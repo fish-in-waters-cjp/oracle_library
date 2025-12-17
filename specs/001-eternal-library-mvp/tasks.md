@@ -482,8 +482,14 @@ oracle_library/
 - [x] T074 [DevA] [US4] 實作鑄造確認對話框（A 級）`frontend/components/mint-confirm-modal.tsx`
   - **Prototype**: `home.html` 鑄造確認彈窗
   - **相依**: Phase 0 的 Modal、FadeIn (T019, T027)
-- [ ] T075 [DevA] [US4] 整合慶祝動畫與 Explorer 連結
+- [x] T075 [DevA] [US4] 整合慶祝動畫與 Explorer 連結
   - **整合**: Developer B 的 CelebrationScene (T072)
+  - **完成內容**:
+    - 在 DrawSection 中新增 `celebrating` 階段並整合 CelebrationScene
+    - 在 DrawResultOverlay 中新增 Explorer 連結顯示（鑄造成功後）
+    - 實作 EventBridge 的 `CELEBRATION_DONE` 事件監聽
+    - 新增 Mock 模式支援到 useMintNFT Hook
+  - **學習報告**: `specs/001-eternal-library-mvp/learning/developer-b/T075-celebration-explorer-integration.md`
 - [x] T076 [DevA] [US4] 實作 -5 MGC 扣除動畫
   - **相依**: Phase 0 的 FlyingNumber (T025)
 

@@ -55,6 +55,13 @@ learning/
 | Optimistic UI | ✅ 已完成 | State Management, UX Design | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#23-optimistic-ui-模式) |
 | Transaction Building | ✅ 已完成 | Coin Splitting, Object Parsing | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#41-usemintnft-hook) |
 | Animation Systems | ✅ 已完成 | Framer Motion, Flying Numbers | [Frontend US3 & US4 Session](frontend-us3-us4-session-20251217.md#34-flyingnumber---飛行數字動畫) |
+| CelebrationScene 整合 | ✅ 已完成 | 延遲場景啟動, 事件驅動整合 | [T075 學習報告](developer-b/T075-celebration-explorer-integration.md) |
+
+## Developer B 學習報告
+
+| 任務 | 日期 | 核心概念 | 檔案 |
+|------|------|----------|------|
+| T075 慶祝動畫整合 | 2024-12-18 | React ↔ Phaser 整合、延遲場景啟動、Mock 模式 | [T075-celebration-explorer-integration.md](developer-b/T075-celebration-explorer-integration.md) |
 
 ## 使用方式
 
