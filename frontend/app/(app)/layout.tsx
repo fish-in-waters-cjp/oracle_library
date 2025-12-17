@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useWalletConnection } from '@/hooks/use-wallet-connection';
 import { ConnectWallet } from '@/components/connect-wallet';
-import { cn } from '@/lib/utils';
 
 /**
- * 應用佈局
+ * 應用佈局 - Style 10 高端奢華設計
  *
  * 已登入使用者的主要佈局，包含導航列和內容區域。
  */
@@ -33,50 +32,69 @@ export default function AppLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ minHeight: '100vh', background: 'var(--color-background-main)' }}>
       {/* 導航列 */}
-      <nav className="border-b border-gray-200 bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
+      <nav
+        style={{
+          borderBottom: '1px solid var(--color-border-default)',
+          background: 'var(--color-background-surface)',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1280px',
+            margin: '0 auto',
+            padding: '0 var(--space-6)',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              height: '64px',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
             {/* Logo 和導航連結 */}
-            <div className="flex items-center gap-8">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
               {/* Logo */}
               <Link
                 href="/home"
-                className="text-xl font-bold text-indigo-600 hover:text-indigo-700"
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'var(--text-xl)',
+                  fontWeight: 'var(--font-weight-normal)',
+                  color: 'var(--color-primary)',
+                  textDecoration: 'none',
+                  letterSpacing: '0.02em',
+                }}
               >
                 永恆圖書館
               </Link>
 
               {/* 導航連結 */}
-              <div className="hidden md:flex md:items-center md:gap-4">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
                 <NavLink href="/home">主頁</NavLink>
-                <NavLink href="/home/collection">收藏</NavLink>
+                <NavLink href="/collection">收藏</NavLink>
               </div>
             </div>
 
-            {/* 右側：MGC 餘額 + 錢包 */}
-            <div className="flex items-center gap-4">
-              {/* MGC 餘額區域（預留位置，US2 時實作） */}
-              <div className="hidden md:flex md:items-center md:gap-2">
-                {/* 這裡將來會放 BalanceDisplay 元件 */}
-              </div>
-
-              {/* 錢包連接狀態 */}
+            {/* 右側：錢包連接狀態 */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
               <ConnectWallet />
             </div>
-          </div>
-
-          {/* 移動版導航 */}
-          <div className="flex gap-4 pb-3 md:hidden">
-            <NavLink href="/home">主頁</NavLink>
-            <NavLink href="/home/collection">收藏</NavLink>
           </div>
         </div>
       </nav>
 
       {/* 主要內容區域 */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <main
+        style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: 'var(--space-8) var(--space-6)',
+        }}
+      >
         {children}
       </main>
     </div>
@@ -84,7 +102,7 @@ export default function AppLayout({
 }
 
 /**
- * 導航連結元件
+ * 導航連結元件 - Style 10 設計
  */
 function NavLink({
   href,
@@ -96,12 +114,24 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={cn(
-        'text-sm font-medium transition-colors',
-        'text-gray-700 hover:text-indigo-600',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2',
-        'rounded-md px-3 py-2'
-      )}
+      style={{
+        fontFamily: 'var(--font-body)',
+        fontSize: 'var(--text-sm)',
+        fontWeight: 'var(--font-weight-medium)',
+        color: 'var(--color-text-secondary)',
+        textDecoration: 'none',
+        padding: 'var(--space-2) var(--space-3)',
+        borderRadius: 'var(--radius-md)',
+        transition: 'var(--transition-fast)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.color = 'var(--color-primary)';
+        e.currentTarget.style.background = 'var(--color-background-elevated)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.color = 'var(--color-text-secondary)';
+        e.currentTarget.style.background = 'transparent';
+      }}
     >
       {children}
     </Link>

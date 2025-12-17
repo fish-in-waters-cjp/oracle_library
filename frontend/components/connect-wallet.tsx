@@ -4,10 +4,31 @@ import { useState } from 'react';
 import { ConnectModal } from '@iota/dapp-kit';
 import Button from '@/components/ui/button';
 import { useWalletConnection } from '@/hooks/use-wallet-connection';
-import { cn } from '@/lib/utils';
 
 /**
- * ConnectWallet 元件
+ * Style 10 樣式定義
+ */
+const styles = {
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'var(--space-2)',
+  },
+
+  walletIcon: {
+    width: '1.25rem',
+    height: '1.25rem',
+    borderRadius: '50%',
+  },
+
+  address: {
+    fontFamily: 'monospace',
+    fontSize: 'var(--text-sm)',
+  },
+};
+
+/**
+ * ConnectWallet 元件 - Style 10 高端奢華設計
  *
  * 根據錢包連接狀態顯示不同的按鈕：
  * - 未連接：顯示「連接錢包」按鈕，點擊打開連接模態框
@@ -49,33 +70,30 @@ export function ConnectWallet() {
 
   // 已連接狀態：顯示地址和斷開按鈕
   return (
-    <div className="flex items-center gap-2">
+    <div style={styles.container}>
       {/* 錢包地址按鈕 */}
       <Button
         variant="secondary"
-        className={cn(
-          'flex items-center gap-2',
-          isDisconnecting && 'cursor-not-allowed'
-        )}
         disabled={isDisconnecting}
         aria-label={`錢包地址: ${truncatedAddress}`}
+        style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}
       >
         {/* 錢包圖示 */}
         {walletIcon && (
           <img
             src={walletIcon}
             alt="Wallet Icon"
-            className="h-5 w-5 rounded-full"
+            style={styles.walletIcon}
           />
         )}
 
         {/* 截斷的地址 */}
-        <span className="font-mono text-sm">{truncatedAddress}</span>
+        <span style={styles.address}>{truncatedAddress}</span>
       </Button>
 
       {/* 斷開連接按鈕 */}
       <Button
-        variant="secondary"
+        variant="ghost"
         size="sm"
         onClick={disconnect}
         loading={isDisconnecting}

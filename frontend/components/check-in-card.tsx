@@ -9,7 +9,68 @@ import { formatCountdown } from '@/lib/time';
 import { CHECK_IN_REWARD } from '@/consts';
 
 /**
- * CheckInCard 元件
+ * Style 10 樣式定義
+ */
+const styles = {
+  card: {
+    borderRadius: 'var(--radius-lg)',
+    background: 'var(--color-background-surface)',
+    border: '1px solid var(--color-border-default)',
+    padding: 'var(--space-6)',
+  } as React.CSSProperties,
+
+  skeleton: {
+    height: '1rem',
+    background: 'var(--color-background-elevated)',
+    borderRadius: 'var(--radius-md)',
+    animation: 'pulse 2s infinite',
+  } as React.CSSProperties,
+
+  title: {
+    fontFamily: 'var(--font-heading)',
+    fontSize: 'var(--text-xl)',
+    fontWeight: 'var(--font-weight-normal)',
+    color: 'var(--color-primary)',
+    letterSpacing: '0.02em',
+  } as React.CSSProperties,
+
+  statsText: {
+    fontSize: 'var(--text-sm)',
+    color: 'var(--color-text-secondary)',
+  } as React.CSSProperties,
+
+  highlight: {
+    fontWeight: 'var(--font-weight-semibold)',
+    color: 'var(--color-primary)',
+  } as React.CSSProperties,
+
+  successHighlight: {
+    fontWeight: 'var(--font-weight-semibold)',
+    color: 'var(--color-success)',
+  } as React.CSSProperties,
+
+  errorBox: {
+    borderRadius: 'var(--radius-md)',
+    background: 'rgba(220, 38, 38, 0.1)',
+    border: '1px solid var(--color-error)',
+    padding: 'var(--space-3)',
+    fontSize: 'var(--text-sm)',
+    color: 'var(--color-error)',
+  } as React.CSSProperties,
+
+  bodyText: {
+    color: 'var(--color-text-secondary)',
+    marginBottom: 'var(--space-4)',
+  } as React.CSSProperties,
+
+  mutedText: {
+    fontSize: 'var(--text-sm)',
+    color: 'var(--color-text-muted)',
+  } as React.CSSProperties,
+};
+
+/**
+ * CheckInCard 元件 - Style 10 高端奢華設計
  *
  * 顯示簽到功能，包含：
  * - 首次簽到按鈕（無記錄時）
@@ -75,8 +136,8 @@ export function CheckInCard() {
   // 未連接錢包
   if (!isConnected) {
     return (
-      <div className="rounded-lg bg-white p-6 shadow" data-testid="check-in-card">
-        <p className="text-center text-gray-500">請先連接錢包</p>
+      <div style={styles.card} data-testid="check-in-card">
+        <p style={{ textAlign: 'center', color: 'var(--color-text-muted)' }}>請先連接錢包</p>
       </div>
     );
   }
@@ -84,30 +145,27 @@ export function CheckInCard() {
   // 載入中
   if (stateLoading) {
     return (
-      <div
-        className="rounded-lg bg-white p-6 shadow"
-        data-testid="skeleton"
-      >
-        <div className="space-y-3">
-          <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200"></div>
-          <div className="h-4 w-1/2 animate-pulse rounded bg-gray-200"></div>
+      <div style={styles.card} data-testid="skeleton">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+          <div style={{ ...styles.skeleton, width: '75%' }} />
+          <div style={{ ...styles.skeleton, width: '50%' }} />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow" data-testid="check-in-card">
-      <div className="space-y-4">
+    <div style={styles.card} data-testid="check-in-card">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
         {/* 標題 */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">每日簽到</h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h2 style={styles.title}>每日簽到</h2>
           {hasRecord && (
-            <div className="text-sm text-gray-500">
-              累積簽到 <span className="font-bold text-indigo-600">{totalCheckIns}</span> 次
+            <div style={styles.statsText}>
+              累積簽到 <span style={styles.highlight}>{totalCheckIns}</span> 次
               {consecutiveDays > 0 && (
-                <span className="ml-2">
-                  連續 <span className="font-bold text-green-600">{consecutiveDays}</span> 天
+                <span style={{ marginLeft: 'var(--space-2)' }}>
+                  連續 <span style={styles.successHighlight}>{consecutiveDays}</span> 天
                 </span>
               )}
             </div>
@@ -116,7 +174,7 @@ export function CheckInCard() {
 
         {/* 錯誤訊息 */}
         {error && (
-          <div className="rounded bg-red-50 p-3 text-sm text-red-600">
+          <div style={styles.errorBox}>
             錯誤: {error.message}
           </div>
         )}
@@ -124,9 +182,9 @@ export function CheckInCard() {
         {/* 內容區 */}
         {!hasRecord ? (
           // 首次簽到
-          <div className="text-center">
-            <p className="mb-4 text-gray-600">
-              歡迎！開始簽到之旅，每次簽到獲得 <span className="font-bold text-indigo-600">{CHECK_IN_REWARD} MGC</span>
+          <div style={{ textAlign: 'center' }}>
+            <p style={styles.bodyText}>
+              歡迎！開始簽到之旅，每次簽到獲得 <span style={styles.highlight}>{CHECK_IN_REWARD} MGC</span>
             </p>
             <Button
               onClick={handleCheckIn}
@@ -139,9 +197,9 @@ export function CheckInCard() {
           </div>
         ) : canCheckIn ? (
           // 可以簽到
-          <div className="text-center">
-            <p className="mb-4 text-gray-600">
-              今天還沒簽到，獲得 <span className="font-bold text-indigo-600">+{CHECK_IN_REWARD} MGC</span> 獎勵！
+          <div style={{ textAlign: 'center' }}>
+            <p style={styles.bodyText}>
+              今天還沒簽到，獲得 <span style={styles.highlight}>+{CHECK_IN_REWARD} MGC</span> 獎勵！
             </p>
             <Button
               onClick={handleCheckIn}
@@ -154,17 +212,19 @@ export function CheckInCard() {
           </div>
         ) : (
           // 已簽到
-          <div className="text-center">
-            <p className="mb-2 text-gray-600">今日已簽到 ✓</p>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ ...styles.bodyText, marginBottom: 'var(--space-2)' }}>
+              今日已簽到 ✓
+            </p>
             {nextCheckInTime && (
-              <p className="text-sm text-gray-500">
+              <p style={styles.mutedText}>
                 下次簽到: {countdown}
               </p>
             )}
             <Button
               disabled
               aria-disabled="true"
-              className="mt-4"
+              style={{ marginTop: 'var(--space-4)' }}
             >
               明天再來
             </Button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { IotaClientProvider, WalletProvider } from "@iota/dapp-kit";
+import { darkTheme, IotaClientProvider, WalletProvider } from "@iota/dapp-kit";
 import { getFullnodeUrl } from "@iota/iota-sdk/client";
 import { useState } from "react";
 
@@ -20,7 +20,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <IotaClientProvider networks={networks} defaultNetwork={network}>
-        <WalletProvider autoConnect>{children}</WalletProvider>
+        <WalletProvider theme={darkTheme} autoConnect>{children}</WalletProvider>
       </IotaClientProvider>
     </QueryClientProvider>
   );

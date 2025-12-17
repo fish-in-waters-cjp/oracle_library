@@ -82,22 +82,69 @@ export default function HomePage() {
 
   return (
     <PageTransition variant="fade">
-      <div className="space-y-8">
-        {/* MGC 餘額顯示 */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
+        {/* MGC 餘額顯示 - Style 10 黑金設計 */}
         <div
           ref={balanceRef}
-          className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white shadow-lg"
+          style={{
+            borderRadius: 'var(--radius-lg)',
+            background: 'linear-gradient(135deg, var(--color-background-surface) 0%, var(--color-background-elevated) 100%)',
+            border: '1px solid var(--color-border-default)',
+            padding: 'var(--space-6)',
+            boxShadow: 'var(--shadow-glow-gold)',
+          }}
         >
-          <h1 className="text-xl font-bold">你的智慧碎片</h1>
-          <div className="mt-2 flex items-baseline">
+          <h1
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'var(--text-xl)',
+              fontWeight: 'var(--font-weight-normal)',
+              color: 'var(--color-primary)',
+              letterSpacing: '0.02em',
+            }}
+          >
+            你的智慧碎片
+          </h1>
+          <div style={{ marginTop: 'var(--space-2)', display: 'flex', alignItems: 'baseline' }}>
             {balanceLoading || coinsLoading ? (
-              <div className="h-12 w-32 animate-pulse rounded bg-white/20"></div>
+              <div
+                style={{
+                  height: '3rem',
+                  width: '8rem',
+                  background: 'var(--color-background-elevated)',
+                  borderRadius: 'var(--radius-md)',
+                  animation: 'pulse 2s infinite',
+                }}
+              />
             ) : (
               <>
-                <span className="text-5xl font-bold">{displayedBalanceString}</span>
-                <span className="ml-2 text-2xl">MGC</span>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'var(--text-4xl)',
+                    fontWeight: 'var(--font-weight-bold)',
+                    color: 'var(--color-primary)',
+                  }}
+                >
+                  {displayedBalanceString}
+                </span>
+                <span
+                  style={{
+                    marginLeft: 'var(--space-2)',
+                    fontSize: 'var(--text-2xl)',
+                    color: 'var(--color-text-secondary)',
+                  }}
+                >
+                  MGC
+                </span>
                 {optimisticBalance !== null && (
-                  <span className="ml-3 text-sm opacity-75">
+                  <span
+                    style={{
+                      marginLeft: 'var(--space-3)',
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--color-text-muted)',
+                    }}
+                  >
                     (更新中...)
                   </span>
                 )}
@@ -110,24 +157,39 @@ export default function HomePage() {
         <CheckInCard />
 
         {/* 抽取解答區塊 */}
-        {address && mgcCoinId ? (
+        {address ? (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">抽取解答之書</h2>
+            <h2
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'var(--text-2xl)',
+                fontWeight: 'var(--font-weight-normal)',
+                color: 'var(--color-primary)',
+                marginBottom: 'var(--space-4)',
+                letterSpacing: '0.02em',
+              }}
+            >
+              抽取解答之書
+            </h2>
             <DrawSection
-              mgcCoinId={mgcCoinId}
+              mgcCoinId={mgcCoinId || ''}
               onDrawStart={handleDrawStart}
               onDrawSuccess={handleDrawSuccess}
               onMintSuccess={handleMintSuccess}
             />
           </div>
         ) : (
-          <div className="rounded-lg border-2 border-dashed border-gray-300 bg-white p-8 text-center">
-            <p className="text-gray-500">
-              {!address
-                ? '請先連接錢包'
-                : coinsLoading
-                ? '載入中...'
-                : 'MGC 不足，請先完成簽到獲得 MGC'}
+          <div
+            style={{
+              borderRadius: 'var(--radius-lg)',
+              border: '2px dashed var(--color-border-default)',
+              background: 'var(--color-background-surface)',
+              padding: 'var(--space-8)',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ color: 'var(--color-text-muted)' }}>
+              請先連接錢包
             </p>
           </div>
         )}

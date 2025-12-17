@@ -196,7 +196,7 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
   const mgcBalance = Number(balance) / 1_000_000_000; // 假設 decimals = 9
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div style={{ width: '100%' }}>
       <AnimatePresence mode="wait">
         {/* 階段 1: 輸入問題 */}
         {phase === 'idle' && (
@@ -206,6 +206,12 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
+            style={{
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--color-background-surface)',
+              border: '1px solid var(--color-border-default)',
+              padding: 'var(--space-6)',
+            }}
           >
             <DrawForm
               isDrawing={isDrawing}
@@ -224,24 +230,48 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.4 }}
-            className="relative"
+            style={{ position: 'relative' }}
           >
             {/* Phaser 遊戲容器 */}
-            <div className="relative bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+            <div
+              style={{
+                position: 'relative',
+                background: 'var(--color-background-surface)',
+                borderRadius: 'var(--radius-lg)',
+                overflow: 'hidden',
+                border: '1px solid var(--color-border-default)',
+              }}
+            >
               <PhaserGame
                 onGameReady={handleGameReady}
-                className="w-full"
                 config={{
                   backgroundColor: '#0f0f1e',
                 }}
               />
 
               {/* 狀態提示 */}
-              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'var(--space-4)',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  zIndex: 10,
+                }}
+              >
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="px-6 py-3 bg-black/50 backdrop-blur-sm rounded-full text-white text-sm font-medium"
+                  style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    backdropFilter: 'blur(8px)',
+                    borderRadius: '9999px',
+                    color: 'var(--color-primary)',
+                    fontSize: 'var(--text-sm)',
+                    fontWeight: 'var(--font-weight-medium)',
+                    border: '1px solid var(--color-border-default)',
+                  }}
                 >
                   {phase === 'drawing' ? '🎴 抽取中...' : '✨ 揭示答案...'}
                 </motion.div>

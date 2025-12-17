@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Answer, Rarity, RARITY_COLORS } from '@/hooks/use-answers';
 import { MintConfirmModal } from './mint-confirm-modal';
+import Button from '@/components/ui/button';
 
 /**
  * DrawResultOverlay Props
@@ -36,29 +37,173 @@ const RARITY_NAMES: Record<Rarity, string> = {
 };
 
 /**
- * 稀有度背景漸層
+ * Style 10 稀有度背景色
  */
-const RARITY_GRADIENTS: Record<Rarity, string> = {
-  Common: 'from-gray-100 to-gray-200',
-  Rare: 'from-blue-100 to-blue-200',
-  Epic: 'from-purple-100 to-purple-200',
-  Legendary: 'from-yellow-100 to-yellow-200',
+const RARITY_BG_COLORS: Record<Rarity, string> = {
+  Common: 'rgba(156, 163, 175, 0.1)',
+  Rare: 'rgba(96, 165, 250, 0.1)',
+  Epic: 'rgba(167, 139, 250, 0.1)',
+  Legendary: 'rgba(212, 175, 55, 0.15)',
 };
 
 /**
- * 稀有度文字顏色
+ * Style 10 稀有度文字色
  */
 const RARITY_TEXT_COLORS: Record<Rarity, string> = {
-  Common: 'text-gray-600',
-  Rare: 'text-blue-600',
-  Epic: 'text-purple-600',
-  Legendary: 'text-yellow-600',
+  Common: '#9ca3af',
+  Rare: '#60a5fa',
+  Epic: '#a78bfa',
+  Legendary: '#d4af37',
+};
+
+/**
+ * Style 10 樣式定義
+ */
+const styles = {
+  container: {
+    position: 'relative' as const,
+    maxWidth: '42rem',
+    margin: '0 auto',
+  },
+
+  card: {
+    background: 'var(--color-background-surface)',
+    borderRadius: 'var(--radius-xl)',
+    boxShadow: 'var(--shadow-glow-gold)',
+    overflow: 'hidden',
+    border: '1px solid var(--color-border-default)',
+  },
+
+  decorBar: {
+    height: '0.25rem',
+  },
+
+  content: {
+    padding: 'var(--space-8)',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: 'var(--space-6)',
+  },
+
+  titleSection: {
+    textAlign: 'center' as const,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: 'var(--space-2)',
+  },
+
+  title: {
+    fontFamily: 'var(--font-heading)',
+    fontSize: 'var(--text-3xl)',
+    fontWeight: 'var(--font-weight-bold)',
+    color: 'var(--color-primary)',
+    letterSpacing: '0.02em',
+  },
+
+  rarityBadge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 'var(--space-2)',
+    padding: 'var(--space-2) var(--space-4)',
+    background: 'var(--color-background-elevated)',
+    borderRadius: '9999px',
+    border: '1px solid var(--color-border-default)',
+  },
+
+  rarityLabel: {
+    fontSize: 'var(--text-xs)',
+    color: 'var(--color-text-muted)',
+  },
+
+  answerCard: {
+    position: 'relative' as const,
+    borderRadius: 'var(--radius-xl)',
+    padding: 'var(--space-8)',
+    border: '1px solid var(--color-border-default)',
+  },
+
+  quoteDecor: {
+    position: 'absolute' as const,
+    fontSize: 'var(--text-4xl)',
+    opacity: 0.2,
+    color: 'var(--color-primary)',
+  },
+
+  answerText: {
+    position: 'relative' as const,
+    fontFamily: 'var(--font-heading)',
+    fontSize: 'var(--text-xl)',
+    color: 'var(--color-text-primary)',
+    textAlign: 'center' as const,
+    lineHeight: 1.8,
+    fontWeight: 'var(--font-weight-medium)',
+    padding: '0 var(--space-8)',
+  },
+
+  answerId: {
+    textAlign: 'center' as const,
+    fontSize: 'var(--text-sm)',
+    color: 'var(--color-text-muted)',
+  },
+
+  buttonGroup: {
+    display: 'flex',
+    gap: 'var(--space-4)',
+    paddingTop: 'var(--space-4)',
+  },
+
+  secondaryButton: {
+    flex: 1,
+    padding: 'var(--space-3) var(--space-6)',
+    background: 'var(--color-background-elevated)',
+    border: '1px solid var(--color-border-default)',
+    borderRadius: 'var(--radius-lg)',
+    color: 'var(--color-text-primary)',
+    fontWeight: 'var(--font-weight-semibold)',
+    cursor: 'pointer',
+    transition: 'var(--transition-fast)',
+  },
+
+  hints: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: 'var(--space-1)',
+  },
+
+  hint: {
+    textAlign: 'center' as const,
+    fontSize: 'var(--text-xs)',
+    color: 'var(--color-text-muted)',
+  },
+
+  recordId: {
+    textAlign: 'center' as const,
+    fontSize: 'var(--text-xs)',
+    color: 'var(--color-text-muted)',
+    fontFamily: 'monospace',
+  },
+
+  glowEffect: {
+    position: 'absolute' as const,
+    inset: 0,
+    pointerEvents: 'none' as const,
+    borderRadius: 'var(--radius-xl)',
+  },
+
+  floatingDecor: {
+    position: 'absolute' as const,
+    width: '2rem',
+    height: '2rem',
+    opacity: 0.5,
+    fontSize: '1.5rem',
+  },
 };
 
 /**
  * DrawResultOverlay - 抽取結果顯示
  *
  * 美化的結果顯示元件，顯示答案內容、稀有度和操作按鈕
+ * Style 10 高端奢華設計
  */
 export function DrawResultOverlay({
   answer,
@@ -72,9 +217,9 @@ export function DrawResultOverlay({
   const [showMintModal, setShowMintModal] = useState(false);
 
   const rarityName = RARITY_NAMES[rarity];
-  const rarityGradient = RARITY_GRADIENTS[rarity];
-  const rarityTextColor = RARITY_TEXT_COLORS[rarity];
   const rarityColor = RARITY_COLORS[rarity];
+  const rarityBgColor = RARITY_BG_COLORS[rarity];
+  const rarityTextColor = RARITY_TEXT_COLORS[rarity];
 
   const MINT_COST = 5;
 
@@ -105,27 +250,27 @@ export function DrawResultOverlay({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="relative max-w-2xl mx-auto"
+      style={styles.container}
     >
       {/* 主卡片容器 */}
-      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div style={styles.card}>
         {/* 稀有度裝飾條 */}
         <div
-          className={`h-2 bg-gradient-to-r ${rarityGradient}`}
           style={{
-            backgroundImage: `linear-gradient(to right, ${rarityColor}, ${rarityColor})`,
+            ...styles.decorBar,
+            background: rarityColor,
           }}
         />
 
         {/* 內容區域 */}
-        <div className="p-8 space-y-6">
+        <div style={styles.content}>
           {/* 標題與稀有度 */}
-          <div className="text-center space-y-2">
+          <div style={styles.titleSection}>
             <motion.h2
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="text-3xl font-bold text-gray-800"
+              style={styles.title}
             >
               解答之書
             </motion.h2>
@@ -134,12 +279,14 @@ export function DrawResultOverlay({
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full"
+              style={{ display: 'flex', justifyContent: 'center' }}
             >
-              <span className={`text-sm font-semibold ${rarityTextColor}`}>
-                {rarityName}
+              <span style={styles.rarityBadge}>
+                <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-weight-semibold)', color: rarityTextColor }}>
+                  {rarityName}
+                </span>
+                <span style={styles.rarityLabel}>稀有度</span>
               </span>
-              <span className="text-xs text-gray-500">稀有度</span>
             </motion.div>
           </div>
 
@@ -148,18 +295,22 @@ export function DrawResultOverlay({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className={`relative bg-gradient-to-br ${rarityGradient} rounded-xl p-8 shadow-inner`}
+            style={{
+              ...styles.answerCard,
+              background: rarityBgColor,
+              borderColor: rarityTextColor,
+            }}
           >
             {/* 裝飾性引號 */}
-            <div className="absolute top-4 left-4 text-4xl opacity-20">
+            <div style={{ ...styles.quoteDecor, top: 'var(--space-4)', left: 'var(--space-4)' }}>
               「
             </div>
-            <div className="absolute bottom-4 right-4 text-4xl opacity-20">
+            <div style={{ ...styles.quoteDecor, bottom: 'var(--space-4)', right: 'var(--space-4)' }}>
               」
             </div>
 
             {/* 答案文字 */}
-            <p className="relative text-xl text-gray-800 text-center leading-relaxed font-medium px-8">
+            <p style={styles.answerText}>
               {answer.text_zh}
             </p>
           </motion.div>
@@ -169,11 +320,9 @@ export function DrawResultOverlay({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-center"
+            style={styles.answerId}
           >
-            <span className="text-sm text-gray-500">
-              答案編號 #{answer.id.toString().padStart(2, '0')}
-            </span>
+            答案編號 #{answer.id.toString().padStart(2, '0')}
           </motion.div>
 
           {/* 操作按鈕 */}
@@ -181,7 +330,7 @@ export function DrawResultOverlay({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="flex gap-4 pt-4"
+            style={styles.buttonGroup}
           >
             {/* 再抽一次按鈕 */}
             <motion.button
@@ -189,43 +338,24 @@ export function DrawResultOverlay({
               disabled={isMinting}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex-1 py-3 px-6 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-800 font-semibold rounded-lg transition-colors"
+              style={{
+                ...styles.secondaryButton,
+                opacity: isMinting ? 0.6 : 1,
+                cursor: isMinting ? 'not-allowed' : 'pointer',
+              }}
             >
               再抽一次
             </motion.button>
 
             {/* 鑄造 NFT 按鈕 */}
-            <motion.button
+            <Button
               onClick={handleMintClick}
               disabled={isMinting}
-              whileHover={!isMinting ? { scale: 1.05, y: -2 } : {}}
-              whileTap={!isMinting ? { scale: 0.95 } : {}}
-              className="flex-1 py-3 px-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl"
+              loading={isMinting}
+              style={{ flex: 1 }}
             >
-              {isMinting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      fill="none"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  鑄造中...
-                </span>
-              ) : (
-                '🎨 鑄造 NFT (5 MGC)'
-              )}
-            </motion.button>
+              {isMinting ? '鑄造中...' : '🎨 鑄造 NFT (5 MGC)'}
+            </Button>
           </motion.div>
 
           {/* 提示文字 */}
@@ -233,12 +363,12 @@ export function DrawResultOverlay({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="space-y-1"
+            style={styles.hints}
           >
-            <p className="text-center text-xs text-gray-500">
+            <p style={styles.hint}>
               鑄造 NFT 後，此解答將永久保存至區塊鏈
             </p>
-            <p className="text-center text-xs text-gray-400 font-mono">
+            <p style={styles.recordId}>
               DrawRecord ID: {recordId.substring(0, 12)}...
             </p>
           </motion.div>
@@ -250,8 +380,8 @@ export function DrawResultOverlay({
             initial={{ opacity: 0 }}
             animate={{ opacity: [0.3, 0.6, 0.3] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute inset-0 pointer-events-none"
             style={{
+              ...styles.glowEffect,
               background: `radial-gradient(circle at 50% 50%, ${rarityColor}20, transparent 70%)`,
             }}
           />
@@ -270,7 +400,7 @@ export function DrawResultOverlay({
               rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
               scale: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
             }}
-            className="absolute -top-4 -left-4 w-8 h-8 opacity-50"
+            style={{ ...styles.floatingDecor, top: '-1rem', left: '-1rem' }}
           >
             ✨
           </motion.div>
@@ -283,7 +413,7 @@ export function DrawResultOverlay({
               rotate: { duration: 15, repeat: Infinity, ease: 'linear' },
               scale: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' },
             }}
-            className="absolute -top-4 -right-4 w-8 h-8 opacity-50"
+            style={{ ...styles.floatingDecor, top: '-1rem', right: '-1rem' }}
           >
             ⭐
           </motion.div>
@@ -296,7 +426,7 @@ export function DrawResultOverlay({
               rotate: { duration: 18, repeat: Infinity, ease: 'linear' },
               scale: { duration: 2.8, repeat: Infinity, ease: 'easeInOut' },
             }}
-            className="absolute -bottom-4 -left-4 w-8 h-8 opacity-50"
+            style={{ ...styles.floatingDecor, bottom: '-1rem', left: '-1rem' }}
           >
             💫
           </motion.div>
@@ -309,7 +439,7 @@ export function DrawResultOverlay({
               rotate: { duration: 22, repeat: Infinity, ease: 'linear' },
               scale: { duration: 3.2, repeat: Infinity, ease: 'easeInOut' },
             }}
-            className="absolute -bottom-4 -right-4 w-8 h-8 opacity-50"
+            style={{ ...styles.floatingDecor, bottom: '-1rem', right: '-1rem' }}
           >
             🌟
           </motion.div>

@@ -14,6 +14,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   /** 按鈕內容 */
   children: ReactNode;
+  /** 自訂樣式 */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -48,6 +50,7 @@ export default function Button({
   className,
   children,
   type = 'button',
+  style: customStyle,
   ...props
 }: ButtonProps) {
   // 基礎樣式 - 使用 Tailwind classes
@@ -129,7 +132,7 @@ export default function Button({
       type={type}
       disabled={disabled || loading}
       className={cn(baseStyles, className)}
-      style={getButtonStyles()}
+      style={{ ...getButtonStyles(), ...customStyle }}
       onMouseEnter={(e) => {
         if (disabled || loading) return;
         const target = e.currentTarget;
