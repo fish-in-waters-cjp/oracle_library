@@ -1,50 +1,50 @@
 {
   "network": "testnet",
-  "deployedAt": "2025-12-18T16:00:00Z",
+  "deployedAt": "2025-12-18T17:30:00Z",
   "deployer": "0x82e38888fb72afd3bd452cd72e7db77196969b9edb8edc7f4321b0c9b3cf6594",
-  "txDigest": "J7mRdSc8aHxFbwQkD2gCC6s2e5Xz358inemqZDLzidGv",
-  "version": "3",
-  "notes": "Rarity now stored in DrawRecord on-chain for security",
+  "txDigest": "5PFnJuwpg1FipTb8t8G4mpi98WErd8YYdW3v7aLeKKC2",
+  "version": "4",
+  "notes": "NFT URL format changed to {base_url}{answer_id}.png for static hosting",
 
   "package": {
-    "packageId": "0xbcf99ecd98c9af2bd31b7977a6c218d860caef638533b60b906c237b63a44782"
+    "packageId": "0xd8247f0e7713dfb531e28fa9686dcc3689ef1287a440916de958da5860b5de07"
   },
 
   "sharedObjects": {
     "mgcTreasury": {
-      "objectId": "0xd939413ef61db7b3510d7680c06e0b80719994bebe57af9d9998dd9417002f9b"
+      "objectId": "0x10c4bf72ab9c5b7ee56e2fce7dbeb8dba147b3c90f4c4754aa4ac8273453c465"
     },
     "nftConfig": {
-      "objectId": "0x2ac2ed3327c46cc88bce8c24ceee3f18584b027758fc1cf89f6ad582b9951803"
+      "objectId": "0xa29beb63b25ea3f9c019336614d02707b55e2f3d01cf99918d82be01d22bf8c2"
     },
     "emergencyRecovery": {
-      "objectId": "0x24a1361c1baf5479364a69f80a94c482aebba87ea3a4960638eaebd8b06600c8"
+      "objectId": "0xf79612c397364e22bd81761aad5f6a101543a783d21752bd015a23549a3e6a77"
     }
   },
 
   "adminObjects": {
     "adminCap": {
-      "objectId": "0x300fcb0f491c25bdcd1c02ab634ad19ede568fa07d1114f64c02d161838af5ca"
+      "objectId": "0x84c7e47ed0d16b731810d3c3e4858eec2e0b949db57668cdee765d570c8dde74"
     },
     "publisher": {
-      "objectId": "0xbe818dde3f088ae74760bebb9be257b29670b1fb46cb84a220de98e200472167"
+      "objectId": "0x5b8ceb231892a8a52d7a98b71ed3393c0d93bdda0127709f96c0f49aa511886a"
     },
     "display": {
-      "objectId": "0xb138f8faaadef8ad6ce031af7d7396682360b0f16587a8ea4416a8cd4726d59a"
+      "objectId": "0x71e81212b88ffc8937732beac703c5d1177c825805dedad35f550310a2bc4aba"
     }
   },
 
   "immutableObjects": {
     "coinMetadata": {
-      "objectId": "0xc33a0f357fee5b8fc6d7e294f36e16604dbe2231bb3d03569505c4b6b6ad5cc6"
+      "objectId": "0x3aca69716835cf2d0b5865418345c65f5a8c7cf9340d8028adfbd9033d5b64e7"
     }
   },
 
   "frontendEnv": {
     "NEXT_PUBLIC_NETWORK": "testnet",
-    "NEXT_PUBLIC_PACKAGE_ID": "0xbcf99ecd98c9af2bd31b7977a6c218d860caef638533b60b906c237b63a44782",
-    "NEXT_PUBLIC_MGC_TREASURY_ID": "0xd939413ef61db7b3510d7680c06e0b80719994bebe57af9d9998dd9417002f9b",
-    "NEXT_PUBLIC_NFT_CONFIG_ID": "0x2ac2ed3327c46cc88bce8c24ceee3f18584b027758fc1cf89f6ad582b9951803",
+    "NEXT_PUBLIC_PACKAGE_ID": "0xd8247f0e7713dfb531e28fa9686dcc3689ef1287a440916de958da5860b5de07",
+    "NEXT_PUBLIC_MGC_TREASURY_ID": "0x10c4bf72ab9c5b7ee56e2fce7dbeb8dba147b3c90f4c4754aa4ac8273453c465",
+    "NEXT_PUBLIC_NFT_CONFIG_ID": "0xa29beb63b25ea3f9c019336614d02707b55e2f3d01cf99918d82be01d22bf8c2",
     "NEXT_PUBLIC_IPFS_GATEWAY": "https://ipfs.io/ipfs/"
   }
 }

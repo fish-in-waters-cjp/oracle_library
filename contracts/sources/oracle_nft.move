@@ -287,25 +287,17 @@ module oracle_library::oracle_nft {
     }
 
     /// 生成圖片 URL
-    fun generate_image_url(config: &NFTConfig, answer_id: u8, rarity: u8): Url {
+    /// 格式: {base_url}{answer_id}.png
+    /// 例如: https://oracle-library.zeabur.app/game/cards/faces/1.png
+    fun generate_image_url(config: &NFTConfig, answer_id: u8, _rarity: u8): Url {
         let mut url_bytes = vector::empty<u8>();
 
         // 添加 base URL
         vector::append(&mut url_bytes, *config.base_url.bytes());
 
-        // 添加 "answer-"
-        vector::append(&mut url_bytes, b"answer-");
-
         // 添加 answer_id
         let answer_id_str = u8_to_string(answer_id);
         vector::append(&mut url_bytes, *answer_id_str.bytes());
-
-        // 添加 "-rarity-"
-        vector::append(&mut url_bytes, b"-rarity-");
-
-        // 添加 rarity
-        let rarity_str = u8_to_string(rarity);
-        vector::append(&mut url_bytes, *rarity_str.bytes());
 
         // 添加 ".png"
         vector::append(&mut url_bytes, b".png");
