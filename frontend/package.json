@@ -17,6 +17,7 @@
   "dependencies": {
     "@iota/dapp-kit": "^0.8.0",
     "@iota/iota-sdk": "^1.9.0",
+    "@liquidlink-lab/iota-snap-for-metamask": "^1.9.1",
     "@tanstack/react-query": "^5.90.12",
     "clsx": "^2.1.1",
     "framer-motion": "^11",
