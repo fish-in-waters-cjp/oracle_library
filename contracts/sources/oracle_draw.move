@@ -13,6 +13,9 @@ module oracle_library::oracle_draw {
     /// MGC 不足（需要 10 MGC）
     const E_INSUFFICIENT_MGC: u64 = 2;
 
+    /// 稀有度無效（必須 0-3）
+    const E_INVALID_RARITY: u64 = 3;
+
     // ====== 常數 ======
 
     /// 抽取答案的成本（10 MGC）
@@ -20,6 +23,9 @@ module oracle_library::oracle_draw {
 
     /// 最大答案 ID
     const MAX_ANSWER_ID: u8 = 49;
+
+    /// 最大稀有度 (0=Common, 1=Rare, 2=Epic, 3=Legendary)
+    const MAX_RARITY: u8 = 3;
 
     // ====== 資料結構 ======
 
@@ -31,6 +37,8 @@ module oracle_library::oracle_draw {
         owner: address,
         /// 答案編號 (0-49)
         answer_id: u8,
+        /// 稀有度 (0-3: Common, Rare, Epic, Legendary)
+        rarity: u8,
         /// 抽取時間戳記
         timestamp: u64,
         /// 問題 hash（可選）
@@ -47,6 +55,8 @@ module oracle_library::oracle_draw {
         user: address,
         /// 答案 ID
         answer_id: u8,
+        /// 稀有度
+        rarity: u8,
         /// 時間戳記
         timestamp: u64,
     }
@@ -57,6 +67,7 @@ module oracle_library::oracle_draw {
     ///
     /// # 參數
     /// - `answer_id`: 答案編號 (0-49)，由前端隨機生成
+    /// - `rarity`: 稀有度 (0-3)，由前端根據 answers.json 查詢
     /// - `question_hash`: 問題的 hash 值（可選）
     /// - `payment`: 支付的 MGC（至少 10 MGC）
     /// - `mgc_treasury`: MGC Treasury
@@ -64,6 +75,7 @@ module oracle_library::oracle_draw {
     ///
     /// # 前置條件
     /// - answer_id 必須在 0-49 範圍內
+    /// - rarity 必須在 0-3 範圍內
     /// - payment 必須至少 10 MGC
     ///
     /// # 後置條件
@@ -73,6 +85,7 @@ module oracle_library::oracle_draw {
     /// - 發出 DrawEvent
     public entry fun draw(
         answer_id: u8,
+        rarity: u8,
         question_hash: vector<u8>,
         payment: Coin<MGC>,
         mgc_treasury: &mut MGCTreasury,
@@ -80,6 +93,9 @@ module oracle_library::oracle_draw {
     ) {
         // 驗證答案 ID
         assert!(answer_id <= MAX_ANSWER_ID, E_INVALID_ANSWER_ID);
+
+        // 驗證稀有度
+        assert!(rarity <= MAX_RARITY, E_INVALID_RARITY);
 
         // 驗證支付金額
         let payment_value = coin::value(&payment);
@@ -111,6 +127,7 @@ module oracle_library::oracle_draw {
             id: record_uid,
             owner: user,
             answer_id,
+            rarity,
             timestamp,
             question_hash,
         };
@@ -120,6 +137,7 @@ module oracle_library::oracle_draw {
             record_id,
             user,
             answer_id,
+            rarity,
             timestamp,
         });
 
@@ -137,6 +155,11 @@ module oracle_library::oracle_draw {
     /// 取得答案 ID
     public fun get_answer_id(record: &DrawRecord): u8 {
         record.answer_id
+    }
+
+    /// 取得稀有度
+    public fun get_rarity(record: &DrawRecord): u8 {
+        record.rarity
     }
 
     /// 取得時間戳記
@@ -165,19 +188,20 @@ module oracle_library::oracle_draw {
     /// 僅供 oracle_nft 模組在鑄造 NFT 時調用
     ///
     /// # 回傳
-    /// (answer_id, timestamp)
-    public(package) fun destroy_for_mint(record: DrawRecord): (u8, u64) {
+    /// (answer_id, rarity, timestamp)
+    public(package) fun destroy_for_mint(record: DrawRecord): (u8, u8, u64) {
         let DrawRecord {
             id,
             owner: _,
             answer_id,
+            rarity,
             timestamp,
             question_hash: _
         } = record;
 
         object::delete(id);
 
-        (answer_id, timestamp)
+        (answer_id, rarity, timestamp)
     }
 
     // ====== 測試函數 ======
@@ -192,6 +216,7 @@ module oracle_library::oracle_draw {
     /// 測試專用：建立 DrawRecord（跳過支付）
     public fun create_for_testing(
         answer_id: u8,
+        rarity: u8,
         question_hash: vector<u8>,
         ctx: &mut TxContext
     ): DrawRecord {
@@ -202,6 +227,7 @@ module oracle_library::oracle_draw {
             id: object::new(ctx),
             owner: sender,
             answer_id,
+            rarity,
             question_hash,
             timestamp,
         }
@@ -214,6 +240,7 @@ module oracle_library::oracle_draw {
             id,
             owner: _,
             answer_id: _,
+            rarity: _,
             question_hash: _,
             timestamp: _,
         } = record;

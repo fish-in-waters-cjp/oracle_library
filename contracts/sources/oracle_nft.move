@@ -123,8 +123,7 @@ module oracle_library::oracle_nft {
     /// 鑄造 NFT
     ///
     /// # 參數
-    /// - `record`: DrawRecord（會被銷毀）
-    /// - `rarity`: 稀有度 (0-3)
+    /// - `record`: DrawRecord（會被銷毀，包含 answer_id 和 rarity）
     /// - `payment`: 支付的 MGC（至少 5 MGC）
     /// - `config`: NFT 設定
     /// - `mgc_treasury`: MGC Treasury
@@ -132,7 +131,6 @@ module oracle_library::oracle_nft {
     ///
     /// # 前置條件
     /// - 呼叫者是 DrawRecord 的擁有者
-    /// - rarity ≤ 3
     /// - payment ≥ 5 MGC
     ///
     /// # 後置條件
@@ -143,15 +141,11 @@ module oracle_library::oracle_nft {
     /// - 發出 NFTMintedEvent
     public entry fun mint(
         record: DrawRecord,
-        rarity: u8,
         payment: Coin<MGC>,
         config: &NFTConfig,
         mgc_treasury: &mut MGCTreasury,
         ctx: &mut TxContext
     ) {
-        // 驗證稀有度
-        assert!(rarity <= MAX_RARITY, E_INVALID_RARITY);
-
         // 驗證支付金額
         let payment_value = coin::value(&payment);
         assert!(payment_value >= MINT_COST, E_INSUFFICIENT_MGC);
@@ -172,8 +166,8 @@ module oracle_library::oracle_nft {
         // 銷毀 MGC
         mgc_treasury.burn(mint_payment);
 
-        // 從 DrawRecord 取得資料並銷毀
-        let (answer_id, drawn_at) = oracle_library::oracle_draw::destroy_for_mint(record);
+        // 從 DrawRecord 取得資料並銷毀（rarity 已在抽取時驗證並存入）
+        let (answer_id, rarity, drawn_at) = oracle_library::oracle_draw::destroy_for_mint(record);
 
         // 建立 NFT
         let nft_uid = object::new(ctx);

@@ -38,8 +38,8 @@ type MintStatus = 'idle' | 'preparing' | 'minting' | 'success' | 'error';
  * Hook 回傳值
  */
 interface UseMintNFTReturn {
-  /** 執行鑄造 */
-  mint: (recordId: string, rarity: number, mgcCoinId: string) => Promise<MintResult | null>;
+  /** 執行鑄造（rarity 從 DrawRecord 取得） */
+  mint: (recordId: string, mgcCoinId: string) => Promise<MintResult | null>;
   /** 當前狀態 */
   status: MintStatus;
   /** 是否正在鑄造 */
@@ -80,30 +80,22 @@ export function useMintNFT(): UseMintNFTReturn {
   /**
    * 執行鑄造
    *
-   * @param recordId DrawRecord Object ID
-   * @param rarity 稀有度 (0-3)
+   * @param recordId DrawRecord Object ID（包含 answer_id 和 rarity）
    * @param mgcCoinId MGC Coin Object ID（用於支付 5 MGC）
    * @returns 鑄造結果，失敗時回傳 null
    */
   const mint = async (
     recordId: string,
-    rarity: number,
     mgcCoinId: string
   ): Promise<MintResult | null> => {
     try {
       setStatus('preparing');
       setError(null);
 
-      // 驗證稀有度
-      if (rarity < 0 || rarity > 3) {
-        throw new Error('Invalid rarity: must be 0-3');
-      }
-
       // === MOCK 模式：模擬鑄造流程 ===
       if (MOCK_ENABLED) {
         console.log('[useMintNFT] Mock 模式：模擬鑄造交易');
         console.log('[useMintNFT] recordId:', recordId);
-        console.log('[useMintNFT] rarity:', rarity);
 
         setStatus('minting');
 
@@ -113,7 +105,7 @@ export function useMintNFT(): UseMintNFTReturn {
         const mintResult: MintResult = {
           nftId: `mock-nft-${Date.now()}`,
           answerId: 0, // Mock 模式下使用預設值
-          rarity,
+          rarity: 0,   // Mock 模式下使用預設值
           digest: `mock-mint-digest-${Date.now()}`,
           timestamp: Date.now(),
         };
@@ -131,12 +123,11 @@ export function useMintNFT(): UseMintNFTReturn {
       // 分割 5 MGC 作為支付（MGC decimals = 0）
       const [paymentCoin] = tx.splitCoins(tx.object(mgcCoinId), [tx.pure.u64(MINT_COST)]);
 
-      // 調用 mint 函數
+      // 調用 mint 函數（rarity 從 DrawRecord 取得，不需傳入）
       tx.moveCall({
         target: `${PACKAGE_ID}::oracle_nft::mint`,
         arguments: [
-          tx.object(recordId), // DrawRecord
-          tx.pure.u8(rarity), // rarity
+          tx.object(recordId), // DrawRecord（包含 answer_id 和 rarity）
           paymentCoin, // payment
           tx.object(NFT_CONFIG_ID), // config
           tx.object(MGC_TREASURY_ID), // mgc_treasury
@@ -193,6 +184,11 @@ export function useMintNFT(): UseMintNFTReturn {
 
       const answerId = fields?.answer_id
         ? parseInt(fields.answer_id, 10)
+        : 0;
+
+      // 從 NFT 取得 rarity（已存入鏈上）
+      const rarity = fields?.rarity
+        ? parseInt(fields.rarity, 10)
         : 0;
 
       const mintResult: MintResult = {

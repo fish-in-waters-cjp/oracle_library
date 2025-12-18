@@ -168,17 +168,27 @@ export function useOracleDraw(): UseOracleDrawReturn {
       // 2. 計算問題 hash
       const questionHash = hashQuestion(question);
 
-      // 3. 建立交易
+      // 3. 將稀有度轉換為數字 (0-3)
+      const rarityMap: Record<string, number> = {
+        Common: 0,
+        Rare: 1,
+        Epic: 2,
+        Legendary: 3,
+      };
+      const rarityNum = rarityMap[rarity] ?? 0;
+
+      // 4. 建立交易
       const tx = new Transaction();
 
       // 分割 10 MGC 作為支付（MGC decimals = 0）
       const [paymentCoin] = tx.splitCoins(tx.object(mgcCoinId), [tx.pure.u64(10)]);
 
-      // 調用 draw 函數
+      // 調用 draw 函數（包含 rarity 參數，存入 DrawRecord）
       tx.moveCall({
         target: `${PACKAGE_ID}::oracle_draw::draw`,
         arguments: [
           tx.pure.u8(answerId),
+          tx.pure.u8(rarityNum),  // rarity 現在存入鏈上
           tx.pure.vector('u8', Array.from(questionHash)),
           paymentCoin,
           tx.object(MGC_TREASURY_ID),

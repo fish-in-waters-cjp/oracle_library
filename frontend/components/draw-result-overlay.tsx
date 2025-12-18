@@ -21,9 +21,11 @@ function getCardImageUrl(answerId: number): string | null {
 }
 
 /**
- * IOTA Explorer Base URL
+ * IOTA Explorer URL helper
  */
-const EXPLORER_BASE_URL = process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://explorer.rebased.iota.org';
+const NETWORK = process.env.NEXT_PUBLIC_NETWORK || 'testnet';
+const getExplorerUrl = (objectId: string) =>
+  `https://explorer.iota.org/object/${objectId}?network=${NETWORK}`;
 
 /**
  * DrawResultOverlay Props
@@ -163,7 +165,7 @@ export function DrawResultOverlay({
 
   // Explorer 連結
   const explorerUrl = mintedNftId
-    ? `${EXPLORER_BASE_URL}/object/${mintedNftId}`
+    ? getExplorerUrl(mintedNftId)
     : null;
 
   const rarityName = RARITY_NAMES[rarity];

@@ -397,15 +397,6 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
               const answer = getAnswerById(resultData.answerId);
               if (!answer) return null;
 
-              // 取得稀有度數字 (0-3)
-              const rarityMap: Record<string, number> = {
-                Common: 0,
-                Rare: 1,
-                Epic: 2,
-                Legendary: 3,
-              };
-              const rarityValue = rarityMap[resultData.rarity] ?? 0;
-
               // 取得可用的 MGC Coin（5 MGC）
               const MINT_COST_VALUE = BigInt(5); // 5 MGC (decimals = 0)
               const mintCoinId = getCoinWithBalance(MINT_COST_VALUE);
@@ -427,9 +418,9 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
                       return;
                     }
 
+                    // rarity 已存入 DrawRecord，不需再傳入
                     const result = await mint(
                       lastResult.recordId,
-                      rarityValue,
                       mintCoinId
                     );
 

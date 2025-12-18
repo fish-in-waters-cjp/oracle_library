@@ -276,7 +276,8 @@ export default function NFTDetailModal({
               }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
-                window.open(`https://explorer.iota.org/iota/object/${nft.id}`, '_blank');
+                const network = process.env.NEXT_PUBLIC_NETWORK || 'testnet';
+                window.open(`https://explorer.iota.org/object/${nft.id}?network=${network}`, '_blank');
               }}
             >
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
