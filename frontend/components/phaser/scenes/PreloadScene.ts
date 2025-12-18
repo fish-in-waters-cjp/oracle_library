@@ -63,9 +63,8 @@ export class PreloadScene extends Phaser.Scene {
 
     const answerId = this.initData.answerId;
     if (answerId !== undefined && answerId >= 0 && answerId <= 49) {
-      // answerId 0-49 對應圖片 1.png - 50.png
-      const imageId = answerId + 1;
-      const imageUrl = `/game/cards/faces/${imageId}.png`;
+      // answerId 0-49 對應圖片 0.png - 49.png
+      const imageUrl = `/game/cards/faces/${answerId}.png`;
       const textureKey = `card-${answerId}`;
 
       // 避免重複載入

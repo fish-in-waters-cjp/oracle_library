@@ -9,13 +9,11 @@ import Button from '@/components/ui/button';
 
 /**
  * 根據 answerId 取得卡片圖片 URL
- * 注意：answerId 是 0-49，圖片檔名是 1-50，所以需要 +1
+ * answerId 是 0-49，圖片檔名也是 0-49
  */
 function getCardImageUrl(answerId: number): string | null {
-  // answerId 0-49 對應圖片 1.png - 50.png
-  const imageId = answerId + 1;
-  if (imageId >= 1 && imageId <= 50) {
-    return `/game/cards/faces/${imageId}.png`;
+  if (answerId >= 0 && answerId <= 49) {
+    return `/game/cards/faces/${answerId}.png`;
   }
   return null;
 }

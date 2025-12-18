@@ -50,11 +50,11 @@ const RARITY_LABELS: Record<Rarity, string> = {
 
 /**
  * 根據 answerId 取得卡片圖片 URL
+ * answerId 是 0-49，圖片檔名也是 0-49
  */
 function getCardImageUrl(answerId: number): string | null {
-  const imageId = answerId + 1;
-  if (imageId >= 1 && imageId <= 50) {
-    return `/game/cards/faces/${imageId}.png`;
+  if (answerId >= 0 && answerId <= 49) {
+    return `/game/cards/faces/${answerId}.png`;
   }
   return null;
 }
