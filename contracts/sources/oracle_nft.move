@@ -8,7 +8,7 @@ module oracle_library::oracle_nft {
     use iota::package;
     use iota::display;
     use iota::url::{Self, Url};
-    use oracle_library::mgc::{MGC, MGCTreasury};
+    use oracle_library::mgc::{MGC, MGCTreasury, AdminCap};
     use oracle_library::oracle_draw::DrawRecord;
 
     // ====== 錯誤碼 ======
@@ -208,6 +208,33 @@ module oracle_library::oracle_nft {
 
         // 轉移 NFT 給使用者
         transfer::transfer(nft, owner);
+    }
+
+    // ====== 管理員函數 ======
+
+    /// 更新 NFT 圖片的 base URL
+    ///
+    /// # 參數
+    /// - `_admin_cap`: 管理員權限憑證（驗證身份用）
+    /// - `config`: NFT 設定
+    /// - `new_base_url`: 新的 base URL（例如 "https://ipfs.io/ipfs/QmXxx/"）
+    ///
+    /// # 範例
+    /// ```
+    /// // 設定為 IPFS gateway URL
+    /// update_base_url(admin_cap, config, b"https://ipfs.io/ipfs/QmXxxYourCID/");
+    /// ```
+    public entry fun update_base_url(
+        _admin_cap: &AdminCap,
+        config: &mut NFTConfig,
+        new_base_url: vector<u8>,
+    ) {
+        config.base_url = string::utf8(new_base_url);
+    }
+
+    /// 查詢當前 base URL
+    public fun get_base_url(config: &NFTConfig): &String {
+        &config.base_url
     }
 
     // ====== 查詢函數 ======

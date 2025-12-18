@@ -3,13 +3,14 @@
 ## 最新部署記錄
 
 **網路**: testnet
-**部署時間**: 2025-12-18
+**部署時間**: 2025-12-18 (v2)
 **部署者**: `0x82e38888fb72afd3bd452cd72e7db77196969b9edb8edc7f4321b0c9b3cf6594`
-**Transaction Digest**: `4ZLG3FLyVUNbkWh2y7GnEBgNgSzyPp1usKeJKdBUoDKb`
+**Transaction Digest**: `2LsbnoPNbTyw7ULPfn5gbiVFXsSKKjZ8LDgeShN6hbNo`
 
 ### 合約版本
 - 首次簽到獎勵: 100 MGC（新用戶禮包）
 - 每日簽到獎勵: 20 MGC
+- **新增**: `update_base_url` 管理員函數（用於更新 NFT 圖片 URL）
 
 ---
 
@@ -45,37 +46,37 @@ iota client publish --gas-budget 100000000
 | 項目 | 值 |
 |------|-----|
 | Network | testnet |
-| 部署時間 | 2025-12-18 |
+| 部署時間 | 2025-12-18 (v2) |
 | 部署者地址 | `0x82e38888fb72afd3bd452cd72e7db77196969b9edb8edc7f4321b0c9b3cf6594` |
-| Transaction Digest | `4ZLG3FLyVUNbkWh2y7GnEBgNgSzyPp1usKeJKdBUoDKb` |
+| Transaction Digest | `2LsbnoPNbTyw7ULPfn5gbiVFXsSKKjZ8LDgeShN6hbNo` |
 
 ### Package
 
 | 項目 | Object ID |
 |------|-----------|
-| **Package ID** | `0xa6b3c3f1e412013e40ba5970855ec586dbdacfc430128a7e99f9590894cb903c` |
+| **Package ID** | `0x03d6285ccac25d0e103f63faac598f829ff3d375741012f19faff68289b9b4c4` |
 
 ### Shared Objects
 
 | 項目 | Object ID |
 |------|-----------|
-| **MGCTreasury** | `0x6a417dff4eb7b7a62cf3a42ee1e28062bce87ad41b1b51065f59122801d4066e` |
-| **NFTConfig** | `0xc73f87f05b1deadbb2a83a1f3fcadb1bfa5da691e5de4d96dec270f5fc7302a5` |
-| EmergencyRecovery | `0xd590036658e91a15bdc77181ba82259b9f85bfe15e0bd8140c49ba272006ecd6` |
+| **MGCTreasury** | `0xe93e4ead0246195f95d673026f001eafcf68df4a39dd65e1bb362fd77101a72d` |
+| **NFTConfig** | `0x8f8032ab8bf7d3c76f34158c413e44c3c654987cf7ec335bb4770532a614685b` |
+| EmergencyRecovery | `0x7146ab79c89a524bb4d2cd63dfff90aa5357ea8162bc8902582b7311bed9186f` |
 
 ### Admin Objects（部署者擁有）
 
 | 項目 | Object ID |
 |------|-----------|
-| **AdminCap** | `0x902765001e3cfac620e4e7dd9e5c16e53e6198118715db0a903cb4af3bce46e9` |
-| Publisher | `0x829c7a4d01e1028f1db76c7c82e1369f018aeb4fb5d2ca984bb78c26664107b0` |
-| Display | `0x445774b0ffe70a1f08f319c13031a17323929fe311ccda53155603a3265ea7ab` |
+| **AdminCap** | `0x1c465beb5880fc319ce40c4d720b2db3addf8befbc8ffa6014a630250cf617c8` |
+| Publisher | `0xcce868e392b36d899d687b84157dca15e236f3444b07a9edef55930ca58fc08c` |
+| Display | `0xfae220a354208bf5a739ad66547e494edacb318dcabdf24a2b1d4f21dc32f3b0` |
 
 ### Immutable Objects
 
 | 項目 | Object ID |
 |------|-----------|
-| CoinMetadata | `0x90384585589be70a3436b587459c4b738c76abc03a97e2f6b1e846e9f2ab8992` |
+| CoinMetadata | `0x3ac2775c7f289dbb527b73550f4be6662e90d9d1ecc8e0f27b9e14d6453dfdab` |
 
 ---
 
@@ -85,10 +86,28 @@ iota client publish --gas-budget 100000000
 
 ```env
 NEXT_PUBLIC_NETWORK=testnet
-NEXT_PUBLIC_PACKAGE_ID=0xa6b3c3f1e412013e40ba5970855ec586dbdacfc430128a7e99f9590894cb903c
-NEXT_PUBLIC_MGC_TREASURY_ID=0x6a417dff4eb7b7a62cf3a42ee1e28062bce87ad41b1b51065f59122801d4066e
-NEXT_PUBLIC_NFT_CONFIG_ID=0xc73f87f05b1deadbb2a83a1f3fcadb1bfa5da691e5de4d96dec270f5fc7302a5
+NEXT_PUBLIC_PACKAGE_ID=0x03d6285ccac25d0e103f63faac598f829ff3d375741012f19faff68289b9b4c4
+NEXT_PUBLIC_MGC_TREASURY_ID=0xe93e4ead0246195f95d673026f001eafcf68df4a39dd65e1bb362fd77101a72d
+NEXT_PUBLIC_NFT_CONFIG_ID=0x8f8032ab8bf7d3c76f34158c413e44c3c654987cf7ec335bb4770532a614685b
 NEXT_PUBLIC_IPFS_GATEWAY=https://ipfs.io/ipfs/
+```
+
+---
+
+## 更新 NFT 圖片 Base URL
+
+部署後可使用以下指令更新 NFT 圖片的 base URL：
+
+```bash
+iota client call \
+  --package 0x03d6285ccac25d0e103f63faac598f829ff3d375741012f19faff68289b9b4c4 \
+  --module oracle_nft \
+  --function update_base_url \
+  --args \
+    0x1c465beb5880fc319ce40c4d720b2db3addf8befbc8ffa6014a630250cf617c8 \
+    0x8f8032ab8bf7d3c76f34158c413e44c3c654987cf7ec335bb4770532a614685b \
+    "https://your-domain.com/nft-images/" \
+  --gas-budget 10000000
 ```
 
 ---
@@ -100,6 +119,7 @@ NEXT_PUBLIC_IPFS_GATEWAY=https://ipfs.io/ipfs/
 - [ ] 抽籤功能正常
 - [ ] NFT 鑄造功能正常
 - [ ] AdminCap 可以執行 admin_mint
+- [ ] update_base_url 可以更新 NFT 圖片路徑
 
 ---
 
@@ -113,6 +133,6 @@ NEXT_PUBLIC_IPFS_GATEWAY=https://ipfs.io/ipfs/
 
 ## Explorer 連結
 
-- [Transaction](https://explorer.iota.org/testnet/txblock/4ZLG3FLyVUNbkWh2y7GnEBgNgSzyPp1usKeJKdBUoDKb)
-- [Package](https://explorer.iota.org/testnet/object/0xa6b3c3f1e412013e40ba5970855ec586dbdacfc430128a7e99f9590894cb903c)
-- [MGCTreasury](https://explorer.iota.org/testnet/object/0x6a417dff4eb7b7a62cf3a42ee1e28062bce87ad41b1b51065f59122801d4066e)
+- [Transaction](https://explorer.iota.org/testnet/txblock/2LsbnoPNbTyw7ULPfn5gbiVFXsSKKjZ8LDgeShN6hbNo)
+- [Package](https://explorer.iota.org/testnet/object/0x03d6285ccac25d0e103f63faac598f829ff3d375741012f19faff68289b9b4c4)
+- [MGCTreasury](https://explorer.iota.org/testnet/object/0xe93e4ead0246195f95d673026f001eafcf68df4a39dd65e1bb362fd77101a72d)
