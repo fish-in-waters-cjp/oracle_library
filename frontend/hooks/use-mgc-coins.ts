@@ -32,7 +32,7 @@ export interface UseMGCCoinsReturn {
  * @example
  * ```tsx
  * const { coins, getCoinWithBalance } = useMGCCoins(address);
- * const coinId = getCoinWithBalance(10_000_000_000n); // 10 MGC
+ * const coinId = getCoinWithBalance(10n); // 10 MGC (decimals = 0)
  * ```
  */
 export function useMGCCoins(address: string | null): UseMGCCoinsReturn {

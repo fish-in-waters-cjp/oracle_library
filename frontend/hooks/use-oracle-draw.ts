@@ -171,8 +171,8 @@ export function useOracleDraw(): UseOracleDrawReturn {
       // 3. 建立交易
       const tx = new Transaction();
 
-      // 分割 10 MGC 作為支付
-      const [paymentCoin] = tx.splitCoins(tx.object(mgcCoinId), [10_000_000_000]); // 10 MGC (假設 decimals = 9)
+      // 分割 10 MGC 作為支付（MGC decimals = 0）
+      const [paymentCoin] = tx.splitCoins(tx.object(mgcCoinId), [tx.pure.u64(10)]);
 
       // 調用 draw 函數
       tx.moveCall({

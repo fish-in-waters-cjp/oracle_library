@@ -294,8 +294,8 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
     pendingCelebration.current = { rarity, nftId };
   };
 
-  // 計算 MGC 餘額（轉換為顯示用的數字）
-  const mgcBalance = Number(balance) / 1_000_000_000; // 假設 decimals = 9
+  // 計算 MGC 餘額（MGC decimals = 0，不需轉換）
+  const mgcBalance = Number(balance);
 
   return (
     <div style={{ width: '100%' }}>
@@ -407,11 +407,11 @@ export function DrawSection({ mgcCoinId, onDrawStart, onDrawSuccess, onMintSucce
               const rarityValue = rarityMap[resultData.rarity] ?? 0;
 
               // 取得可用的 MGC Coin（5 MGC）
-              const MINT_COST = BigInt(5_000_000_000); // 5 MGC
-              const mintCoinId = getCoinWithBalance(MINT_COST);
+              const MINT_COST_VALUE = BigInt(5); // 5 MGC (decimals = 0)
+              const mintCoinId = getCoinWithBalance(MINT_COST_VALUE);
 
-              // 計算 MGC 餘額（轉換為顯示用的數字）
-              const mgcBalanceNumber = Number(balance) / 1_000_000_000; // 假設 decimals = 9
+              // 計算 MGC 餘額（MGC decimals = 0，不需轉換）
+              const mgcBalanceNumber = Number(balance);
 
               return (
                 <DrawResultOverlay

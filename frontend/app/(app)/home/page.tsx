@@ -43,10 +43,10 @@ export default function HomePage() {
 
   // 計算顯示用的餘額（Optimistic UI）
   const displayedBalance = optimisticBalance !== null ? optimisticBalance : balance;
-  const displayedBalanceString = (Number(displayedBalance) / 1_000_000_000).toString();
+  const displayedBalanceString = Number(displayedBalance).toString(); // MGC decimals = 0
 
   // 取得可用的 MGC Coin ID
-  const DRAW_COST = BigInt(10_000_000_000); // 10 MGC
+  const DRAW_COST = BigInt(10); // 10 MGC (decimals = 0)
   const mgcCoinId = getCoinWithBalance(DRAW_COST);
 
   /**

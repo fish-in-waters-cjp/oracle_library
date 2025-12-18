@@ -128,9 +128,8 @@ export function useMintNFT(): UseMintNFTReturn {
       // 建立交易
       const tx = new Transaction();
 
-      // 分割 5 MGC 作為支付（假設 decimals = 9）
-      const MINT_COST_MIST = MINT_COST * 1_000_000_000; // 5 MGC
-      const [paymentCoin] = tx.splitCoins(tx.object(mgcCoinId), [MINT_COST_MIST]);
+      // 分割 5 MGC 作為支付（MGC decimals = 0）
+      const [paymentCoin] = tx.splitCoins(tx.object(mgcCoinId), [tx.pure.u64(MINT_COST)]);
 
       // 調用 mint 函數
       tx.moveCall({

@@ -60,8 +60,8 @@ iota client publish --gas-budget 100000000
 | 項目 | Object ID |
 |------|-----------|
 | **MGCTreasury** | `0x6a417dff4eb7b7a62cf3a42ee1e28062bce87ad41b1b51065f59122801d4066e` |
-| **NFTConfig** | `0xd590036658e91a15bdc77181ba82259b9f85bfe15e0bd8140c49ba272006ecd6` |
-| EmergencyRecovery | `0xc73f87f05b1deadbb2a83a1f3fcadb1bfa5da691e5de4d96dec270f5fc7302a5` |
+| **NFTConfig** | `0xc73f87f05b1deadbb2a83a1f3fcadb1bfa5da691e5de4d96dec270f5fc7302a5` |
+| EmergencyRecovery | `0xd590036658e91a15bdc77181ba82259b9f85bfe15e0bd8140c49ba272006ecd6` |
 
 ### Admin Objects（部署者擁有）
 
@@ -87,7 +87,7 @@ iota client publish --gas-budget 100000000
 NEXT_PUBLIC_NETWORK=testnet
 NEXT_PUBLIC_PACKAGE_ID=0xa6b3c3f1e412013e40ba5970855ec586dbdacfc430128a7e99f9590894cb903c
 NEXT_PUBLIC_MGC_TREASURY_ID=0x6a417dff4eb7b7a62cf3a42ee1e28062bce87ad41b1b51065f59122801d4066e
-NEXT_PUBLIC_NFT_CONFIG_ID=0xd590036658e91a15bdc77181ba82259b9f85bfe15e0bd8140c49ba272006ecd6
+NEXT_PUBLIC_NFT_CONFIG_ID=0xc73f87f05b1deadbb2a83a1f3fcadb1bfa5da691e5de4d96dec270f5fc7302a5
 NEXT_PUBLIC_IPFS_GATEWAY=https://ipfs.io/ipfs/
 ```
 

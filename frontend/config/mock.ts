@@ -6,7 +6,7 @@
  */
 
 // ===== 全域 Mock 開關 =====
-export const MOCK_ENABLED = true;
+export const MOCK_ENABLED = false;
 
 // ===== Mock 資料 =====
 export const MOCK_DATA = {
