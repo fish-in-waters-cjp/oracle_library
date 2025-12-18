@@ -10,7 +10,8 @@ module oracle_library::check_in_tests {
     const ADMIN: address = @0xAD;
     const USER1: address = @0x1;
     const USER2: address = @0x2;
-    const CHECK_IN_REWARD: u64 = 5;
+    const FIRST_CHECK_IN_REWARD: u64 = 100;  // 首次簽到獎勵（新用戶禮包）
+    const DAILY_CHECK_IN_REWARD: u64 = 20;   // 每日簽到獎勵
     const UTC8_OFFSET_MS: u64 = 28800000; // 8 * 3600 * 1000
     const DAY_MS: u64 = 86400000; // 24 * 3600 * 1000
 
@@ -70,11 +71,11 @@ module oracle_library::check_in_tests {
             ts::return_shared(clock);
         };
 
-        // 驗證：使用者獲得 5 MGC
+        // 驗證：使用者獲得 100 MGC（首次簽到獎勵）
         ts::next_tx(&mut scenario, USER1);
         {
             let mgc_coin = ts::take_from_sender<coin::Coin<MGC>>(&scenario);
-            assert!(coin::value(&mgc_coin) == CHECK_IN_REWARD, 3);
+            assert!(coin::value(&mgc_coin) == FIRST_CHECK_IN_REWARD, 3);
             ts::return_to_sender(&scenario, mgc_coin);
         };
 
@@ -175,7 +176,7 @@ module oracle_library::check_in_tests {
             ts::return_shared(treasury);
         };
 
-        // 驗證：使用者再獲得 5 MGC（總共 10 MGC）
+        // 驗證：使用者再獲得 20 MGC（總共 100 + 20 = 120 MGC）
         ts::next_tx(&mut scenario, USER1);
         {
             // 取得所有 MGC coin 並合併
@@ -185,7 +186,7 @@ module oracle_library::check_in_tests {
                 total_value = total_value + coin::value(&mgc_coin);
                 ts::return_to_sender(&scenario, mgc_coin);
             };
-            assert!(total_value == CHECK_IN_REWARD * 2, 3);
+            assert!(total_value == FIRST_CHECK_IN_REWARD + DAILY_CHECK_IN_REWARD, 3);
         };
 
         ts::end(scenario);

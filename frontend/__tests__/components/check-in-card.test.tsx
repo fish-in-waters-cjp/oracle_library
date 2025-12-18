@@ -144,7 +144,7 @@ describe('CheckInCard', () => {
     it('應該顯示獎勵資訊', () => {
       render(<CheckInCard />);
 
-      expect(screen.getByText(/\+5 MGC/i)).toBeInTheDocument();
+      expect(screen.getByText(/\+20 MGC/i)).toBeInTheDocument();
     });
   });
 

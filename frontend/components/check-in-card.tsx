@@ -6,7 +6,7 @@ import { useWalletConnection } from '@/hooks/use-wallet-connection';
 import { useCheckInState } from '@/hooks/use-check-in-state';
 import { useCheckIn } from '@/hooks/use-check-in';
 import { formatCountdown } from '@/lib/time';
-import { CHECK_IN_REWARD } from '@/consts';
+import { FIRST_CHECK_IN_REWARD, DAILY_CHECK_IN_REWARD } from '@/consts';
 
 /**
  * Style 10 樣式定義
@@ -184,7 +184,7 @@ export function CheckInCard() {
           // 首次簽到
           <div style={{ textAlign: 'center' }}>
             <p style={styles.bodyText}>
-              歡迎！開始簽到之旅，每次簽到獲得 <span style={styles.highlight}>{CHECK_IN_REWARD} MGC</span>
+              歡迎！首次簽到獲得 <span style={styles.highlight}>{FIRST_CHECK_IN_REWARD} MGC</span> 新用戶禮包
             </p>
             <Button
               onClick={handleCheckIn}
@@ -199,7 +199,7 @@ export function CheckInCard() {
           // 可以簽到
           <div style={{ textAlign: 'center' }}>
             <p style={styles.bodyText}>
-              今天還沒簽到，獲得 <span style={styles.highlight}>+{CHECK_IN_REWARD} MGC</span> 獎勵！
+              今天還沒簽到，獲得 <span style={styles.highlight}>+{DAILY_CHECK_IN_REWARD} MGC</span> 獎勵！
             </p>
             <Button
               onClick={handleCheckIn}

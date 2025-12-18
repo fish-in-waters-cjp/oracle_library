@@ -55,7 +55,7 @@ export function useCheckIn(): UseCheckInReturn {
   /**
    * 首次簽到
    *
-   * 創建 UserCheckInRecord 並獲得 5 MGC 獎勵
+   * 創建 UserCheckInRecord 並獲得 100 MGC 獎勵（新用戶禮包）
    */
   const firstCheckIn = async () => {
     // === MOCK 模式 ===
@@ -96,7 +96,7 @@ export function useCheckIn(): UseCheckInReturn {
   /**
    * 每日簽到
    *
-   * 更新記錄並獲得 5 MGC 獎勵
+   * 更新記錄並獲得 20 MGC 獎勵
    *
    * @param recordId - 使用者的 UserCheckInRecord Object ID
    */

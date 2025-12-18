@@ -7,7 +7,8 @@ export const NFT_CONFIG_ID = process.env.NEXT_PUBLIC_NFT_CONFIG_ID || "0x0";
 export const IPFS_GATEWAY = process.env.NEXT_PUBLIC_IPFS_GATEWAY || "https://ipfs.io/ipfs/";
 
 // Game Constants
-export const CHECK_IN_REWARD = 5;
+export const FIRST_CHECK_IN_REWARD = 100;  // 首次簽到獎勵（新用戶禮包）
+export const DAILY_CHECK_IN_REWARD = 20;   // 每日簽到獎勵
 export const DRAW_COST = 10;
 export const MINT_COST = 5;
 

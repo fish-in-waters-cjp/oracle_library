@@ -1,8 +1,8 @@
 /// 每日簽到模組
 ///
 /// 使用者透過簽到獲得 MGC 獎勵：
-/// - 首次簽到：創建 UserCheckInRecord 並獲得 5 MGC
-/// - 每日簽到：更新記錄並獲得 5 MGC（一天只能簽到一次）
+/// - 首次簽到：創建 UserCheckInRecord 並獲得 100 MGC（新用戶禮包）
+/// - 每日簽到：更新記錄並獲得 20 MGC（一天只能簽到一次）
 ///
 /// 時區：所有日期計算基於 UTC+8
 module oracle_library::check_in {
@@ -17,8 +17,11 @@ module oracle_library::check_in {
 
     // ============ 常數 ============
 
-    /// 每次簽到的 MGC 獎勵
-    const CHECK_IN_REWARD: u64 = 5;
+    /// 首次簽到的 MGC 獎勵（新用戶禮包）
+    const FIRST_CHECK_IN_REWARD: u64 = 100;
+
+    /// 每日簽到的 MGC 獎勵
+    const DAILY_CHECK_IN_REWARD: u64 = 20;
 
     /// UTC+8 時區偏移（毫秒）
     const UTC8_OFFSET_MS: u64 = 28800000; // 8 * 3600 * 1000
@@ -70,7 +73,7 @@ module oracle_library::check_in {
     ///
     /// # 後置條件
     /// - 使用者獲得一個 UserCheckInRecord 物件
-    /// - 使用者獲得 5 MGC 獎勵
+    /// - 使用者獲得 100 MGC 獎勵（新用戶禮包）
     /// - 發出 CheckInEvent
     ///
     /// # 範例
@@ -100,15 +103,15 @@ module oracle_library::check_in {
             total_check_ins: 1,
         };
 
-        // 鑄造 MGC 獎勵
-        let reward = mgc::mint(treasury, CHECK_IN_REWARD, ctx);
+        // 鑄造 MGC 獎勵（首次簽到獎勵）
+        let reward = mgc::mint(treasury, FIRST_CHECK_IN_REWARD, ctx);
 
         // 發出簽到事件
         event::emit(CheckInEvent {
             user: sender,
             day_number: current_day,
             total_check_ins: 1,
-            reward_amount: CHECK_IN_REWARD,
+            reward_amount: FIRST_CHECK_IN_REWARD,
         });
 
         // 轉移記錄和獎勵給使用者
@@ -132,7 +135,7 @@ module oracle_library::check_in {
     /// # 後置條件
     /// - 更新 last_check_in_day 為今天
     /// - 增加 total_check_ins
-    /// - 使用者獲得 5 MGC 獎勵
+    /// - 使用者獲得 20 MGC 獎勵
     /// - 發出 CheckInEvent
     ///
     /// # 錯誤
@@ -165,15 +168,15 @@ module oracle_library::check_in {
         record.last_check_in_day = current_day;
         record.total_check_ins = record.total_check_ins + 1;
 
-        // 鑄造 MGC 獎勵
-        let reward = mgc::mint(treasury, CHECK_IN_REWARD, ctx);
+        // 鑄造 MGC 獎勵（每日簽到獎勵）
+        let reward = mgc::mint(treasury, DAILY_CHECK_IN_REWARD, ctx);
 
         // 發出簽到事件
         event::emit(CheckInEvent {
             user: sender,
             day_number: current_day,
             total_check_ins: record.total_check_ins,
-            reward_amount: CHECK_IN_REWARD,
+            reward_amount: DAILY_CHECK_IN_REWARD,
         });
 
         // 轉移獎勵給使用者
